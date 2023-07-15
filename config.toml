@@ -1,4 +1,4 @@
-base_url = "https://example.com"
+base_url = "https://kyawaway.github.io/myblog/"
 compile_sass = true
 highlight_code = true
 build_search_index = false
@@ -35,3 +35,4 @@ twitter = "kyawaway"
 [extra.show]
 tags = true
 links = true
+
