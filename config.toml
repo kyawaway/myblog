@@ -1,0 +1,37 @@
+base_url = "https://example.com"
+compile_sass = true
+highlight_code = true
+build_search_index = false
+generate_feed = true
+highlight_theme = "base16-ocean-light"
+default_language = "en"
+
+
+[languages.en]
+title = "kya"
+description = "My blog"
+generate_feed = true
+taxonomies = [
+    {name = "tags"},
+]
+
+
+[languages.en.translations]
+language_name = "English"
+about = "About"
+home = "Home"
+tags = "Tags"
+archive = "Archive"
+links = "Links"
+date_format = "%Y-%m-%d"
+next_page = "Next Page"
+last_page = "Last Page"
+
+
+[extra.social]
+github = "kyawaway"
+twitter = "kyawaway"
+
+[extra.show]
+tags = true
+links = true
