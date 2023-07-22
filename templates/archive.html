@@ -9,6 +9,8 @@
       {% set path = "_index." ~ lang ~ ".md"%}
       {% set section_item = get_section(path=path) %}
     {% endif %}
+    <span>投稿記録です．記事が投稿日時順に表示されます．</span>
+    <br> </br>
     {% for year, posts in section_item.pages | group_by(attribute="year") %}
       {% set language_posts = posts | filter(attribute="lang", value=lang) %}
       {% if language_posts | length > 0 %}
