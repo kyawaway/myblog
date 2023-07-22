@@ -1,7 +1,7 @@
 +++
-title = "About"
+title = "遊び日記について"
 template = "about.html"
 paginate_by = 0
 +++
 
-About this site
+雑記．主にキーボード，数理論理，ごはんについて書いていく．

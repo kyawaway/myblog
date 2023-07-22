@@ -2,17 +2,16 @@ base_url = "https://kyawaway.github.io/myblog/"
 compile_sass = true
 highlight_code = true
 build_search_index = false
-generate_feed = true
-highlight_theme = "base16-ocean-light"
 
+[markdown]
+highlight_code = true
+highlight_theme = "monokai"
 
 [languages.en]
-title = "kya"
-description = "My blog"
+title = "遊び日記"
+description = "遊びの日記"
 generate_feed = true
 compile_sass = true
-highlight_code = true
-highlight_theme = "base16-ocean-light"
 taxonomies = [
     {name = "tags"},
 ]

@@ -4,6 +4,7 @@ template = "page.html"
 date = 2020-02-23T14:00:00Z
 tags = ["backend", "oauth","security"]
 [extra]
+summary = "OAuth2.0のフローをなんとなく眺めた．"
 mermaid = "mermaid"
 +++
 
