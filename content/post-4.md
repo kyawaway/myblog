@@ -7,6 +7,8 @@ tags = ["backend", "oauth","security"]
 mermaid = "mermaid"
 +++
 
+<span style="color: red; ">※2020年時点の内容です！</span>
+
 ## はじめに
 
 本記事は、
@@ -212,7 +214,7 @@ sequenceDiagram
 
 #### OAuth1.0の署名(Signature)とは
 
-https://syncer.jp/Web/API/OAuth/ がとてもわかりやすくまとめられています。（現在は、TwitterもOAuth2.0も採用していたような気がします。）
+[https://syncer.jp/Web/API/OAuth/](https://syncer.jp/Web/API/OAuth/) がとてもわかりやすくまとめられています。（現在は、TwitterもOAuth2.0も採用していたような気がします。）
 要約すると...
 
 - **署名とは、URLとあるトークンを組み合わせて暗号化する**こと
@@ -324,17 +326,18 @@ Basic認証のようにidとpasswordをクライアントアプリに渡して�
 
 いかがでしたか？OAuthというものの概形がなんとなくつかめたでしょうか？
 また、これらを実装するときには、各言語で様々なライブラリが普及しているので、思ったより簡単に実装できると思います。ただライブラリを使うのではなく、内部でこういう処理をしているんだなぁということがわかっていれば、より簡単に実装ができると思います！
-Ｐythonでは、
-https://qiita.com/mikan3rd/items/686e4978f9e1111628e9
+Pythonでは、
+[https://qiita.com/mikan3rd/items/686e4978f9e1111628e9](https://qiita.com/mikan3rd/items/686e4978f9e1111628e9])
 等が参考になると思います。
 
 書いているうちにごちゃごちゃしてしまったり、Twitter関係なくなってしまったりでとても読みにくかったと思います。特に図は最後に読みかえしてわかりにくかったから急いで付け足したようなものなので、見た目があれです。最後まで目を通してくださってありがとうございました！
 
 ## 参考
-https://dev.classmethod.jp/security/authentication-and-authorization/
+[https://dev.classmethod.jp/security/authentication-and-authorization/](https://dev.classmethod.jp/security/authentication-and-authorization/)
 
-https://openid-foundation-japan.github.io/rfc6749.ja.html
+[https://openid-foundation-japan.github.io/rfc6749.ja.html](https://openid-foundation-japan.github.io/rfc6749.ja.html])
 
-https://ja.wikipedia.org/wiki/OAuth
+[https://ja.wikipedia.org/wiki/OAuth](https://ja.wikipedia.org/wiki/OAuth)
 
-https://qiita.com/TakahikoKawasaki/items/200951e5b5929f840a1f
+[https://qiita.com/TakahikoKawasaki/items/200951e5b5929f840a1f](https://qiita.com/TakahikoKawasaki/items/200951e5b5929f840a1f)
+

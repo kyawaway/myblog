@@ -4,13 +4,15 @@ highlight_code = true
 build_search_index = false
 generate_feed = true
 highlight_theme = "base16-ocean-light"
-default_language = "en"
 
 
 [languages.en]
 title = "kya"
 description = "My blog"
 generate_feed = true
+compile_sass = true
+highlight_code = true
+highlight_theme = "base16-ocean-light"
 taxonomies = [
     {name = "tags"},
 ]
