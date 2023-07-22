@@ -2,6 +2,7 @@
 title = "(過去記事転載)DjangoにおけるCSRF対策についてメモ"
 template = "page.html"
 date = 2020-10-20T16:00:00Z
+[taxonomies]
 tags = ["backend","python","django","security"]
 [extra]
 summary = "Djangoの{% csrf_token %}を追った．"
