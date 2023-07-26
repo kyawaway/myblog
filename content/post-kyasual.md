@@ -74,9 +74,8 @@ block環境で勝手に発生する段組みを使えば，いい感じにconten
 ```
 
 で，
-![hoge](/images/post_kyasual/textblock.png)
 <div style="text-align: center">
-    <img src="https://github.com/kyawaway/myblog/tree/gh-pages/images/post_kyasual/textblock.png" width='50%'>
+    <img src="https://github.com/kyawaway/myblog/images/post_kyasual/textblock.png" width='50%'>
 </div>
 
 と表示される．後述するように，itemizeとの組み合わせでよりいい感じになる．
