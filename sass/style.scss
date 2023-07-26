@@ -379,11 +379,11 @@ img {
     }
 
     & code {
-      padding: 1px 3px;
+      padding: 0;
       font-family: 'MesloLGS NF', Inconsolata, monospace, sans-serif;
       font-size: inherit;
       white-space: pre-wrap;
-      border-radius: 2px;
+      border-radius: 0;
     }
 
     pre {
@@ -967,9 +967,13 @@ html.theme--light {
       }
 
       & code {
+        padding: 0;
+        font-size: inherit;
+        white-space: inherit;
         border: 1px solid #E3EDF3;
         background: #f7f7f9;
         color: rgb(255, 58, 107);
+        border-radius: 0;
       }
 
       & pre code {
@@ -1261,6 +1265,9 @@ html.theme--dark {
       }
 
       & code {
+        padding: 0;
+        font-size: inherit;
+        white-space: inherit;
         background: #2b303b;
         color: rgb(255, 58, 107);
       }
