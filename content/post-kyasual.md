@@ -76,7 +76,7 @@ block環境で勝手に発生する段組みを使えば，いい感じにconten
 で，
 
 <div style="text-align: center">
-    <img src="/images/post_kyasual/textblock.png" width='50%'>
+    <img src="https://github.com/kyawaway/myblog/tree/gh-pages/images/post_kyasual/textblock.png" width='50%'>
 </div>
 
 と表示される．後述するように，itemizeとの組み合わせでよりいい感じになる．
@@ -96,7 +96,7 @@ block環境で勝手に発生する段組みを使えば，いい感じにconten
 で，
 
 <div style="text-align: center">
-    <img src="/images/post_kyasual/item.png" width='30%'>
+    <img src="https://github.com/kyawaway/myblog/tree/gh-pages/images/post_kyasual/item.png" width='30%'>
 </div>
 のような表示になる．
 
@@ -123,7 +123,7 @@ HogeHoge method :
 ```
 
 <div style="text-align: center">
-    <img src="/images/post_kyasual/item-ex.png" width='70%'>
+    <img src="https://github.com/kyawaway/myblog/tree/gh-pages/images/post_kyasual/item-ex.png" width='70%'>
 </div>
 
 ##### thusitem
@@ -137,7 +137,7 @@ HogeHoge method :
 で，
 
 <div style="text-align: center">
-    <img src="/images/post_kyasual/thus.png" width='30%'>
+    <img src="https://github.com/kyawaway/myblog/tree/gh-pages/images/post_kyasual/thus.png" width='30%'>
 </div>
 
 のような表示になる．
@@ -155,7 +155,7 @@ HogeHoge method :
 ```
 
 <div style="text-align: center">
-    <img src="/images/post_kyasual/block_item.png" width='70%'>
+    <img src="https://github.com/kyawaway/myblog/tree/gh-pages/images/post_kyasual/block_item.png" width='70%'>
 </div>
 
 のように組版できる．
