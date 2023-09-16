@@ -7,7 +7,7 @@ paginate_by = 0
 
 #### プロフィール:
 
-- (TODO)
+- [https://www.ueda.info.waseda.ac.jp/~takyu/](https://www.ueda.info.waseda.ac.jp/~takyu/)
 
 #### scrapbox:
 
