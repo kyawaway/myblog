@@ -1,7 +1,7 @@
 +++
 title = "mason-lspによるelm-lspの導入ではまった"
 template = "page.html"
-date = 2020-02-15T15:00:00Z
+date = 2023-09-9T13:00:00Z
 [taxonomies]
 tags = ["neovim","lsp","elm"]
 [extra]
