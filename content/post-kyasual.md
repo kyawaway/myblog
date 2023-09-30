@@ -3,7 +3,7 @@ title = "自作beamerテンプレートkyasualの紹介"
 template = "page.html"
 date = 2023-07-22T17:00:00Z
 [taxonomies]
-tags = ["beamer","latex"]
+tags = ["beamer","latex", "design"]
 [extra]
 summary = "kyasualの紹介"
 +++
