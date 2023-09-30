@@ -8,6 +8,22 @@ tags = ["beamer","latex"]
 summary = "kyasualの紹介"
 +++
 
+<div style="text-align: center">
+    <img src="https://pbs.twimg.com/media/F7O-qHubkAEqzX0?format=png&name=large" width='80%'>
+</div>
+
+<div style="text-align: center">
+    <img src="https://pbs.twimg.com/media/F7O-qHuakAAhpUO?format=png&name=large" width='80%'>
+</div>
+
+<div style="text-align: center">
+    <img src="https://pbs.twimg.com/media/F7O-qHwakAAVbJ-?format=png&name=large" width='80%'>
+</div>
+
+<div style="text-align: center">
+    <img src="https://pbs.twimg.com/media/F7O-qHyakAAsb70?format=png&name=large" width='80%'>
+</div>
+
 [https://github.com/kyawaway/kyasual](https://github.com/kyawaway/kyasual)の紹介．
 
 ## モチベーション
