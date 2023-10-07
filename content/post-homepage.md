@@ -1,5 +1,5 @@
 +++
-title = "zolaでホームページを立てた．"
+title = "zolaでホームページを立てた"
 template = "page.html"
 date = 2023-09-30T17:00:00Z
 [taxonomies]
