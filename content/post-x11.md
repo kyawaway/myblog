@@ -20,7 +20,7 @@ mathjax = "tex-mml"
 
 * Memory : 16GB
 
-### remote : Linux
+#### remote : Linux
 
 * OS : Ubuntu 22.04.3 LTS
 
