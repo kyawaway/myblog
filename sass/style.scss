@@ -1,9 +1,11 @@
+@import "predefined.scss";
+
 html {
   -webkit-font-smoothing: antialiased;
 }
 
 body {
-  font-family: 'Noto Sans JP', sans-serif;
+  font-family: $fonts;
   font-size: 15px;
   width: 100%;
   margin: 0 auto 30px auto;
@@ -345,6 +347,7 @@ img {
 
     a {
       text-decoration: none;
+      letter-spacing: 1px;
 
       &:hover {
         text-decoration: underline;
@@ -369,7 +372,7 @@ img {
 
     & pre code {
       padding: 0;
-      font-family: 'MesloLGS NF', Inconsolata, monospace, sans-serif;
+      font-family: $code-fonts;
       font-size: inherit;
       white-space: inherit;
       border: 0;
@@ -380,7 +383,7 @@ img {
 
     & code {
       padding: 0;
-      font-family: 'MesloLGS NF', Inconsolata, monospace, sans-serif;
+      font-family: $code-fonts;
       font-size: inherit;
       white-space: pre-wrap;
       border-radius: 0;
@@ -1434,6 +1437,298 @@ html.theme--dark {
           &:hover {
             color: #fff;
             background: #3CBD10;
+            border: 1px solid rgba(0, 0, 0, 0.15);
+          }
+        }
+      }
+    }
+  }
+}
+
+/* color styles */
+/* kyasual mode */
+html.theme--kyasual {
+  background-color: $kyasual-background;
+
+  body {
+    color: $kyasual-text;
+    background-color: $kyasual-background;
+  }
+
+  a:link,
+  a:visited {
+    color: $kyasual-alerted-title;
+  }
+
+  a:hover,
+  a:active {
+    color: $kyasual-alerted-body;
+  }
+
+  /*basic styles ends*/
+
+  .page-top {
+    background-color: $kyasual-text;
+    border-bottom: 1px solid #f2f2f2;
+
+    .nav {
+      a {
+        color: $kyasual-background;
+        background-color: $kyasual-text;
+      }
+
+      a:hover {
+        color: $kyasual-alerted-body;
+      }
+
+      a.current {
+        color: #eeeeee;
+        border-bottom: 1px solid #eeeeee;
+      }
+    }
+
+    .information #language-switch {
+      button {
+        color: #f5f5f5;
+
+        &:hover {
+          background-color: #5A5A5A;
+        }
+      }
+
+      #languages {
+        box-shadow: 0px 8px 16px 0px rgba(95, 95, 95, 0.2);
+        background-color: #152028;
+        a:hover {
+          background-color: #5A5A5A;
+        }
+      }
+    }
+  }
+
+  #sidebar {
+    background-color: $kyasual-background;
+    border-right: 1px solid #f2f2f2;
+
+    .logo-title {
+      .description {
+        color: $kyasual-attention-title;
+      }
+
+      .title {
+        a {
+        color: $kyasual-attention-title;
+          &:hover {
+            color: $kyasual-alerted-body;
+          }
+        }
+      }
+    }
+
+    .social-links {
+      a {
+        color: $kyasual-attention-title;
+      }
+
+      a:hover {
+        color: $kyasual-alerted-body;
+      }
+    }
+  }
+
+  .post {
+    background-color: $kyasual-background;
+
+    .post-title {
+      h2 {
+        color: $kyasual-text;
+      }
+
+      h3 {
+        color: $kyasual-text;
+      }
+
+      p {
+        color: $kyasual-attention-title;
+      }
+
+      a {
+        color: $kyasual-alerted-title;
+        &:hover {
+          color: $kyasual-alerted-body;
+        }
+      }
+    }
+
+    .post-content {
+      a {
+        color: $kyasual-alerted-title;
+      }
+
+      a:hover {
+        color: $kyasual-alerted-body;
+      }
+
+      h1 {
+        color: $kyasual-text;
+      }
+
+      h2 {
+        color: $kyasual-alerted-title;
+      }
+
+      h3 {
+        color: $kyasual-text;
+      }
+
+      h4 {
+        color: $kyasual-text;
+      }
+
+
+      & code {
+        background: rgb(225, 240, 200);
+        color: rgb(90, 115, 35);
+      }
+
+      & pre code {
+        padding: 0;
+        font-size: inherit;
+        white-space: inherit;
+        border: 0;
+        background: inherit;
+        color: inherit;
+        border-radius: 0;
+      }
+
+      blockquote {
+        border-left: #4a4a4a 0.2em solid;
+      }
+    }
+
+    .post-footer {
+      border-bottom: 5px dotted $kyasual-attention-title;
+
+      .meta {
+        color: $kyasual-attention-title;
+
+        a {
+          color: $kyasual-attention-title;
+
+          &:hover {
+            color: $kyasual-alerted-body;
+          }
+        }
+      }
+
+      .tags {
+        a {
+          color: rgb(225, 240, 200);
+        }
+      }
+    }
+  }
+
+  .pagination {
+    border-bottom: 1px solid #464646;
+  }
+
+  #disqus_thread {
+    border-bottom: 1px solid #464646;
+  }
+
+  .footer {
+    color: rgb(60, 55, 45);
+
+    a {
+      color: rgb(60, 55, 45);
+    }
+
+    a:hover {
+      color: $kyasual-alerted-body;
+    }
+  }
+
+  /*for archive*/
+  .list-with-title {
+    .listing-title {
+      color: $kyasual-alerted-title;
+    }
+
+    .listing {
+      .listing-post {
+        .post-time {
+          color: $kyasual-attention-title;
+        }
+
+        a {
+          color: $kyasual-attention-title;
+
+          &:hover {
+            color: $kyasual-alerted-body;
+          }
+        }
+      }
+    }
+
+    .tag-list-item {
+      .tagcount {
+        color: $kyasual-example-title;
+        background: $kyasual-example-body;
+      }
+    }
+  }
+
+  /* share */
+  .twitter {
+    background-color: #59C0FD;
+
+    a {
+      color: #fff;
+    }
+
+    a:hover {
+      color: #4B9ECE;
+    }
+  }
+
+  /* comments */
+
+  .comment-count {
+    color: #666;
+  }
+
+  .tab-community {
+    color: #666;
+  }
+
+  a.btn {
+    color: #868686;
+  }
+
+  .btn {
+    color: rgba(187, 187, 187, 0.5);
+    background: rgba(0, 0, 0, 0);
+    border: 1px solid rgba(187, 187, 187, 0.5);
+  }
+
+  .btn:hover {
+    color: $kyasual-alerted-body;
+    background: rgba(0, 0, 0, 0);
+    border: 1px solid #9f9f9f;
+  }
+
+  .menu {
+    .btn-down {
+      li {
+        a {
+          color: rgba(0, 0, 0, 0.44);
+          background: rgb(255, 255, 230);
+          border: 1px solid rgba(0, 0, 0, 0.15);
+
+          &:hover {
+            color: $kyasual-alerted-body;
+            background: rgb(255, 255, 230);
             border: 1px solid rgba(0, 0, 0, 0.15);
           }
         }
