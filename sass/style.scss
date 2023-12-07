@@ -1562,6 +1562,7 @@ html.theme--kyasual {
 
     .post-content {
       a {
+        letter-spacing: 1px;
         color: $kyasual-alerted-title;
       }
 
@@ -1570,18 +1571,31 @@ html.theme--kyasual {
       }
 
       h1 {
-        color: $kyasual-text;
+        font-size: 26px;
+        letter-spacing: 1px;
+        line-height: 1;
+        color: $kyasual-alerted-title;
       }
 
       h2 {
+        letter-spacing: 1px;
+        font-size: 22px;
+        line-height: 1;
+        font-weight: 600;
         color: $kyasual-alerted-title;
       }
 
       h3 {
+        letter-spacing: 1px;
+        line-height: 1;
+        font-weight: 600;
+        font-size: 20px;
+        margin: 0;
         color: $kyasual-text;
       }
 
       h4 {
+        font-size: 16px;
         color: $kyasual-text;
       }
 
