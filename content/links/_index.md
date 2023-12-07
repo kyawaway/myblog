@@ -4,5 +4,14 @@ template = "links.html"
 paginate_by = 0
 +++
 
-Extern links:
-- [Origin theme demo](http://anatole.cai-cai.me)
+
+#### プロフィール:
+
+- [https://www.ueda.info.waseda.ac.jp/~takyu/](https://www.ueda.info.waseda.ac.jp/~takyu/)
+
+#### scrapbox:
+
+- [きゃのscrapbox.io](https://scrapbox.io/kya/)
+
+
+

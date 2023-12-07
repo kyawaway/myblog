@@ -2,6 +2,7 @@
 title = "(過去記事転載)OAuth2.0をざっくり理解する"
 template = "page.html"
 date = 2020-02-23T14:00:00Z
+[taxonomies]
 tags = ["backend", "oauth","security"]
 [extra]
 summary = "OAuth2.0のフローをなんとなく眺めた．"

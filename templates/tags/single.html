@@ -4,7 +4,9 @@
 <div class="archive animated fadeInDown">
     <ul class="list-with-title">
         <div class="archive">
-        <div class="listing-title">{{ term.name }}</div>
+        <span>タグのリスト．クリックするとタグごとの記事が出てくる．</span>
+        <br></br>
+        <div class="listing-title">{{ term.name }} の記事一覧：</div>
         <ul class="listing">
         {% for post in term.pages %}
             <div class="listing-item">
