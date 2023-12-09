@@ -169,6 +169,8 @@ Girardは当時，直観主義論理の分析を行っていた．その過程�
 
 #### もう少し詳しく
 
+WIP.
+
 詳しい定義は[https://www.kurims.kyoto-u.ac.jp/~terui/birth.pdf](https://www.kurims.kyoto-u.ac.jp/~terui/birth.pdf)をみてください．
 
 [https://ziphil.com/diary/mathematics/71.html](https://ziphil.com/diary/mathematics/71.html)も参考になります．
