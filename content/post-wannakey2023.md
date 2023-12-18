@@ -1,5 +1,5 @@
 +++
-title = "理想のキーボード構成"
+title = "理想のキーボード構成2023"
 template = "page.html"
 date = 2023-12-18T17:00:00Z
 [taxonomies]
