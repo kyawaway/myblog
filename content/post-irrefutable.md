@@ -1,7 +1,7 @@
 +++
 title = "Irrefutable Pattern"
 template = "page.html"
-date = 2023-01-20T11:00:00Z
+date = 2024-01-20T11:00:00Z
 [taxonomies]
 tags = ["haskell", "functional programming"]
 [extra]
