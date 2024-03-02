@@ -30,7 +30,7 @@ interface PlaneCoordinate {
   y: number;
 };
 
-const GeoToPlane: PlaneCoordinate = (geo: GeoCoordinate) => {
+const GeoToPlane= (geo: GeoCoordinate): PlaneCoordinate  => {
   //奇跡的な処理
   return {x: hoge, y:huga};
 };
@@ -46,7 +46,7 @@ const GeoToPlane: PlaneCoordinate = (geo: GeoCoordinate) => {
 日本においては，緯度に110000を，経度に91000をかけるとだいたいいい感じの値になることが知られている．
 
 ```TypeScript
-const GeoToPlaneDodge: PlaneCoordinate = (geo: GeoCoordinate) => {
+const GeoToPlaneDodge = (geo: GeoCoordinate): PlaneCoordinate  => {
   return {x: geo.latitude * 110000, y:geo.latitude * 91000};
 };
 ```
@@ -55,6 +55,7 @@ const GeoToPlaneDodge: PlaneCoordinate = (geo: GeoCoordinate) => {
 
 
 ## 真面目にやる
+
 
 ちゃんと地球の形状を考慮して，真面目に変換する．
 
@@ -65,7 +66,18 @@ const GeoToPlaneDodge: PlaneCoordinate = (geo: GeoCoordinate) => {
 
 また，平面直角座標系の原点に関しては，
 
+
+このように，地球を回転楕円体とみなして投影を行う手法を[Gauss-Krüger 投影](https://ja.wikipedia.org/wiki/%E3%82%AC%E3%82%A6%E3%82%B9%E3%83%BB%E3%82%AF%E3%83%AA%E3%83%A5%E3%83%BC%E3%82%B2%E3%83%AB%E5%9B%B3%E6%B3%95)というらしい．
+
 （[https://www.gsi.go.jp/sokuchikijun/datum-main.html](https://www.gsi.go.jp/sokuchikijun/datum-main.html)等．）
+
+### 導出の準備
+
+Gauss-Krüger 投影は，回転楕円体から平面への等角写像の一種である．これは，投影しようとする範囲の中心地点を通る子午線（中央子午線）の子午線弧長を保存している．
+
+いくつか流儀であるが，今日日本においては，楕円体の第三扁平率のみを係数に含む冪級数展開により表す手法が普及している．今回はこれを用いる．
+
+
 
 ### 数式を並べる
 
@@ -109,7 +121,7 @@ const m_0:number = 0.9999;
 
 $\phi, \lambda$を受け取り，平面直角座標$x,y$を返す．
 
-$n$:
+まず，第三扁平率$n$は，以下のように定義される：
 
 $$n = \frac{1}{2F-1}$$
 
@@ -231,7 +243,6 @@ const y = bar_A * (eta + alpha_List.map((alpha, j) => alpha * Math.sin(2*j*xi) *
 
 #### まとめ
 
-
 ```typescript
 interface GeoCoordinate {
   latitude: number;
@@ -251,7 +262,7 @@ interface Configure {
   scale_factor: number;
 };
 
-const get_A_List:number[] = (n:number) => {
+const get_A_List = (n:number):number[] => {
   return [
     1 + (n^2 / 4) + (n^3 / 64),
     -(3/2) * (n - ((n^3) / 8) - ((n^5) / 64)),
@@ -262,8 +273,9 @@ const get_A_List:number[] = (n:number) => {
   ];
 };
 
-const get_alpha_List:number[] = (n:number) => {
+const get_alpha_List= (n:number):number[]  => {
   return [
+    0,
     (1/2)*n - (2/3)*(n^2) + (5/16)*(n^3) - (41/180)*(n^4) - (127/288)*(n^5),
     (13/48)*(n^2) - (3/5)*(n^3) + (557/1440)*(n^4) + (281/630)*(n^5),
     (61/240)*(n^3) - (103/140)*(n^4) + (15061/26880)*(n^5),
@@ -272,51 +284,51 @@ const get_alpha_List:number[] = (n:number) => {
   ];
 };
 
-const get_bar_S_phi_0: number = (m_0: number, a:number, n:number, A_List:number[], phi_0:number) => {
-  return (m_0*a / (1+n)) * (A_0*phi_0 + A_List.map((A, j) => A * Math.sin(2*j*phi_0) ).reduce((a, b) => a+b, 0));
+const get_bar_S_phi_0　= (m_0: number, a:number, n:number, A_List:number[], phi_0:number): number  => {
+  return (m_0*a / (1+n)) * (A_List[0] * phi_0 + A_List.map((A, j) => A * Math.sin(2*j*phi_0) ).reduce((a, b) => a+b, 0));
 };
 
-const get_bar_A: number = (m_0:number, n:number, A_List:number[]) => {
+const get_bar_A = (m_0:number, n:number, A_List:number[]): number => {
 
-  return (m_0 / (1+n)) * A_0;
+  return (m_0 / (1+n)) * A_List[0];
 };
 
-const get_lambda_epsilon: number = (lambda:number, lambda_0:number) => {
+const get_lambda_epsilon = (lambda:number, lambda_0:number): number => {
   return Math.cos(lambda - lambda_0);
 };
 
-const get_lambda_s: number = (lambda:number, lambda_0:number) => {
+const get_lambda_s = (lambda:number, lambda_0:number): number => {
   return Math.sin(lambda - lambda_0);
 };
 
-const get_t: number = (n:number, phi:number) => {
+const get_t = (n:number, phi:number): number => {
   return Math.sinh(Math.atanh(Math.sin(phi)) - (2*Math.sqrt(n) / (1+n)) * Math.atanh( (2*Math.sqrt(n) / (1+n)) * Math.sin(phi) ));
 };
 
-const get_bar_t: number = (t:number) => {
+const get_bar_t = (t:number): number => {
   return Math.sqrt(1 + t^2);
 };
 
-const get_xi: number = (t:number, lambda_epsilon:number) => {
+const get_xi = (t:number, lambda_epsilon:number): number => {
   return Math.atan(t / lambda_epsilon);
 };
 
-const get_eta: number = (lambda_s:number, t:number) => {
+const get_eta = (lambda_s:number, t:number): number => {
   return Math.atan(lambda_s / t);
 };
 
 
-const GeoToPlane: PlaneCoordinate = (geo: GeoCoordinate, config: Configure) => {
+const GeoToPlane = (geo: GeoCoordinate, config: Configure): PlaneCoordinate => {
   const latitude = geo.latitude;
   const longitude = geo.longitude;
 
   const latitude_origin:number = config.latitude_origin;
   const longitude_origin:number = config.longitude_origin;
-  const long_lad:number = config.logn_lad;
+  const long_lad:number = config.long_lad;
   const oblateness:number = config.oblateness;
   const scale_factor:number = config.scale_factor;
 
-  const n:number = = 1 / (2 * oblateness - 1);
+  const n:number = 1 / (2 * oblateness - 1);
 
   const A_List:number[] = get_A_List(n);
   const alpha_List:number[] = get_alpha_List(n);
@@ -340,6 +352,8 @@ const GeoToPlane: PlaneCoordinate = (geo: GeoCoordinate, config: Configure) => {
   };
 };
 ```
+テストはしてません．
+
 めんどい．
 
 
