@@ -1,5 +1,5 @@
 +++
-title = "Install Agda"
+title = "Agda Installation"
 template = "page.html"
 date = 2024-07-08T11:00:00Z
 [taxonomies]
@@ -159,13 +159,8 @@ cd ..
 
 ## 3. Editor Setup
 
-ここからは，実際にサンプルコードを用意して動作確認する．ファイルの中身は適宜記述していくが，面倒な場合は本リポジトリをcloneすれば全部入っている．
+ここからは，実際にサンプルコードを用意して動作確認する．
 
-
-```shell
-git clone git@gitlab.ueda.info.waseda.ac.jp:takyu/agda-tutorial2024.git
-cd agda-tutorial2024/sample/0
-```
 
 ### VSCode
 
