@@ -1,6 +1,6 @@
 base_url = "https://kyawaway.github.io/myblog/"
 compile_sass = true
-highlight_code = true
+# highlight_code = true
 build_search_index = false
 
 [markdown]
@@ -10,8 +10,8 @@ highlight_theme = "monokai"
 [languages.en]
 title = "遊び日記"
 description = "遊びの日記"
-generate_feed = true
-compile_sass = true
+# generate_feed = true
+# compile_sass = true
 taxonomies = [
     {name = "tags"},
 ]
@@ -36,4 +36,3 @@ twitter = "kyawaway"
 [extra.show]
 tags = true
 links = true
-

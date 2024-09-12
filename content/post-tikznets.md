@@ -41,7 +41,7 @@ mathjax = "tex-mml"
 のように，中心の座標を指定してやる．このとき，中に文字や式が書ける．
 
 <div style="text-align: center">
-    <img src="https://pbs.twimg.com/media/GA49_KWaEAAlRjI?format=png&name=small" width='20%'>
+    <img src="https://pbs.twimg.com/media/GXQGp3fawAAup8G?format=png&name=small" width='20%'>
 </div>
 
 ### Wire
@@ -55,15 +55,15 @@ mathjax = "tex-mml"
 と書くと，始点(0,0)から，180°の方向に出て行った線が，終点(2,2)に，90°の方向に入っていく．
 
 
-cell,wireを組み合わせると，MELLのProof Netsの構成要素が描ける．
+cell,wireを組み合わせると，こんな感じで基本コンポーネントが描ける．
 
 <div style="text-align: center">
-    <img src="https://pbs.twimg.com/media/GA49Dh9akAELMpQ?format=jpg&name=large" width='70%'>
+    <img src="https://pbs.twimg.com/media/GXQGoWUbgAQk1i3?format=jpg&name=large" width='70%'>
 </div>
 
 ```latex
 \begin{tikzpicture}
-%% otimes
+    %% otimes
     \draw[very thick] (0,0) to [out=180,in=-90] (-0.7,0.7);
     \draw[very thick, -{Latex[length=2.1mm]}] (-0.7,0.7)--(-0.7,0.5);
     \node[anchor=center] (arrow) at (-0.7,1) {$A$};
@@ -104,7 +104,7 @@ cell,wireを組み合わせると，MELLのProof Netsの構成要素が描ける
     \node[anchor=center] (arrow) at (7,1) {$A^{\bot}$};
     \node[pnode] (4) at (6.3,0) {$cut$};
 
-%% contr
+    %% contr
     \draw[very thick] (8.4,0) to [out=180,in=-90] (7.7,0.7);
     \draw[very thick, -{Latex[length=2.1mm]}] (7.7,0.7)--(7.7,0.5);
     \node[anchor=center] (arrow) at (7.7,1) {$?A$};
@@ -116,12 +116,12 @@ cell,wireを組み合わせると，MELLのProof Netsの構成要素が描ける
     \node[anchor=center] (arrow) at (8.4,-1) {$?A$};
     \node[pnode] (1) at (8.4,0) {$?c$};
 
-%% weakn
+    %% weakn
     \draw[very thick, -{Latex[length=2.1mm]}] (10.5,0)--(10.5,-0.8);
     \node[anchor=center] (arrow) at (10.5,-1) {$?A$};
     \node[pnode] (2) at (10.5,0) {$?w$};
 
-%%  dist
+    %%  dist
     \node[anchor=center] (arrow) at (12.6,1) {$A$};
     \draw[very thick] (12.6,0)--(12.6,0.7);
     \draw[very thick, -{Latex[length=2.1mm]}] (12.6,0.7)--(12.6,0.5);
@@ -129,7 +129,7 @@ cell,wireを組み合わせると，MELLのProof Netsの構成要素が描ける
     \node[anchor=center] (arrow) at (12.6,-1) {$?A$};
     \node[pnode] (2) at (12.6,0) {$?d$};
 
-%%  !
+    %%  !
     \node[anchor=center] (arrow) at (14.7,1) {$A$};
     \draw[very thick] (14.7,0)--(14.7,0.7);
     \draw[very thick, -{Latex[length=2.1mm]}] (14.7,0.7)--(14.7,0.5);
@@ -137,26 +137,24 @@ cell,wireを組み合わせると，MELLのProof Netsの構成要素が描ける
     \node[anchor=center] (arrow) at (14.7,-1) {$!A$};
     \node[pnode] (2) at (14.7,0) {$!$};
 
-
 \end{tikzpicture}
 ```
 
 
 ### Box
 
-Promotionが出てくる体系では，Boxを扱う．角丸の四角形を組み合わせて構成する．
+Exponentialが出てくる体系では，Promotion Boxを扱う．角丸の四角形を組み合わせて構成する．
 
 <div style="text-align: center">
-    <img src="https://pbs.twimg.com/media/GA4-v28agAAXQn5?format=png&name=900x900" width='40%'>
+    <img src="https://pbs.twimg.com/media/GXQGrXdbgAAQKbg?format=png&name=900x900" width='40%'>
 </div>
 
 ```latex
 \begin{tikzpicture}
     \draw[thick, rounded corners=10pt, fill=red!10]
         (-3,0)--(-3,3)--(0,3)--(0,0)-- cycle;
-        \draw[very thick, dashed, rounded corners=10pt, fill=white]
+    \draw[very thick, dashed, rounded corners=10pt, fill=white]
         (-2.6,1.5)--(-2.6,2.6)--(-0.4,2.6)--(-0.4,1.5)-- cycle;
-
 
     \node[anchor=center] (a) at (-0.8,0.9) {\fontsize{12pt}{12pt}$A$};
     \draw[very thick, -{Latex[length=2.1mm]}] (-0.8,1.5)--(a);
@@ -183,7 +181,7 @@ Promotionが出てくる体系では，Boxを扱う．角丸の四角形を組�
 例: $\lambda f: \mathrm{n\to n}. x: \mathrm{n}. f x$
 
 <div style="text-align: center">
-    <img src="https://pbs.twimg.com/media/GA5ACotbsAA1Hz2?format=jpg&name=large" width='70%'>
+    <img src="https://pbs.twimg.com/media/GXQGtdAawAARpGG?format=jpg&name=large" width='70%'>
 </div>
 
 ```latex
@@ -213,7 +211,7 @@ Promotionが出てくる体系では，Boxを扱う．角丸の四角形を組�
     \node[anchor=center] (aex) at (-0.8,-1.1) {$!n$};
     \draw[ultra thick, -{Latex[length=2.1mm]}] (ex)--(aex);
 
-%%
+
     \node[anchor=center] (a2) at (-6.8,1.7) {\fontsize{14pt}{14pt}$?n^{\bot}\:\linpar\:n$};
 
     \node[pnodeb] (d2) at (-8.9,0.6) {\fontsize{14pt}{14pt}$?d$};
@@ -229,7 +227,7 @@ Promotionが出てくる体系では，Boxを扱う．角丸の四角形を組�
     \node[pnodeb] (ax2) at (-7.75,2.5) {\fontsize{14pt}{14pt}$ax$};
     \draw[ultra thick, -{Latex[length=2.1mm]}] (d2f)--(d2);
 
-%% ax
+    %% ax
 
     \node[anchor=center] (axt1) at (0.8,-1.1) {\fontsize{14pt}{14pt}$n^{\bot}$};
     \node[anchor=center] (axt2) at (2.4,-1.1) {\fontsize{14pt}{14pt}$n$};
@@ -243,7 +241,6 @@ Promotionが出てくる体系では，Boxを扱う．角丸の四角形を組�
     \node[anchor=center] (tf) at (0,-2.8) {\fontsize{14pt}{14pt}$!n \otimes n^{\bot}$};
     \draw[ultra thick, -{Latex[length=2.1mm]}] (t1)--(tf);
 
-%%
 
     \draw[ultra thick, -{Latex[length=2.1mm]}] (a2) to [out=-90,in=180] (-3,-3.5);
     \draw[ultra thick, -{Latex[length=2.1mm]}] (tf) to [out=-90,in=0] (-3,-3.5);
@@ -264,14 +261,13 @@ Promotionが出てくる体系では，Boxを扱う．角丸の四角形を組�
     \draw[ultra thick, -{Latex[length=2.1mm]}] (c1)--(c1f);
     \draw[ultra thick, -{Latex[length=2.1mm]}] (c2)--(c2f);
 
-%%%%%
+
     \draw[ultra thick] (axt2)--(2.4,-4);
     \draw[ultra thick, -{Latex[length=2.1mm]}] (2.4,-4) to [out=-90,in=0] (-3,-5);
     \draw[ultra thick, -{Latex[length=2.1mm]}] (c2f) to [out=-90,in=180] (-3,-5);
 
     \node[anchor=center] (p1f) at (-3,-6) {\fontsize{14pt}{14pt}$? n^{\bot} \: \linpar \: n$};
     \node[anchor=center] (p2f) at (-4,-8) {\fontsize{14pt}{14pt}$?(!n \otimes n^{\bot}) \: \linpar \: ?n^{\bot} \:\linpar\: n $};
-;q
 
     \draw[ultra thick, -{Latex[length=2.1mm]}] (p1f) to [out=-90,in=0] (-4,-6.9);
     \draw[ultra thick, -{Latex[length=2.1mm]}] (c1f) to [out=-90,in=180] (-4,-6.9);
@@ -282,7 +278,6 @@ Promotionが出てくる体系では，Boxを扱う．角丸の四角形を組�
     \draw[ultra thick, -{Latex[length=2.1mm]}] (par1)--(p1f);
     \draw[ultra thick, -{Latex[length=2.1mm]}] (par2)--(p2f);
 
-%
 
     \draw[ultra thick, rounded corners=10pt, fill=red!10]
         (3.5,-4.5)--(3.5,3)--(6.5,3)--(6.5,-4.5)-- cycle;
@@ -312,8 +307,6 @@ Promotionが出てくる体系では，Boxを扱う．角丸の四角形を組�
     \draw[ultra thick, -{Latex[length=2.1mm]}] (ex5)--(aex5);
 
 
-%%%%%%%%%%
-
     \node[anchor=center] (ax51) at (7.4,-5.5) {\fontsize{14pt}{14pt}$!n \otimes n^{\bot}$};
     \node[anchor=center] (ax52) at (9.8,-5.5) {\fontsize{14pt}{14pt}$(?n^{\bot})\: \linpar \: n$};
 
@@ -327,7 +320,6 @@ Promotionが出てくる体系では，Boxを扱う．角丸の四角形を組�
     \node[pnodeb] (ax5) at (8.6,-4.5) {\fontsize{14pt}{14pt}$ax$};
     \draw[ultra thick, -{Latex[length=2.1mm]}] (t5)--(t5f);
 
-%%%%%%%
     \draw[ultra thick, -{Latex[length=2.1mm]}] (t5f) to [out=-90,in=0] (0,-9);
     \draw[ultra thick, -{Latex[length=2.1mm]}] (p2f) to [out=-90,in=180] (0,-9);
     \node[pnodeb] (cut5) at (0,-9) {\fontsize{14pt}{14pt}$cut$};

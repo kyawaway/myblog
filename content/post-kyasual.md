@@ -9,19 +9,19 @@ summary = "kyasualの紹介"
 +++
 
 <div style="text-align: center">
-    <img src="https://pbs.twimg.com/media/F7O-qHubkAEqzX0?format=png&name=large" width='80%'>
+    <img src="https://pbs.twimg.com/media/GXQPLLFaMAAjehF?format=jpg&name=large" width='80%'>
 </div>
 
 <div style="text-align: center">
-    <img src="https://pbs.twimg.com/media/F7O-qHuakAAhpUO?format=png&name=large" width='80%'>
+    <img src="https://pbs.twimg.com/media/GXQPLK9bgAIWSuZ?format=jpg&name=large" width='80%'>
 </div>
 
 <div style="text-align: center">
-    <img src="https://pbs.twimg.com/media/F7O-qHwakAAVbJ-?format=png&name=large" width='80%'>
+    <img src="https://pbs.twimg.com/media/GXQPLLCasAABfdU?format=jpg&name=large" width='80%'>
 </div>
 
 <div style="text-align: center">
-    <img src="https://pbs.twimg.com/media/F7O-qHyakAAsb70?format=png&name=large" width='80%'>
+    <img src="https://pbs.twimg.com/media/GXQPLK8acAAyFbA?format=jpg&name=large" width='80%'>
 </div>
 
 [https://github.com/kyawaway/kyasual](https://github.com/kyawaway/kyasual)の紹介．
@@ -86,12 +86,12 @@ block環境で勝手に発生する段組みを使えば，いい感じにconten
 ```tex
 \begin{textblock}{textblock title.}
     textblock body. textblock body.
-\end{textbock}
+\end{textblock}
 ```
 
 で，
 <div style="text-align: center">
-    <img src="https://pbs.twimg.com/media/F19hAyOaEAA11xO?format=png&name=900x900" width='50%'>
+    <img src="https://pbs.twimg.com/media/GXQRSuXbEAASnip?format=png&name=4096x4096" width='50%'>
 </div>
 
 と表示される．後述するように，itemizeとの組み合わせでよりいい感じになる．
@@ -111,7 +111,7 @@ block環境で勝手に発生する段組みを使えば，いい感じにconten
 で，
 
 <div style="text-align: center">
-    <img src="https://pbs.twimg.com/media/F19hAyCaYAAdEz2?format=png&name=360x360" width='30%'>
+    <img src="https://pbs.twimg.com/media/GXQRSuXaUAAimzQ?format=png&name=small" width='30%'>
 </div>
 のような表示になる．
 
@@ -138,7 +138,7 @@ HogeHoge method :
 ```
 
 <div style="text-align: center">
-    <img src="https://pbs.twimg.com/media/F19hAyBaAAAAyQ4?format=jpg&name=900x900" width='70%'>
+    <img src="https://pbs.twimg.com/media/GXQRSuWbIAA21VG?format=jpg&name=4096x4096" width='70%'>
 </div>
 
 ##### thusitem
@@ -152,7 +152,7 @@ HogeHoge method :
 で，
 
 <div style="text-align: center">
-    <img src="https://pbs.twimg.com/media/F19hAyeaEAIZKe9?format=png&name=360x360" width='30%'>
+    <img src="https://pbs.twimg.com/media/GXQRSuXbUAAEyR0?format=png&name=small" width='30%'>
 </div>
 
 のような表示になる．
@@ -170,7 +170,7 @@ HogeHoge method :
 ```
 
 <div style="text-align: center">
-    <img src="https://pbs.twimg.com/media/F19gq1JaIAE-Oi2?format=jpg&name=medium" width='70%'>
+    <img src="https://pbs.twimg.com/media/GXQRUkdbgAALzb9?format=jpg&name=4096x4096" width='70%'>
 </div>
 
 のように組版できる．

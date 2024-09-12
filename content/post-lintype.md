@@ -51,7 +51,7 @@ un 型はふつうの単純型と同じで，lin 型が線形型とする．
 コアになっているのは，文脈の分割 $\Gamma = \Gamma_1 \circ \Gamma_2$ の概念である:
 
 <div style="text-align: center">
-    <img src="https://pbs.twimg.com/media/GA3sYfzbEAAsqTk?format=jpg&name=medium" width='50%'>
+    <img src="https://pbs.twimg.com/media/GXQGhnKbgAI6-yQ?format=jpg&name=medium" width='50%'>
 </div>
 
 分割演算$\circ$が行われた時，un型は両側の文脈に残る(コピーされる)が，lin型はどちらか片方の文脈にしか残らない．
@@ -59,7 +59,7 @@ un 型はふつうの単純型と同じで，lin 型が線形型とする．
 Appの型付け規則を見る:
 
 <div style="text-align: center">
-    <img src="https://pbs.twimg.com/media/GA3wjJRb0AEG7Uq?format=jpg&name=medium" width='50%'>
+    <img src="https://pbs.twimg.com/media/GXQGkXobgAIYQhd?format=jpg&name=medium" width='50%'>
 </div>
 
 ここで，qはqualifier(lin | un)である．
@@ -138,13 +138,13 @@ AならばBかつCはどうだろう．
 以下に，線形論理の推論規則を示す．
 
 <div style="text-align: center">
-    <img src="https://pbs.twimg.com/media/GAzShXva4AAn0Kt?format=jpg&name=4096x4096" width='70%'>
+    <img src="https://pbs.twimg.com/media/GXQGe7tawAA935O?format=jpg&name=4096x4096" width='70%'>
 </div>
 
 $\oplus$，<div class="rotate">&</div>はそれぞれ&，$\otimes$の双対，つまりorにあたるものである．
 
-contraction，weakeningが，演算子'!'，'?'の上でのみ定義されている．contractio，weakeningは，論理式の任意個コピーを可能にしている．つまり，デフォルトでは線形論理式はresource sensitiveで，これらの演算子をつけた時のみ資源の消費を考慮しなくてもよくなる．
-これらの演算子は指数関数演算子と呼ばれていて，線形論理と古典論理を接続している．
+contraction，weakeningが，演算子'!'，'?'の上でのみ定義されている．contraction，weakeningは，論理式の任意個コピーを可能にしている．(exchangeは認められている．$\Gamma$は論理式の列で，exchange，contraction，weakeningがあると，集合のように振る舞う．一方で，exchangeのみだと，$\Gamma$は多重集合のように振る舞う．) つまり，デフォルトでは線形論理式はresource sensitiveで，これらの演算子をつけた時のみ資源の消費を考慮しなくてもよくなる．
+これらの演算子は指数的演算子と呼ばれていて，線形論理と古典論理を接続している．
 
 
 ## 線形論理の線形性

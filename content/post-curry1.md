@@ -15,14 +15,14 @@ amazonでこんなものを見かけた．[https://amzn.asia/d/15m02tW](https://
 早速買ってみた．
 
 <div style="text-align: center">
-    <img src="https://pbs.twimg.com/media/F19llFzacAAb1sH?format=jpg&name=large" width='50%'>
+    <img src="https://pbs.twimg.com/media/GXQLpElbgAMFVa0?format=jpg&name=large" width='50%'>
 </div>
 
 （雰囲気でガラムマサラも追加で買った．）
 
 これはやるしかない．やったことないけど多分いける．
 
-## つくった 
+## つくった
 
 玉ねぎと肉を炒めて，と買ったスパイスを全部小さじ１杯入れて，水とトマト缶を入れて煮た．
 
@@ -32,23 +32,19 @@ amazonでこんなものを見かけた．[https://amzn.asia/d/15m02tW](https://
 
 
 <div style="text-align: center">
-    <img src="https://pbs.twimg.com/media/F19llF0aEAAn7ad?format=jpg&name=large" width='50%'>
+    <img src="https://pbs.twimg.com/media/GXQLpEkaMAAr70X?format=jpg&name=large" width='50%'>
 </div>
 
 #### トマト缶 200g
 
 <div style="text-align: center">
-    <img src="https://pbs.twimg.com/media/F19lns_aAAAKuXf?format=jpg&name=large" width='50%'>
-</div>
-
-<div style="text-align: center">
-    <img src="https://pbs.twimg.com/media/F19lntHaYAIAkJp?format=jpg&name=large" width='50%'>
+    <img src="https://pbs.twimg.com/media/GXQLx33bgAAcDo2?format=jpg&name=large" width='50%'>
 </div>
 
 #### 鶏肉 250g
 
 <div style="text-align: center">
-    <img src="https://pbs.twimg.com/media/F19oLCsaYAEo0C2?format=jpg&name=large" width='50%'>
+    <img src="https://pbs.twimg.com/media/GXQL9eVbgAEDwlT?format=jpg&name=medium" width='50%'>
 </div>
 
 #### スパイス
@@ -65,7 +61,7 @@ amazonでこんなものを見かけた．[https://amzn.asia/d/15m02tW](https://
 
 
 <div style="text-align: center">
-    <img src="https://pbs.twimg.com/media/F19llF6aIAE3eng?format=jpg&name=large" width='50%'>
+    <img src="https://pbs.twimg.com/media/GXQLpEjbgAMM4XU?format=jpg&name=large" width='50%'>
 </div>
 
 よくわかんないからとりあえず全部小さじ1杯にしてみた．
@@ -83,14 +79,14 @@ amazonでこんなものを見かけた．[https://amzn.asia/d/15m02tW](https://
 #### 1. フライパンにサラダ油をしいて，中火で鶏肉，玉ねぎを炒める．
 
 <div style="text-align: center">
-    <img src="https://pbs.twimg.com/media/F19lns_aEAIKhyX?format=jpg&name=large" width='50%'>
+    <img src="https://pbs.twimg.com/media/GXQLx33bgAU1LHQ?format=jpg&name=large" width='50%'>
 </div>
 
 #### 2. スパイスを全部入れてみる．
 
 
 <div style="text-align: center">
-    <img src="https://pbs.twimg.com/media/F19lntEaMAAnSPt?format=jpg&name=large" width='50%'>
+    <img src="https://pbs.twimg.com/media/GXQLx37bgAA8oef?format=jpg&name=large" width='50%'>
 </div>
 
 入れてみた．
@@ -98,7 +94,7 @@ amazonでこんなものを見かけた．[https://amzn.asia/d/15m02tW](https://
 #### 3. 玉ねぎがいい感じになってきたら，弱火にして，水，トマト缶，塩，砂糖，鶏ガラスープの素を入れる．
 
 <div style="text-align: center">
-    <img src="https://pbs.twimg.com/media/F19qSxNaUAA7lXD?format=jpg&name=large" width='50%'>
+    <img src="https://pbs.twimg.com/media/GXQL4Q1bgAMUx1v?format=jpg&name=medium" width='50%'>
 </div>
 
 赤い．
@@ -106,14 +102,9 @@ amazonでこんなものを見かけた．[https://amzn.asia/d/15m02tW](https://
 
 #### 4. 水気が飛んだら皿に盛って完成．
 
-<div style="text-align: center">
-    <img src="https://pbs.twimg.com/media/F19lsvvaEAEArZI?format=jpg&name=large" width='50%'>
-</div>
-
-ぽい．
 
 <div style="text-align: center">
-    <img src="https://pbs.twimg.com/media/F19lsv0aUAE0kwI?format=jpg&name=large" width='50%'>
+    <img src="https://pbs.twimg.com/media/GXQL4QNbMAAH9N0?format=jpg&name=large" width='50%'>
 </div>
 
 やっぱ赤い．
