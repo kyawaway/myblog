@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html translate="no"  class="theme--kyasual" >
+
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, viewport-fit=cover">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://kyawaway.github.io/myblog/images/apple-touch-icon-144x144.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="120x120" href="https://kyawaway.github.io/myblog/images/apple-touch-icon-120x120.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="https://kyawaway.github.io/myblog/images/apple-touch-icon-72x72.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="57x57" href="https://kyawaway.github.io/myblog/images/apple-touch-icon-57x57.png" />
+  <link rel="short icon" href="https://kyawaway.github.io/myblog/images/favicon.png" type="image/x-icon" />
+  <link rel="stylesheet" href="https://kyawaway.github.io/myblog/style.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap" rel="stylesheet">
+  <title>遊び日記 • (過去記事転載)ライブラリに頼らずにニューラルネットワークを実装する</title>
+  
+  
+  
+</head>
+
+<body>
+  <div id="sidebar" class="animated fadeInDown">
+    <div class="logo-title">
+      <div class="title">
+        <img src=https://kyawaway.github.io/myblog/images/logo.png style="width:127px;" alt="logo" />
+        <h3><a href="https://kyawaway.github.io/myblog/">遊び日記</a></h3>
+        <div class="description">
+          <p>遊びの日記</p>
+        </div>
+      </div>
+    </div>
+    <ul class="social-links"><li><a href="https://github.com/kyawaway" aria-label="Go to Github profile page"><i class="fab fa-github"></i></a></li><li><a href="https://twitter.com/kyawaway" aria-label="Go to Twitter profile page"><i class="fab fa-twitter"></i></a></li>
+      
+    </ul>
+    <div class="footer">
+      
+      <span>Designed based on </span><a href="https://www.getzola.org/themes/anatole-zola/">anatole-zola</a>
+      <div class="by_zola"><a href="https://www.getzola.org/" target="_blank">Proudly published with Zola!</a></div>
+      
+    </div>
+  </div>
+  <div id="main">
+    <div class="page-top animated fadeInDown">
+      <div class="nav">
+        
+        
+        
+        
+        <li><a  href="https://kyawaway.github.io/myblog/">Home</a></li>
+        <li><a  href="https://kyawaway.github.io/myblog/about/">About</a></li><li><a  href="https://kyawaway.github.io/myblog/tags">Tags</a></li><li><a 
+            href="https://kyawaway.github.io/myblog/archive/">Archive</a></li><li><a  href="https://kyawaway.github.io/myblog/links/">Links</a></li></div>
+      <div class="information">
+        <div class="back_btn">
+          <a onclick="window.history.go(-1)" ><i
+              class="fas fa-chevron-left"></i></a>
+        </div>
+        
+        
+        
+        <div class="avatar"><img src="https://kyawaway.github.io/myblog/images/avatar.jpg"></div>
+      </div>
+    </div>
+    <div class="autopagerize_page_element">
+      <div class="content">
+        
+<article class="post animated fadeInDown">
+  <h1><a href="https:&#x2F;&#x2F;kyawaway.github.io&#x2F;myblog&#x2F;post-3&#x2F;">(過去記事転載)ライブラリに頼らずにニューラルネットワークを実装する</a></h1>
+  
+  <div class="post-content"><h2 id="hazimeni">はじめに</h2>
+<p>本記事では、著書「<a href="https://www.amazon.co.jp/%E3%82%BC%E3%83%AD%E3%81%8B%E3%82%89%E4%BD%9C%E3%82%8BDeep-Learning-%E2%80%95Python%E3%81%A7%E5%AD%A6%E3%81%B6%E3%83%87%E3%82%A3%E3%83%BC%E3%83%97%E3%83%A9%E3%83%BC%E3%83%8B%E3%83%B3%E3%82%B0%E3%81%AE%E7%90%86%E8%AB%96%E3%81%A8%E5%AE%9F%E8%A3%85-%E6%96%8E%E8%97%A4-%E5%BA%B7%E6%AF%85/dp/4873117585">ゼロから始めるDeep Learning</a>」を参考に、Pythonで、<strong>ライブラリを極力使わずに</strong> 2層のニューラルネットワークを実装、MNISTの画像データの学習を実装していきます。</p>
+<h2 id="huan-jing">環境</h2>
+<ul>
+<li>
+<p>CPU:第７世代intel corei7</p>
+</li>
+<li>
+<p>OS:Windows10home</p>
+</li>
+<li>
+<p>Language:Python3.6.5</p>
+</li>
+</ul>
+<h2 id="ge-zhong-guan-shu-noshi-zhuang">各種関数の実装</h2>
+<p>ディープラーニングを実装する前に、実装に必要な要素をfunctionsというファイルにまとめます。また、ほとんどの関数でnumpyを使います。numpyは使ってもいいですよね？</p>
+<pre data-lang="Python" style="background-color:#272822;color:#f8f8f2;" class="language-Python "><code class="language-Python" data-lang="Python"><span style="color:#f92672;">import </span><span>numpy </span><span style="color:#f92672;">as </span><span>np
+</span></code></pre>
+<h3 id="huo-xing-hua-guan-shu">活性化関数</h3>
+<p>活性化関数は、各ニューロンへの入力を整形するのに用いる関数です。今回はシグモイド関数のみ使用していますが、ReLuも有名なので実装しました。</p>
+<h4 id="sigumoidoguan-shu">シグモイド関数</h4>
+<p>シグモイド関数は、</p>
+<p>$$f(x) = \frac{1}{(1 + e^{-x})}$$</p>
+<p>で表される、入力の値の0から1の間に収めるための関数です。これをそのまま実装します。</p>
+<pre data-lang="python" style="background-color:#272822;color:#f8f8f2;" class="language-python "><code class="language-python" data-lang="python"><span style="font-style:italic;color:#f92672;">def </span><span style="color:#a6e22e;">sigmoid</span><span>(</span><span style="font-style:italic;color:#fd971f;">x</span><span>):
+</span><span>    </span><span style="color:#f92672;">return </span><span style="color:#ae81ff;">1 </span><span style="color:#f92672;">/ </span><span>(</span><span style="color:#ae81ff;">1 </span><span style="color:#f92672;">+ </span><span>np.exp(</span><span style="color:#f92672;">-</span><span>x))    
+</span></code></pre>
+<h5 id="sigumoidoguan-shu-nogou-pei">シグモイド関数の勾配</h5>
+<p>シグモイド関数の勾配を逆伝播で求めます。</p>
+<p>まず、計算グラフで$f(x) = \frac{1}{(1 - e^{-x})}$をそのまま表現します。</p>
+<p><img src="https://pbs.twimg.com/media/ETDjI-wUUAAbU1q.jpg" alt="" /></p>
+<p>次に、$\frac{1}{(1 - e^{-x})}=y$とし、逆伝播していきます。</p>
+<p><img src="https://pbs.twimg.com/media/ETDjJAeVAAElaz-.jpg" alt="" /></p>
+<p>以上より、$f(x) = \frac{1}{(1 - e^{-x})}$の勾配は</p>
+<p>$$\frac{\partial L}{\partial y}y^2\exp(-x)$$</p>
+<p>これを整理して、
+$$\frac{\partial L}{\partial y}y(1-y)$$
+で表されることがわかりました。これをそのまま実装します。</p>
+<pre data-lang="python" style="background-color:#272822;color:#f8f8f2;" class="language-python "><code class="language-python" data-lang="python"><span style="font-style:italic;color:#f92672;">def </span><span style="color:#a6e22e;">sigmoid_grad</span><span>(</span><span style="font-style:italic;color:#fd971f;">x</span><span>):
+</span><span>    </span><span style="color:#f92672;">return </span><span>(</span><span style="color:#ae81ff;">1.0 </span><span style="color:#f92672;">- </span><span>sigmoid(x)) </span><span style="color:#f92672;">* </span><span>sigmoid(x)
+</span></code></pre>
+<h4 id="relu">ReLu</h4>
+<p>Reluは、入力が0以下の時は0を、0より大きい時はそのままの値を返す関数です。</p>
+<pre data-lang="python" style="background-color:#272822;color:#f8f8f2;" class="language-python "><code class="language-python" data-lang="python"><span style="font-style:italic;color:#f92672;">def </span><span style="color:#a6e22e;">relu</span><span>(</span><span style="font-style:italic;color:#fd971f;">x</span><span>):
+</span><span>    </span><span style="color:#f92672;">return </span><span>np.maximum(</span><span style="color:#ae81ff;">0</span><span>, x)        
+</span></code></pre>
+<p>numpyのmaximumは、引数を２つ取り、値の大きいほうを返すメソッドで、0とreluの引数をmaximumで比較することでReLuを実装しています。</p>
+<h3 id="sun-shi-guan-shu">損失関数</h3>
+<p>損失関数は、学習の誤差、どれだけ間違えたかを出力します。勾配法によってこの値を小さくします。
+ニューラルネットワークの出力と教師データを引数にとり、その誤差を出力します。今回使うのは交差エントロピー誤差ですが、有名な二乗和誤差も実装してみました。</p>
+<h4 id="er-cheng-he-wu-chai">二乗和誤差</h4>
+<p>二乗和誤差は、</p>
+<p>$$E = \frac{1}{2}\sum_{n}(y_k - t_k)^2$$</p>
+<p>で表されます。誤差の二乗の和です。</p>
+<pre data-lang="python" style="background-color:#272822;color:#f8f8f2;" class="language-python "><code class="language-python" data-lang="python"><span style="font-style:italic;color:#f92672;">def </span><span style="color:#a6e22e;">sum_squared_error</span><span>(</span><span style="font-style:italic;color:#fd971f;">y</span><span>, </span><span style="font-style:italic;color:#fd971f;">t</span><span>):
+</span><span>    </span><span style="color:#f92672;">return </span><span style="color:#ae81ff;">0.5 </span><span style="color:#f92672;">* </span><span>np.sum((y</span><span style="color:#f92672;">-</span><span>t)</span><span style="color:#f92672;">**</span><span style="color:#ae81ff;">2</span><span>)
+</span></code></pre>
+<h4 id="jiao-chai-entoropiwu-chai">交差エントロピー誤差</h4>
+<p>交差エントロピー誤差は、</p>
+<p>$$E = -\sum_{k}t_k \log{y_k}$$</p>
+<p>で表されます。今回行うのはバッチデータに対する学習なので、</p>
+<p>$$E = -\frac{1}{N}\sum_{n} \sum_{k}t_{nk} \log{y_{nk}}$$</p>
+<p>のようにN個の訓練データの誤差平均を出すような形にします。</p>
+<pre data-lang="python" style="background-color:#272822;color:#f8f8f2;" class="language-python "><code class="language-python" data-lang="python"><span style="font-style:italic;color:#f92672;">def </span><span style="color:#a6e22e;">cross_entropy_error</span><span>(</span><span style="font-style:italic;color:#fd971f;">y</span><span>, </span><span style="font-style:italic;color:#fd971f;">t</span><span>):
+</span><span>    </span><span style="color:#f92672;">if </span><span>y.ndim </span><span style="color:#f92672;">== </span><span style="color:#ae81ff;">1</span><span>:
+</span><span>        t </span><span style="color:#f92672;">= </span><span>t.reshape(</span><span style="color:#ae81ff;">1</span><span>, t.size)
+</span><span>        y </span><span style="color:#f92672;">= </span><span>y.reshape(</span><span style="color:#ae81ff;">1</span><span>, y.size)
+</span><span>
+</span><span>
+</span><span>    </span><span style="color:#f92672;">if </span><span>t.size </span><span style="color:#f92672;">== </span><span>y.size:
+</span><span>        t </span><span style="color:#f92672;">= </span><span>t.argmax(</span><span style="font-style:italic;color:#fd971f;">axis</span><span style="color:#f92672;">=</span><span style="color:#ae81ff;">1</span><span>)
+</span><span>
+</span><span>    batch_size </span><span style="color:#f92672;">= </span><span>y.shape[</span><span style="color:#ae81ff;">0</span><span>]
+</span><span>    </span><span style="color:#f92672;">return -</span><span>np.sum(np.log(y[np.arange(batch_size), t] </span><span style="color:#f92672;">+ </span><span style="color:#ae81ff;">1e-7</span><span>)) </span><span style="color:#f92672;">/ </span><span>batch_size
+</span></code></pre>
+<p>y(ニューラルネットワークの出力)の次元が１の場合は、データ一つあたりの誤差を計算するためにデータを整形しバッチの枚数で正規化します。
+<code>y[np.arrange(batch_size),t]</code>は、各データの正解ラベルに対応するニューラルネットワークの出力を抽出します。今回はｔがラベル表現なので、このような形をとりました。
+また、<code>y[np.arrange(batch_size),t]</code>の値が０になった時、np.log(0)=-∞になってしまうので、それを避けるために1e-7のような微小な数を加えています。</p>
+<h3 id="chu-li-ceng">出力層</h3>
+<h4 id="heng-chang-guan-shu">恒常関数</h4>
+<p>恒常関数は、出力層の中でも、入力された値をそのまま返す関数です。主に分類問題で使います。実装も、</p>
+<pre data-lang="python" style="background-color:#272822;color:#f8f8f2;" class="language-python "><code class="language-python" data-lang="python"><span> </span><span style="font-style:italic;color:#f92672;">def </span><span style="color:#a6e22e;">constant</span><span>(</span><span style="font-style:italic;color:#fd971f;">x</span><span>):
+</span><span>    </span><span style="color:#f92672;">return </span><span>x
+</span></code></pre>
+<p>のように簡単です。</p>
+<h4 id="sohutomatukusuguan-shu">ソフトマックス関数</h4>
+<p>ソフトマックス関数は、主に回帰問題で使います。</p>
+<p>$$y_k = \frac{\exp(a_k)}{\sum_{i=1}^{n}\exp(a_i)}$$
+ここで、
+$y_k$($k = 0,1,...$)は出力層のニューロン、
+$a_k$($k=0,1,...$)は、出力層に対する入力層の各ニューロンです。
+分母を見ると分かる通り、全ての出力が、全ての入力から影響を受けます。</p>
+<p>このままの形で使用すると、$a_k$の値が大きくなってくると簡単にオーバーフローを起こしてしまうので、任意定数$C$を用いて、</p>
+<p>$$
+\begin{aligned}
+y_k &amp;= \frac{C\exp(a_k)}{C\sum_{i=1}^{n}\exp(a_i)} \\
+&amp;= \frac{\exp(a_k +\log{C})}{\sum_{i=1}^{n}\exp(a_i+\log{C})}  \\
+&amp;= \frac{\exp(a_k+C')}{\sum_{i=1}^{n}\exp(a_i+C')}
+\end{aligned}
+$$</p>
+<p>で対策します。
+$C'$は、入力信号の中で最大の値を用いるのが一般的で、今回もそのように実装します。</p>
+<pre data-lang="python" style="background-color:#272822;color:#f8f8f2;" class="language-python "><code class="language-python" data-lang="python"><span style="font-style:italic;color:#f92672;">def </span><span style="color:#a6e22e;">softmax</span><span>(</span><span style="font-style:italic;color:#fd971f;">x</span><span>):
+</span><span>    </span><span style="color:#f92672;">if </span><span>x.ndim </span><span style="color:#f92672;">== </span><span style="color:#ae81ff;">2</span><span>:
+</span><span>        x </span><span style="color:#f92672;">= </span><span>x.T
+</span><span>        x </span><span style="color:#f92672;">= </span><span>x </span><span style="color:#f92672;">- </span><span>np.max(x, </span><span style="font-style:italic;color:#fd971f;">axis</span><span style="color:#f92672;">=</span><span style="color:#ae81ff;">0</span><span>)
+</span><span>        y </span><span style="color:#f92672;">= </span><span>np.exp(x) </span><span style="color:#f92672;">/ </span><span>np.sum(np.exp(x), </span><span style="font-style:italic;color:#fd971f;">axis</span><span style="color:#f92672;">=</span><span style="color:#ae81ff;">0</span><span>)
+</span><span>        </span><span style="color:#f92672;">return </span><span>y.T
+</span><span>
+</span><span>    x </span><span style="color:#f92672;">= </span><span>x </span><span style="color:#f92672;">- </span><span>np.max(x)
+</span><span>    </span><span style="color:#f92672;">return </span><span>np.exp(x) </span><span style="color:#f92672;">/ </span><span>np.sum(np.exp(x))
+</span></code></pre>
+<h2 id="2ceng-niyurarunetutowakunoshi-zhuang">２層ニューラルネットワークの実装</h2>
+<p>TwoLayerNetというクラスの形で実装します。</p>
+<pre data-lang="python" style="background-color:#272822;color:#f8f8f2;" class="language-python "><code class="language-python" data-lang="python"><span style="color:#f92672;">import </span><span>sys, os
+</span><span style="color:#f92672;">import </span><span>numpy </span><span style="color:#f92672;">as </span><span>np
+</span><span>sys.path.append(os.pardir)  
+</span><span style="color:#f92672;">from </span><span>functions </span><span style="color:#f92672;">import </span><span style="color:#ae81ff;">*
+</span></code></pre>
+<p>numpyのほかに、親ディレクトリのファイルをインポートするための設定に必要なライブラリも使っていますが、本質から外れるので説明は省きます。上で実装した関数たちが入っているfunctionsファイルもインポートします。</p>
+<p>次は、クラス本体です。</p>
+<pre data-lang="python" style="background-color:#272822;color:#f8f8f2;" class="language-python "><code class="language-python" data-lang="python"><span style="font-style:italic;color:#f92672;">class </span><span style="text-decoration:underline;color:#a6e22e;">TwoLayerNet</span><span>:
+</span><span>
+</span><span>    </span><span style="font-style:italic;color:#f92672;">def </span><span style="color:#66d9ef;">__init__</span><span>(</span><span style="font-style:italic;color:#fd971f;">self</span><span>, </span><span style="font-style:italic;color:#fd971f;">input_size</span><span>, </span><span style="font-style:italic;color:#fd971f;">hidden_size</span><span>, </span><span style="font-style:italic;color:#fd971f;">output_size</span><span>, </span><span style="font-style:italic;color:#fd971f;">weight_init_std</span><span style="color:#f92672;">=</span><span style="color:#ae81ff;">0.01</span><span>):
+</span><span>
+</span><span>        self.params </span><span style="color:#f92672;">= </span><span>{}
+</span><span>        self.params[</span><span style="color:#e6db74;">&#39;W1&#39;</span><span>] </span><span style="color:#f92672;">= </span><span>weight_init_std </span><span style="color:#f92672;">* </span><span>np.random.randn(input_size, hidden_size)
+</span><span>        self.params[</span><span style="color:#e6db74;">&#39;b1&#39;</span><span>] </span><span style="color:#f92672;">= </span><span>np.zeros(hidden_size)
+</span><span>        self.params[</span><span style="color:#e6db74;">&#39;W2&#39;</span><span>] </span><span style="color:#f92672;">= </span><span>weight_init_std </span><span style="color:#f92672;">* </span><span>np.random.randn(hidden_size, output_size)
+</span><span>        self.params[</span><span style="color:#e6db74;">&#39;b2&#39;</span><span>] </span><span style="color:#f92672;">= </span><span>np.zeros(output_size)
+</span><span>
+</span><span>    </span><span style="font-style:italic;color:#f92672;">def </span><span style="color:#a6e22e;">predict</span><span>(</span><span style="font-style:italic;color:#fd971f;">self</span><span>, </span><span style="font-style:italic;color:#fd971f;">x</span><span>):
+</span><span>        W1, W2 </span><span style="color:#f92672;">= </span><span>self.params[</span><span style="color:#e6db74;">&#39;W1&#39;</span><span>], self.params[</span><span style="color:#e6db74;">&#39;W2&#39;</span><span>]
+</span><span>        b1, b2 </span><span style="color:#f92672;">= </span><span>self.params[</span><span style="color:#e6db74;">&#39;b1&#39;</span><span>], self.params[</span><span style="color:#e6db74;">&#39;b2&#39;</span><span>]
+</span><span>
+</span><span>        a1 </span><span style="color:#f92672;">= </span><span>np.dot(x, W1) </span><span style="color:#f92672;">+ </span><span>b1
+</span><span>        z1 </span><span style="color:#f92672;">= </span><span>sigmoid(a1)
+</span><span>        a2 </span><span style="color:#f92672;">= </span><span>np.dot(z1, W2) </span><span style="color:#f92672;">+ </span><span>b2
+</span><span>        y </span><span style="color:#f92672;">= </span><span>softmax(a2)
+</span><span>
+</span><span>        </span><span style="color:#f92672;">return </span><span>y
+</span><span>
+</span><span>
+</span><span>    </span><span style="font-style:italic;color:#f92672;">def </span><span style="color:#a6e22e;">loss</span><span>(</span><span style="font-style:italic;color:#fd971f;">self</span><span>, </span><span style="font-style:italic;color:#fd971f;">x</span><span>, </span><span style="font-style:italic;color:#fd971f;">t</span><span>):
+</span><span>        y </span><span style="color:#f92672;">= </span><span>self.predict(x)
+</span><span>
+</span><span>        </span><span style="color:#f92672;">return </span><span>cross_entropy_error(y, t)
+</span><span>
+</span><span>    </span><span style="font-style:italic;color:#f92672;">def </span><span style="color:#a6e22e;">accuracy</span><span>(</span><span style="font-style:italic;color:#fd971f;">self</span><span>, </span><span style="font-style:italic;color:#fd971f;">x</span><span>, </span><span style="font-style:italic;color:#fd971f;">t</span><span>):
+</span><span>        y </span><span style="color:#f92672;">= </span><span>self.predict(x)
+</span><span>        y </span><span style="color:#f92672;">= </span><span>np.argmax(y, </span><span style="font-style:italic;color:#fd971f;">axis</span><span style="color:#f92672;">=</span><span style="color:#ae81ff;">1</span><span>)
+</span><span>        t </span><span style="color:#f92672;">= </span><span>np.argmax(t, </span><span style="font-style:italic;color:#fd971f;">axis</span><span style="color:#f92672;">=</span><span style="color:#ae81ff;">1</span><span>)
+</span><span>
+</span><span>        accuracy </span><span style="color:#f92672;">= </span><span>np.sum(y </span><span style="color:#f92672;">== </span><span>t) </span><span style="color:#f92672;">/ </span><span style="font-style:italic;color:#66d9ef;">float</span><span>(x.shape[</span><span style="color:#ae81ff;">0</span><span>])
+</span><span>        </span><span style="color:#f92672;">return </span><span>accuracy
+</span><span>
+</span><span>
+</span><span>    </span><span style="font-style:italic;color:#f92672;">def </span><span style="color:#a6e22e;">numerical_gradient</span><span>(</span><span style="font-style:italic;color:#fd971f;">self</span><span>, </span><span style="font-style:italic;color:#fd971f;">x</span><span>, </span><span style="font-style:italic;color:#fd971f;">t</span><span>):
+</span><span>        loss_W </span><span style="color:#f92672;">= </span><span style="font-style:italic;color:#f92672;">lambda </span><span style="font-style:italic;color:#fd971f;">W</span><span>: self.loss(x, t)
+</span><span>
+</span><span>        grads </span><span style="color:#f92672;">= </span><span>{}
+</span><span>        grads[</span><span style="color:#e6db74;">&#39;W1&#39;</span><span>] </span><span style="color:#f92672;">= </span><span>numerical_gradient(loss_W, self.params[</span><span style="color:#e6db74;">&#39;W1&#39;</span><span>])
+</span><span>        grads[</span><span style="color:#e6db74;">&#39;b1&#39;</span><span>] </span><span style="color:#f92672;">= </span><span>numerical_gradient(loss_W, self.params[</span><span style="color:#e6db74;">&#39;b1&#39;</span><span>])
+</span><span>        grads[</span><span style="color:#e6db74;">&#39;W2&#39;</span><span>] </span><span style="color:#f92672;">= </span><span>numerical_gradient(loss_W, self.params[</span><span style="color:#e6db74;">&#39;W2&#39;</span><span>])
+</span><span>        grads[</span><span style="color:#e6db74;">&#39;b2&#39;</span><span>] </span><span style="color:#f92672;">= </span><span>numerical_gradient(loss_W, self.params[</span><span style="color:#e6db74;">&#39;b2&#39;</span><span>])
+</span><span>
+</span><span>        </span><span style="color:#f92672;">return </span><span>grads
+</span><span>
+</span><span>    </span><span style="font-style:italic;color:#f92672;">def </span><span style="color:#a6e22e;">gradient</span><span>(</span><span style="font-style:italic;color:#fd971f;">self</span><span>, </span><span style="font-style:italic;color:#fd971f;">x</span><span>, </span><span style="font-style:italic;color:#fd971f;">t</span><span>):
+</span><span>        W1, W2 </span><span style="color:#f92672;">= </span><span>self.params[</span><span style="color:#e6db74;">&#39;W1&#39;</span><span>], self.params[</span><span style="color:#e6db74;">&#39;W2&#39;</span><span>]
+</span><span>        b1, b2 </span><span style="color:#f92672;">= </span><span>self.params[</span><span style="color:#e6db74;">&#39;b1&#39;</span><span>], self.params[</span><span style="color:#e6db74;">&#39;b2&#39;</span><span>]
+</span><span>        grads </span><span style="color:#f92672;">= </span><span>{}
+</span><span>
+</span><span>        batch_num </span><span style="color:#f92672;">= </span><span>x.shape[</span><span style="color:#ae81ff;">0</span><span>]
+</span><span>
+</span><span>
+</span><span>        a1 </span><span style="color:#f92672;">= </span><span>np.dot(x, W1) </span><span style="color:#f92672;">+ </span><span>b1
+</span><span>        z1 </span><span style="color:#f92672;">= </span><span>sigmoid(a1)
+</span><span>        a2 </span><span style="color:#f92672;">= </span><span>np.dot(z1, W2) </span><span style="color:#f92672;">+ </span><span>b2
+</span><span>        y </span><span style="color:#f92672;">= </span><span>softmax(a2)
+</span><span>
+</span><span>
+</span><span>        dy </span><span style="color:#f92672;">= </span><span>(y </span><span style="color:#f92672;">- </span><span>t) </span><span style="color:#f92672;">/ </span><span>batch_num
+</span><span>        grads[</span><span style="color:#e6db74;">&#39;W2&#39;</span><span>] </span><span style="color:#f92672;">= </span><span>np.dot(z1.T, dy)
+</span><span>        grads[</span><span style="color:#e6db74;">&#39;b2&#39;</span><span>] </span><span style="color:#f92672;">= </span><span>np.sum(dy, </span><span style="font-style:italic;color:#fd971f;">axis</span><span style="color:#f92672;">=</span><span style="color:#ae81ff;">0</span><span>)
+</span><span>
+</span><span>        dz1 </span><span style="color:#f92672;">= </span><span>np.dot(dy, W2.T)
+</span><span>        da1 </span><span style="color:#f92672;">= </span><span>sigmoid_grad(a1) </span><span style="color:#f92672;">* </span><span>dz1
+</span><span>        grads[</span><span style="color:#e6db74;">&#39;W1&#39;</span><span>] </span><span style="color:#f92672;">= </span><span>np.dot(x.T, da1)
+</span><span>        grads[</span><span style="color:#e6db74;">&#39;b1&#39;</span><span>] </span><span style="color:#f92672;">= </span><span>np.sum(da1, </span><span style="font-style:italic;color:#fd971f;">axis</span><span style="color:#f92672;">=</span><span style="color:#ae81ff;">0</span><span>)
+</span><span>
+</span><span>        </span><span style="color:#f92672;">return </span><span>grads
+</span></code></pre>
+<p>最初に宣言した<code>params</code>は辞書型で、各層の重み(W)とバイアス(b)を保持するために使います
+。
+<code>grad</code>は辞書型で、各層の重み(W)とバイアス(b)の勾配を保持します。</p>
+<p><code>__ init__</code>メソッドは、()入力層のニューロン数、隠れ層のニューロン数、出力層のニューロン数)を引数にとり、各値の初期化をします。</p>
+<p><code>predict</code>メソッドは、画像データを引数にとり、各層に順番に流し込んでいきます。（活性化関数はシグモイド関数、出力関数はソフトマックス関数）</p>
+<p><code>loss</code>メソッドは、(画像データ、正解ラベル)を引数にとり、損失関数(交差エントロピー誤差)を通した値を返します。</p>
+<p><code>accurary</code>メソッドは、(画像データ、正解ラベル)を引数にとり、認識の制度を返します。</p>
+<p><code>numerical_gradient</code>メソッドは、数値微分を用いて勾配を求めます。損失関数を各ニューロンの重みで偏微分しています。途中でlamnda式を使っている箇所がありますが、この部分は <code>self.loss(x, t)</code>を実行する関数を宣言しているのとあまり意味は変わりません。記述がシンプルで済むので取り入れています。</p>
+<p><code>gradient</code>メソッドでは、誤差逆伝播法を使って勾配を求めます。逆伝播で求めたシグモイド関数の勾配<code>sigmoid_grad</code>を使っています。</p>
+<h2 id="2ceng-niyurarunetutowakuwoshi-tutaxue-xi-noshi-zhuang">２層ニューラルネットワークを使った学習の実装</h2>
+<p>上で実装した２層ニューラルネットワークを実際に使っていきます。</p>
+<pre data-lang="python" style="background-color:#272822;color:#f8f8f2;" class="language-python "><code class="language-python" data-lang="python"><span style="color:#f92672;">import </span><span>sys, os
+</span><span>sys.path.append(os.pardir)  
+</span><span style="color:#f92672;">import </span><span>numpy </span><span style="color:#f92672;">as </span><span>np
+</span><span style="color:#f92672;">import </span><span>matplotlib.pyplot </span><span style="color:#f92672;">as </span><span>plt
+</span><span style="color:#f92672;">from </span><span>dataset.mnist </span><span style="color:#f92672;">import </span><span>load_mnist
+</span><span style="color:#f92672;">from </span><span>two_layer </span><span style="color:#f92672;">import </span><span>TwoLayerNet
+</span></code></pre>
+<p>numpyとmatplotlibのほかに、先ほどと同じように親ディレクトリのファイルをインポートするための設定に必要なライブラリも使っていますが、本質から外れるので説明は省きます。要は、mnist.pyがインポートできればOKです。（今回は、本でデータセットがまとめられていたのでそれをダウンロードしてそのまま使用しました。）
+それから、上で実装したTwoLayerNetのインポートも忘れずに行います。</p>
+<pre data-lang="python" style="background-color:#272822;color:#f8f8f2;" class="language-python "><code class="language-python" data-lang="python"><span>(x_train, t_train), (x_test, t_test) </span><span style="color:#f92672;">= </span><span>load_mnist(</span><span style="font-style:italic;color:#fd971f;">normalize</span><span style="color:#f92672;">=</span><span style="color:#ae81ff;">True</span><span>, </span><span style="font-style:italic;color:#fd971f;">one_hot_label</span><span style="color:#f92672;">=</span><span style="color:#ae81ff;">True</span><span>)
+</span><span>
+</span><span>network </span><span style="color:#f92672;">= </span><span>TwoLayerNet(</span><span style="font-style:italic;color:#fd971f;">input_size</span><span style="color:#f92672;">=</span><span style="color:#ae81ff;">784</span><span>, </span><span style="font-style:italic;color:#fd971f;">hidden_size</span><span style="color:#f92672;">=</span><span style="color:#ae81ff;">50</span><span>, </span><span style="font-style:italic;color:#fd971f;">output_size</span><span style="color:#f92672;">=</span><span style="color:#ae81ff;">10</span><span>)
+</span><span>
+</span><span>iters_num </span><span style="color:#f92672;">= </span><span style="color:#ae81ff;">10000  
+</span><span>train_size </span><span style="color:#f92672;">= </span><span>x_train.shape[</span><span style="color:#ae81ff;">0</span><span>]
+</span><span>batch_size </span><span style="color:#f92672;">= </span><span style="color:#ae81ff;">100
+</span><span>learning_rate </span><span style="color:#f92672;">= </span><span style="color:#ae81ff;">0.1
+</span><span>
+</span><span>train_loss_list </span><span style="color:#f92672;">= </span><span>[]
+</span><span>train_acc_list </span><span style="color:#f92672;">= </span><span>[]
+</span><span>test_acc_list </span><span style="color:#f92672;">= </span><span>[]
+</span><span>
+</span><span>iter_per_epoch </span><span style="color:#f92672;">= </span><span style="color:#66d9ef;">max</span><span>(train_size </span><span style="color:#f92672;">/ </span><span>batch_size, </span><span style="color:#ae81ff;">1</span><span>)
+</span></code></pre>
+<p>networkを、各パラメータを指定したTwoLayerNet型のインスタンスにします。
+<code>iters_num</code>で訓練データ数を、<code>batch_size</code>でミニバッチの数を指定します。</p>
+<p><code>iter_per_epoch</code>とは、エポック（見た通り、訓練データ数/ミニバッチ数）を計算して代入しています。</p>
+<pre data-lang="python" style="background-color:#272822;color:#f8f8f2;" class="language-python "><code class="language-python" data-lang="python"><span style="color:#f92672;">for </span><span>i </span><span style="color:#f92672;">in </span><span style="color:#66d9ef;">range</span><span>(iters_num):
+</span><span>    batch_mask </span><span style="color:#f92672;">= </span><span>np.random.choice(train_size, batch_size)
+</span><span>    x_batch </span><span style="color:#f92672;">= </span><span>x_train[batch_mask]
+</span><span>    t_batch </span><span style="color:#f92672;">= </span><span>t_train[batch_mask]
+</span><span>
+</span><span>    grad </span><span style="color:#f92672;">= </span><span>network.gradient(x_batch, t_batch)
+</span><span>
+</span><span>    </span><span style="color:#f92672;">for </span><span>key </span><span style="color:#f92672;">in </span><span>(</span><span style="color:#e6db74;">&#39;W1&#39;</span><span>, </span><span style="color:#e6db74;">&#39;b1&#39;</span><span>, </span><span style="color:#e6db74;">&#39;W2&#39;</span><span>, </span><span style="color:#e6db74;">&#39;b2&#39;</span><span>):
+</span><span>        network.params[key] </span><span style="color:#f92672;">-= </span><span>learning_rate </span><span style="color:#f92672;">* </span><span>grad[key]
+</span><span>
+</span><span>    loss </span><span style="color:#f92672;">= </span><span>network.loss(x_batch, t_batch)
+</span><span>    train_loss_list.append(loss)
+</span><span>
+</span><span>    </span><span style="color:#f92672;">if </span><span>i </span><span style="color:#f92672;">% </span><span>iter_per_epoch </span><span style="color:#f92672;">== </span><span style="color:#ae81ff;">0</span><span>:
+</span><span>        train_acc </span><span style="color:#f92672;">= </span><span>network.accuracy(x_train, t_train)
+</span><span>        test_acc </span><span style="color:#f92672;">= </span><span>network.accuracy(x_test, t_test)
+</span><span>        train_acc_list.append(train_acc)
+</span><span>        test_acc_list.append(test_acc)
+</span><span>        </span><span style="color:#66d9ef;">print</span><span>(</span><span style="color:#e6db74;">&quot;train acc, test acc | &quot; </span><span style="color:#f92672;">+ </span><span style="font-style:italic;color:#66d9ef;">str</span><span>(train_acc) </span><span style="color:#f92672;">+ </span><span style="color:#e6db74;">&quot;, &quot; </span><span style="color:#f92672;">+ </span><span style="font-style:italic;color:#66d9ef;">str</span><span>(test_acc))
+</span><span>
+</span><span>
+</span><span>markers </span><span style="color:#f92672;">= </span><span>{</span><span style="color:#e6db74;">&#39;train&#39;</span><span>: </span><span style="color:#e6db74;">&#39;o&#39;</span><span>, </span><span style="color:#e6db74;">&#39;test&#39;</span><span>: </span><span style="color:#e6db74;">&#39;s&#39;</span><span>}
+</span><span>x </span><span style="color:#f92672;">= </span><span>np.arange(</span><span style="color:#66d9ef;">len</span><span>(train_acc_list))
+</span></code></pre>
+<p><code>grad</code>に勾配の値を入れるときに、順伝播(数値微分)を用いるなら<code>numerical_gradient</code>を、逆伝播を用いるなら<code>gradient</code>を使用します。</p>
+<p>認識精度を計算する際、データ一つあたりではなく１エポックごとに精度を計算しています。（そこまで高精度な結果はいらないので）</p>
+<p>最後に、結果（認識精度の変化）をグラフで出力します。</p>
+<pre data-lang="python" style="background-color:#272822;color:#f8f8f2;" class="language-python "><code class="language-python" data-lang="python"><span>plt.plot(x, train_acc_list, </span><span style="font-style:italic;color:#fd971f;">label</span><span style="color:#f92672;">=</span><span style="color:#e6db74;">&#39;train acc&#39;</span><span>)
+</span><span>plt.plot(x, test_acc_list, </span><span style="font-style:italic;color:#fd971f;">label</span><span style="color:#f92672;">=</span><span style="color:#e6db74;">&#39;test acc&#39;</span><span>, </span><span style="font-style:italic;color:#fd971f;">linestyle</span><span style="color:#f92672;">=</span><span style="color:#e6db74;">&#39;--&#39;</span><span>)
+</span><span>plt.xlabel(</span><span style="color:#e6db74;">&quot;epochs&quot;</span><span>)
+</span><span>plt.ylabel(</span><span style="color:#e6db74;">&quot;accuracy&quot;</span><span>)
+</span><span>plt.ylim(</span><span style="color:#ae81ff;">0</span><span>, </span><span style="color:#ae81ff;">1.0</span><span>)
+</span><span>plt.legend(</span><span style="font-style:italic;color:#fd971f;">loc</span><span style="color:#f92672;">=</span><span style="color:#e6db74;">&#39;lower right&#39;</span><span>)
+</span><span>plt.show()
+</span></code></pre>
+<h4 id="chu-li-jie-guo">出力結果</h4>
+<p>逆伝播：
+<img src="https://pbs.twimg.com/media/ETD55_kUcAEtBer.png" alt="" /></p>
+<p>15秒ほどでプロットまで終わりました。学習が進むにつれて損失が少なくなっている様子がわかります。また、trainデータとtestデータのグラフがほぼ重なっているので、過学習も起こっていません。</p>
+<p>順伝播の場合は、10分ほど待っても最初のエポックの計算しか終わりませんでした。そういうものならいいけれど、何か問題があるのかな...</p>
+<h2 id="owarini">おわりに</h2>
+<p>参考にするとか言っておきながら、ほとんど丸コピになってしまいました...
+機械学習、深層学習という分野は、初学のうちはライブラリの使い方ゲ―のようになってしまう気がしますが（僕もほとんど何も知らないので言い切れませんが）、このように自分の手で一からアルゴリズムを実装してみるのもまた楽しいです。</p>
+</div>
+  <div class="post-footer">
+    <div class="meta">
+      <div class="info">
+        
+        <i class="far fa-sun"></i><span class="date">2020-02-15</span>
+        
+        
+        <i class="fas fa-tags"></i>
+        
+        <a class="tag" href="https://kyawaway.github.io/myblog/tags/python">&nbsp;python</a>
+        
+        <a class="tag" href="https://kyawaway.github.io/myblog/tags/deep-learning">&nbsp;deep-learning</a>
+        
+        
+      </div>
+    </div>
+  </div>
+</article>
+<div class="share">
+  <div class="twitter">
+    <a class="fab fa-twitter"
+      href="http://twitter.com/share?text=(過去記事転載)ライブラリに頼らずにニューラルネットワークを実装する&url=https:&#x2F;&#x2F;kyawaway.github.io&#x2F;myblog&#x2F;post-3&#x2F;&hashtags=python,deep-learning"></a>
+  </div>
+</div>
+
+
+
+
+
+
+
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script>
+  MathJax = {
+    tex: {
+      displayMath: [['$$', '$$'], ["\\[", "\\]"]],
+      inlineMath: [['$', '$'], ['\\(', '\\)']]
+    }
+  };
+</script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+  </script>
+
+
+
+
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    function showLanguages() {
+      let currentDisplay = document.getElementById("languages").style.display;
+      if (currentDisplay == 'none') {
+        document.getElementById("languages").style.display = 'block';
+      } else {
+        document.getElementById("languages").style.display = 'none';
+      }
+    }
+  </script>
+</body>
+
+</html>

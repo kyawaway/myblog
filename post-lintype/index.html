@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html translate="no"  class="theme--kyasual" >
+
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, viewport-fit=cover">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://kyawaway.github.io/myblog/images/apple-touch-icon-144x144.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="120x120" href="https://kyawaway.github.io/myblog/images/apple-touch-icon-120x120.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="https://kyawaway.github.io/myblog/images/apple-touch-icon-72x72.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="57x57" href="https://kyawaway.github.io/myblog/images/apple-touch-icon-57x57.png" />
+  <link rel="short icon" href="https://kyawaway.github.io/myblog/images/favicon.png" type="image/x-icon" />
+  <link rel="stylesheet" href="https://kyawaway.github.io/myblog/style.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap" rel="stylesheet">
+  <title>遊び日記 • 線形型システムの線形性</title>
+  
+  
+  
+</head>
+
+<body>
+  <div id="sidebar" class="animated fadeInDown">
+    <div class="logo-title">
+      <div class="title">
+        <img src=https://kyawaway.github.io/myblog/images/logo.png style="width:127px;" alt="logo" />
+        <h3><a href="https://kyawaway.github.io/myblog/">遊び日記</a></h3>
+        <div class="description">
+          <p>遊びの日記</p>
+        </div>
+      </div>
+    </div>
+    <ul class="social-links"><li><a href="https://github.com/kyawaway" aria-label="Go to Github profile page"><i class="fab fa-github"></i></a></li><li><a href="https://twitter.com/kyawaway" aria-label="Go to Twitter profile page"><i class="fab fa-twitter"></i></a></li>
+      
+    </ul>
+    <div class="footer">
+      
+      <span>Designed based on </span><a href="https://www.getzola.org/themes/anatole-zola/">anatole-zola</a>
+      <div class="by_zola"><a href="https://www.getzola.org/" target="_blank">Proudly published with Zola!</a></div>
+      
+    </div>
+  </div>
+  <div id="main">
+    <div class="page-top animated fadeInDown">
+      <div class="nav">
+        
+        
+        
+        
+        <li><a  href="https://kyawaway.github.io/myblog/">Home</a></li>
+        <li><a  href="https://kyawaway.github.io/myblog/about/">About</a></li><li><a  href="https://kyawaway.github.io/myblog/tags">Tags</a></li><li><a 
+            href="https://kyawaway.github.io/myblog/archive/">Archive</a></li><li><a  href="https://kyawaway.github.io/myblog/links/">Links</a></li></div>
+      <div class="information">
+        <div class="back_btn">
+          <a onclick="window.history.go(-1)" ><i
+              class="fas fa-chevron-left"></i></a>
+        </div>
+        
+        
+        
+        <div class="avatar"><img src="https://kyawaway.github.io/myblog/images/avatar.jpg"></div>
+      </div>
+    </div>
+    <div class="autopagerize_page_element">
+      <div class="content">
+        
+<article class="post animated fadeInDown">
+  <h1><a href="https:&#x2F;&#x2F;kyawaway.github.io&#x2F;myblog&#x2F;post-lintype&#x2F;">線形型システムの線形性</a></h1>
+  
+  <div class="post-content"><p>Rustの台頭で耳にすることが多くなった線形型(Rustのはもうちょっと条件が緩いAffine型です)だが，一体何が線形なのだろうか，と誰しも考えるだろう．今回は線形型システムの線形性について少しだけまとめてみた．</p>
+<h2 id="xian-xing-xing-sisutemu">線形型システム</h2>
+<p>一言で言うと，変数の使用回数条件，&quot;ちょうど1回呼び出される&quot;制約をつけることができる型システムである．</p>
+<h3 id="jian-su-naxian-xing-xing-sisutemunogou-cheng">簡素な線形型システムの構成</h3>
+<p>以下に具体的に線形型システムを構成する．</p>
+<pre style="background-color:#272822;color:#f8f8f2;"><code><span>&lt;toplevel&gt; ::= let &lt;identifier&gt; &#39;=&#39; &lt;term&gt; &#39;;&#39; &lt;toplevel&gt;
+</span><span>            |  {empty}
+</span><span>
+</span><span>&lt;qualifier&gt; ::= lin | un
+</span><span>&lt;boolean&gt; ::= true | false
+</span><span>&lt;term&gt; ::= &lt;identifier&gt;
+</span><span>        |  &lt;qualifier&gt; &lt;boolean&gt;
+</span><span>        |  &lt;qualifier&gt; &#39;lambda&#39; &lt;identifier&gt; &#39;:&#39; &lt;qualified-type&gt; &#39;.&#39; &lt;term&gt;
+</span><span>        |  &lt;term&gt; &lt;term&gt;
+</span><span>&lt;qualified-type&gt; ::= &lt;qualifier&gt; &lt;type&gt;
+</span><span>
+</span><span>&lt;type&gt; ::= Bool
+</span><span>        |  &lt;qualified-type&gt; &#39;-&gt;&#39; &lt;qualified-type&gt;
+</span></code></pre>
+<p>みたいにsyntaxを定める．</p>
+<p>型はqualified-typeで，<code>un</code>か<code>lin</code>どちらかの修飾子がつく．</p>
+<p>それ以外は，至る所で修飾子を書かせる以外は単純型付きラムダ計算と同じ．</p>
+<p>un 型はふつうの単純型と同じで，lin 型が線形型とする．</p>
+<p>以下にlin 型に対する型付け規則のうち，主要なものを示す．</p>
+<p>コアになっているのは，文脈の分割 $\Gamma = \Gamma_1 \circ \Gamma_2$ の概念である:</p>
+<div style="text-align: center">
+    <img src="https://pbs.twimg.com/media/GXQGhnKbgAI6-yQ?format=jpg&name=medium" width='50%'>
+</div>
+<p>分割演算$\circ$が行われた時，un型は両側の文脈に残る(コピーされる)が，lin型はどちらか片方の文脈にしか残らない．</p>
+<p>Appの型付け規則を見る:</p>
+<div style="text-align: center">
+    <img src="https://pbs.twimg.com/media/GXQGkXobgAIYQhd?format=jpg&name=medium" width='50%'>
+</div>
+<p>ここで，qはqualifier(lin | un)である．</p>
+<p>関数適用の際，un型は分割の影響なく(単純型のように)型付けが進むが，lin型は，(M-Lin)により，型付けが&quot;消費&quot;される．</p>
+<p>以上のように，lin 型は，一回だけ使用できる型である．</p>
+<h4 id="li-heng-deng-guan-shu">例：恒等関数</h4>
+<pre style="background-color:#272822;color:#f8f8f2;"><code><span>let id = lin lambda x:lin bool.x;
+</span><span>
+</span><span>let main = id (lin true);
+</span></code></pre>
+<p>と書くと，<code>id</code>は，<code>lin (lin bool -&gt; lin bool)</code>型の関数で，<code>lin bool</code>型の引数をそのまま返す．(ただの恒等関数)</p>
+<p>mainでは，idを呼び出している．</p>
+<p>このとき，同文脈上(同ファイル内)でもう一度idを呼ぶと型エラーになるし，一度も呼ばなくても型エラーになる．</p>
+<h2 id="xian-xing-xing-toxian-xing-lun-li">線形型と線形論理</h2>
+<p>このように，変数の使用回数条件を付与できる型システムだが，この機能は，線形論理を基にしている．</p>
+<h3 id="xian-xing-lun-li">線形論理</h3>
+<p>線形論理とは，ひとことで言うと&quot;resource sensitive&quot;な論理体系である．ここでのresourceとは論理式の数という，古典論理ではまず気にすることがなかった概念である．</p>
+<p>具体例を交えて紹介する．</p>
+<p>次のような命題をもとに，&quot;かつ&quot;と&quot;ならば&quot;について再考する．</p>
+<p><strong>命題A</strong> ．
+100 円持っている．</p>
+<p><strong>命題B</strong> ．
+コーラ (100 円) が買える．</p>
+<p><strong>命題C</strong> ．
+水 (60 円) が買える．</p>
+<p>このとき，A ならば B，や，A ならば C，が自明に成立する．</p>
+<p>AならばBかつCはどうだろう．</p>
+<p>古典論理なら，A$\to$B$\wedge$Cは成り立つが，日本語の意味を考えると，100円だけ持っていてもコーラと水両方を買うことはできない．</p>
+<p>このような着眼点から，自然言語で&quot;かつ&quot;と記述しても，その意味は以下のような2種類に分割することができると考えられる：</p>
+<ul>
+<li>
+<p>コーラと水どちらも買う&quot;かつ&quot;: $\otimes$</p>
+<ul>
+<li>A ならば B $\otimes$ C は成り立たない．</li>
+</ul>
+</li>
+<li>
+<p>コーラと水どちらかしか買わない&quot;かつ&quot; : &amp;</p>
+<ul>
+<li>A ならば B &amp; C は成り立つ．</li>
+</ul>
+</li>
+</ul>
+<p>資源管理というから，これらの&quot;かつ&quot;を説明する．B &amp; Cは，(どちらでも良いが)BとCどちらか一方を選択する．一方で，B$\otimes$Cは，BとCどちらも両方とってくることを表す．1アクションでいくつ取ってくるかの違いがある．</p>
+<p>この時，命題は資源で，前件の資源を使って後件を実行すると考えると，後件で消費する数だけ前件に命題を書くと，論理式を成立させることができると言える．</p>
+<p>また，&quot;ならば&quot;についても再考する必要がある．命題論理の$\to$には，前件の資源を消費するというニュアンスがないため，専用の含意，$\multimap$を導入する必要がある．</p>
+<p>今までの議論は，以下の論理式で示される:</p>
+<ul>
+<li>A $\multimap$ (B &amp; C) (成り立つ)</li>
+<li>A $\multimap$ (B &amp; C) (成り立たない)</li>
+<li>(A $\otimes$ A) $\multimap$ (B $\otimes$ C) (成り立つ)</li>
+</ul>
+<h4 id="xiang-xi">詳細</h4>
+<p>以下に，線形論理の推論規則を示す．</p>
+<div style="text-align: center">
+    <img src="https://pbs.twimg.com/media/GXQGe7tawAA935O?format=jpg&name=4096x4096" width='70%'>
+</div>
+<p>$\oplus$，<div class="rotate">&amp;</div>はそれぞれ&amp;，$\otimes$の双対，つまりorにあたるものである．</p>
+<p>contraction，weakeningが，演算子'!'，'?'の上でのみ定義されている．contraction，weakeningは，論理式の任意個コピーを可能にしている．(exchangeは認められている．$\Gamma$は論理式の列で，exchange，contraction，weakeningがあると，集合のように振る舞う．一方で，exchangeのみだと，$\Gamma$は多重集合のように振る舞う．) つまり，デフォルトでは線形論理式はresource sensitiveで，これらの演算子をつけた時のみ資源の消費を考慮しなくてもよくなる．
+これらの演算子は指数的演算子と呼ばれていて，線形論理と古典論理を接続している．</p>
+<h2 id="xian-xing-lun-li-noxian-xing-xing">線形論理の線形性</h2>
+<p>やっと本題に入る．線形型の線形性は線形論理の線形性である．なぜ線形論理は線形論理と呼ばれるのか．</p>
+<p>その答えは，線形論理の誕生まで遡る．</p>
+<h3 id="xian-xing-xing-nofa-jian-chao-da-za-ba-nagai-yao">線形性の発見，超大雑把な概要</h3>
+<p>(各種定義は，元気があったらまとめます．)</p>
+<p>線形論理は，1987年にGirardというおじさんが発見し，発表した．</p>
+<p>Girardは当時，直観主義論理の分析を行っていた．その過程で，論理演算子が2種類に分解できることを発見した．これが，線形論理の大元である．</p>
+<p>また，Girardは，発見した論理体系における手続きを，coherent space(単なる無向グラフ)上でモデル化し，分析した．Scottの領域理論では，型は位相空間で，関数は位相空間上の連続写像だった．一方で，Girardは，型をcoherent space，関数をcoherent space上のstable な写像だと定義した．coherent spaceを持ち出した理由は，色んなものを色んなもののクリークとして説明したかったからだと勝手に解釈している．</p>
+<p>そして，<strong>線形論理の特徴である，単一呼び出し性を持つ手続きをcoherent space上の写像として定義すると，その写像が線形性(のような特性)を持つことを発見した．</strong></p>
+<p>これが，線形論理の線形性の所以である．変数の呼び出し回数制限として現れている，単一呼び出し性が，線形性に対応している．</p>
+<h4 id="moushao-sixiang-siku">もう少し詳しく</h4>
+<p>WIP.</p>
+<p>詳しい定義は<a href="https://www.kurims.kyoto-u.ac.jp/~terui/birth.pdf">https://www.kurims.kyoto-u.ac.jp/~terui/birth.pdf</a>をみてください．</p>
+<p><a href="https://ziphil.com/diary/mathematics/71.html">https://ziphil.com/diary/mathematics/71.html</a>も参考になります．</p>
+<h1 id="matome">まとめ</h1>
+<p>線形型システムの線形性は線形論理の線形性で，単一呼び出し性を線形性と呼んでいるが，詳細は領域理論の話になって難しい．</p>
+</div>
+  <div class="post-footer">
+    <div class="meta">
+      <div class="info">
+        
+        <i class="far fa-sun"></i><span class="date">2023-09-07</span>
+        
+        
+        <i class="fas fa-tags"></i>
+        
+        <a class="tag" href="https://kyawaway.github.io/myblog/tags/linear logic">&nbsp;linear logic</a>
+        
+        <a class="tag" href="https://kyawaway.github.io/myblog/tags/linear type">&nbsp;linear type</a>
+        
+        <a class="tag" href="https://kyawaway.github.io/myblog/tags/logic">&nbsp;logic</a>
+        
+        
+      </div>
+    </div>
+  </div>
+</article>
+<div class="share">
+  <div class="twitter">
+    <a class="fab fa-twitter"
+      href="http://twitter.com/share?text=線形型システムの線形性&url=https:&#x2F;&#x2F;kyawaway.github.io&#x2F;myblog&#x2F;post-lintype&#x2F;&hashtags=linear logic,linear type,logic"></a>
+  </div>
+</div>
+
+
+
+
+
+
+
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script>
+  MathJax = {
+    tex: {
+      displayMath: [['$$', '$$'], ["\\[", "\\]"]],
+      inlineMath: [['$', '$'], ['\\(', '\\)']]
+    }
+  };
+</script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+  </script>
+
+
+
+
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    function showLanguages() {
+      let currentDisplay = document.getElementById("languages").style.display;
+      if (currentDisplay == 'none') {
+        document.getElementById("languages").style.display = 'block';
+      } else {
+        document.getElementById("languages").style.display = 'none';
+      }
+    }
+  </script>
+</body>
+
+</html>

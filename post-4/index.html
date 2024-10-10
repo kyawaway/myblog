@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html translate="no"  class="theme--kyasual" >
+
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, viewport-fit=cover">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://kyawaway.github.io/myblog/images/apple-touch-icon-144x144.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="120x120" href="https://kyawaway.github.io/myblog/images/apple-touch-icon-120x120.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="https://kyawaway.github.io/myblog/images/apple-touch-icon-72x72.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="57x57" href="https://kyawaway.github.io/myblog/images/apple-touch-icon-57x57.png" />
+  <link rel="short icon" href="https://kyawaway.github.io/myblog/images/favicon.png" type="image/x-icon" />
+  <link rel="stylesheet" href="https://kyawaway.github.io/myblog/style.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap" rel="stylesheet">
+  <title>遊び日記 • (過去記事転載)OAuth2.0をざっくり理解する</title>
+  
+  
+  
+</head>
+
+<body>
+  <div id="sidebar" class="animated fadeInDown">
+    <div class="logo-title">
+      <div class="title">
+        <img src=https://kyawaway.github.io/myblog/images/logo.png style="width:127px;" alt="logo" />
+        <h3><a href="https://kyawaway.github.io/myblog/">遊び日記</a></h3>
+        <div class="description">
+          <p>遊びの日記</p>
+        </div>
+      </div>
+    </div>
+    <ul class="social-links"><li><a href="https://github.com/kyawaway" aria-label="Go to Github profile page"><i class="fab fa-github"></i></a></li><li><a href="https://twitter.com/kyawaway" aria-label="Go to Twitter profile page"><i class="fab fa-twitter"></i></a></li>
+      
+    </ul>
+    <div class="footer">
+      
+      <span>Designed based on </span><a href="https://www.getzola.org/themes/anatole-zola/">anatole-zola</a>
+      <div class="by_zola"><a href="https://www.getzola.org/" target="_blank">Proudly published with Zola!</a></div>
+      
+    </div>
+  </div>
+  <div id="main">
+    <div class="page-top animated fadeInDown">
+      <div class="nav">
+        
+        
+        
+        
+        <li><a  href="https://kyawaway.github.io/myblog/">Home</a></li>
+        <li><a  href="https://kyawaway.github.io/myblog/about/">About</a></li><li><a  href="https://kyawaway.github.io/myblog/tags">Tags</a></li><li><a 
+            href="https://kyawaway.github.io/myblog/archive/">Archive</a></li><li><a  href="https://kyawaway.github.io/myblog/links/">Links</a></li></div>
+      <div class="information">
+        <div class="back_btn">
+          <a onclick="window.history.go(-1)" ><i
+              class="fas fa-chevron-left"></i></a>
+        </div>
+        
+        
+        
+        <div class="avatar"><img src="https://kyawaway.github.io/myblog/images/avatar.jpg"></div>
+      </div>
+    </div>
+    <div class="autopagerize_page_element">
+      <div class="content">
+        
+<article class="post animated fadeInDown">
+  <h1><a href="https:&#x2F;&#x2F;kyawaway.github.io&#x2F;myblog&#x2F;post-4&#x2F;">(過去記事転載)OAuth2.0をざっくり理解する</a></h1>
+  
+  <div class="post-content"><p><span style="color: red; ">※2020年時点の内容です！</span></p>
+<h2 id="hazimeni">はじめに</h2>
+<p>本記事は、</p>
+<ul>
+<li>OAuthって言葉を聞いたことがない！</li>
+<li>聞いたことはあるけど詳しくは知らない！</li>
+</ul>
+<p>みたいな感じの方向けの記事です。僕もまだよくわかっていません。OAuthを実装したことがある方にはちょっと簡単すぎるかもしれません。また、そういう方がいらっしゃったらぜひ温かい目で流して、おかしなところがあればコメントお願いします！</p>
+<h2 id="oauthtoha">OAuthとは？</h2>
+<h3 id="zatukuri">ざっくり</h3>
+<p><strong>OAuth</strong> （オー オース？）とは、一番簡単に説明するならば、
+これ
+<img src="https://pbs.twimg.com/media/ER6g9aZUUAIx0p3.jpg" alt="twitter" /></p>
+<p>とか
+これ
+<img src="https://pbs.twimg.com/media/ER6kJ96UYAASv7F.jpg" alt="google" /></p>
+<p>です。<strong>これがOAuth</strong>です。みなさんも一度は目にしたことがあると思います。一見ただの認証画面のように見えるけれど、<strong>実はこれは立派なセキュリティシステム</strong>なんです。今回はこれを<strong>ざっくり説明</strong>していきます。</p>
+<h3 id="moushao-sixi-kaku">もう少し細かく</h3>
+<p>OAuthを理解するうえで重要になってくる <strong>２つの概念</strong> があります。それは、</p>
+<ul>
+<li><strong>認証(Authentication)</strong></li>
+<li><strong>認可(Authorization)</strong></li>
+</ul>
+<p>です。それぞれ説明していくと、</p>
+<ul>
+<li>
+<p><strong>認証(Authentication)</strong>
+認証は、通信の相手が誰であるかを確認すること。純粋な認証
+は、それが完了しても、何かの許可が下りるということはない</p>
+</li>
+<li>
+<p><strong>認可(Authorization)</strong>
+認可は、とある条件に対してリソースへのアクセスの権限を与えるこ
+とで、純粋な認可には、「誰」という概念が存在しない</p>
+</li>
+</ul>
+<p><img src="https://pbs.twimg.com/media/ER66aQQUcAA53MX.jpg" alt="auth" /></p>
+<p>です。図はすみません。これを踏まえてOAuthの正体を簡潔に言うと、<strong>「認可情報の委譲」の仕組み</strong>、オープンスタンダード です。認可情報は、認可によって得られた権限等を指します。</p>
+<p>①あるサービスのリソースへのアクセスの権限を、②リソースの持ち主でない他のサービスに与える、これを安全に執り行うための仕組みです。</p>
+<p>ゲームアプリのアカウント登録をGoogleのアカウント情報を用いて行ったり、気になるニュースを見つけたときに、ニュースサイトから出ずにTwitterで共有するときなどに上の画像のような画面が出てきますが、ここでの①あるサービス にあたるのがGoogleやTwitterで、アカウント情報や投稿機能にあたるのがリソース、②他のサービスにあたるのがゲームアプリやニュースサイト です。</p>
+<h2 id="oauthnohuro">OAuthのフロー</h2>
+<h4 id="oauthnobaziyonnituite">OAuthのバージョンについて</h4>
+<p>OAuthには、<strong>OAuth1.0とOAuth2.0という２つのバージョンがあります</strong>が、最初は<strong>OAuth2.0</strong>のほうを見ていきます。</p>
+<p>また、OAuth2.0には <strong>４つの種類（grant）</strong> があり、今回はその中でも
+<strong>Client Credentials Flow</strong> というものを例示します。（イメージしやすそうなので）</p>
+<h4 id="zhun-bei">準備</h4>
+<p>OAuth2.0(Client Cledentials flow) の登場人物は以下の通りになります。</p>
+<table><thead><tr><th style="text-align: left">名前</th><th style="text-align: left">例</th></tr></thead><tbody>
+<tr><td style="text-align: left">ユーザー</td><td style="text-align: left">クライアントアプリを利用しているユーザー</td></tr>
+<tr><td style="text-align: left">クライアント（アプリ）</td><td style="text-align: left">ゲーム、ニュースサイト等の、認可を受け取りたいサービス</td></tr>
+<tr><td style="text-align: left">サービスプロバイダー</td><td style="text-align: left">Twitter,Google等、リソースを提供する側のサービス</td></tr>
+<tr><td style="text-align: left">認可サーバ</td><td style="text-align: left">Twittre、Google等の、認可情報を取り扱うサーバ</td></tr>
+<tr><td style="text-align: left">リソースサーバ</td><td style="text-align: left">Twitter,Google等の、リソースが保管してあるサーバ</td></tr>
+</tbody></table>
+<p>クライアントは事前にサービスプロバイダーにアプリケーションを登録しておきます。
+（<a href="https://www.torikun.com/entry/twitter-developer-api/#Tell_us_about_your_project">twitterでの例</a>）</p>
+<p>ここで、<strong>consumer_key</strong>と<strong>consumer_secret</strong>という値、<strong>redirect_url</strong>を受け取ります。これで準備完了です。</p>
+<h3 id="oauth2-0nohuro-client-cledentials-flow">OAuth2.0のフロー(Client Cledentials Flow)</h3>
+<p><div class="mermaid">
+sequenceDiagram
+ ユーザー-&gt;&gt;クライアント : ①認証開始
+ クライアント-&gt;&gt;ユーザー:②認証ページにリダイレクト
+ ユーザー-&gt;&gt;認可サーバ:③リクエストを送る(HTTPS)
+ 認可サーバ-&gt;&gt;ユーザー:④認証画面を表示
+ ユーザー-&gt;&gt;認可サーバ:⑤idとPasswordを入力
+ 認可サーバ-&gt;&gt;ユーザー:⑥コールバックURL、認可コードを発行
+ クライアント-&gt;&gt;認可サーバ:⑦認可コードを渡す(HTTPS)
+ 認可サーバ-&gt;&gt;クライアント:⑧アクセストークンを発行
+ クライアント-&gt;&gt;リソースサーバ:⑨アクセストークンを使い、リソースにアクセス
+</div>
+<br></p>
+<p>③では、consumer_keyとconsumer_secretを埋め込んだリクエストを送ります(HTTPS,POST)。
+⑤では、元々ユーザーがサービスプロバイダーに登録してあるidとpasswordを入力します。</p>
+<h4 id="shi-zhuang-li">実装例</h4>
+<p>クライアントはローカルなアプリ（それこそ、ゲームアプリやニュースアプリのようなもの）で、URLはブラウザで開かれるとします。</p>
+<p><div class="mermaid">
+sequenceDiagram
+ ユーザー-&gt;&gt;クライアント : ①認証開始
+ クライアント-&gt;&gt;ブラウザ:②認証ページにリダイレクト
+ ブラウザ　-&gt;&gt;認可サーバ:③リクエスト(HTTPS)
+ 認可サーバ-&gt;&gt;ブラウザ:④認証画面を表示
+ ユーザー-&gt;&gt;ブラウザ:⑤idとPasswordを入力
+ ブラウザ-&gt;&gt;認可サーバ:⑤idとPasswordを渡す
+ 認可サーバ-&gt;&gt;ブラウザ:⑥コールバックURLにリダイレクト、認可コードを発行
+ ブラウザ-&gt;&gt;認可サーバ:⑦認可コードを渡す(HTTPS)
+ 認可サーバ-&gt;&gt;クライアント:⑧アクセストークンを発行
+ クライアント-&gt;&gt;リソースサーバ:⑨アクセストークンを使い、APIを呼び出す
+
+ クライアント-&gt;&gt;リソースサーバ:⑨アクセストークンを使い、リソースにアクセス
+</div>
+<br></br></p>
+<p>⓪：クライアントは事前にサービスプロバイダーにアプリケーションを登録しておき、consumer_keyとconsumer_secretという値を受け取っておく。
+①：ユーザーは認証開始ボタン等を利用し認証を開始する。
+②クライアントは、ブラウザを認証ページにリダイレクトさせる。
+③：クライアントは、認可サーバにredirect_urlとconsumer_keyとconsumer_secretを埋め込だリクエストを送る。
+④：クライアントは、ブラウザに認証画面を表示する。
+⑤：ユーザーは、認証画面にidとpasswordを入力する。
+⑥：認可サーバはブラウザをコールバックURLにリダイレクトさせる。このときに、認可サーバは認可コードを発行する。
+⑦：ブラウザは、認可サーバにredirect_urlと⑥で受け取った認可コードを埋め込んだHTTPSリクエストを送る。
+⑧：認可コードを受け取った認可サーバは、レスポンスでクライアントにアクセストークンという文字列を渡す。
+⑨：クライアントは、アクセストークンを用いてAPIを呼び出す。</p>
+<p><strong>①から⑤までが「認証」</strong> で、<strong>⑥から⑨までが「認可」</strong> のフローです。ユーザーがサービスプロバイダーにidとpasswordを渡すのは認証、サービスプロバイダがクライアントに渡すのが、認可情報です。</p>
+<h4 id="apitutehe">APIって何？</h4>
+<p>ここまで説明なしで当然のように使ってきた<strong>API</strong> という単語の説明をします。</p>
+<p>サービスプロバイダーが提供している様々な機能などのリソースを、<strong>機能ごとに外部が使いやすいように作られたプログラムをまとめたもの</strong>、<strong>アプリケーションからプラットフォームの機能を呼び出すための仕組み</strong>を**API(Application Programming Interface)**といいます。例えばTwitterでは、ツイートをするAPI、タイムラインを取得するAPI、フォロワーを取得するAPI、DMをするAPI等があります。</p>
+<p>つまり、この例でいうOAuthにおける「認可情報の委譲」とは、<strong>クライアントがサービスプロバイダーの提供するAPIを呼び出すこと、呼び出す「権利」をアクセストークンという形で「委譲」されること</strong>、です。</p>
+<p>ちなみに、Twitterのような場合では、生成されるアクセストークンはaccess_tokenとaccess_token_secretのように分かれていて、サービスプロバイダー（Twitter等）の各アカウントごとにのものが紐づけられるので、OAuthは、認証をしたアカウントに紐付いたアクセストークンをクライアントに渡すという形をとっています。</p>
+<h3 id="oauth1-0nituite">OAuth1.0について</h3>
+<p>OAuthの場合、<strong>2.0は1.0の純粋なバージョンアップだというわけではない</strong>という意見もあります。その例を、OAuth1.0で先の例と同じものを実装することで可視化してみます。</p>
+<h4 id="zhun-bei-1">準備</h4>
+<p><strong>OAuth1.0でも、OAuth2.0と同様にクライアントは事前にサービスプロバイダーにアプリケーションを登録</strong>しておき、<strong>consumer_key</strong>と<strong>consumer_secret</strong>という値、<strong>redirect_url</strong>を受け取っておきます。</p>
+<h3 id="oauth1-0denohuro">OAuth1.0でのフロー</h3>
+<p><div class="mermaid">
+sequenceDiagram
+ ユーザー-&gt;&gt;クライアント : ①認証開始
+ クライアント-&gt;&gt;認可サーバ:②リクエストトークンを要求(HTTP)
+ 認可サーバ-&gt;&gt;クライアント:③リクエストトークンを発行
+ クライアント-&gt;&gt;ユーザー:④認証ページにリダイレクト
+ ユーザー-&gt;&gt;認可サーバ:⑤リクエストを送る(HTTP)
+ 認可サーバ-&gt;&gt;ユーザー:⑥認証画面を表示
+ ユーザー-&gt;&gt;認可サーバ:⑦idとPasswordを入力
+ 認可サーバ-&gt;&gt;ユーザー:⑧コールバックURL、認可コードを発行
+ クライアント-&gt;&gt;認可サーバ:⑨リクエストトークンを渡す(HTTP)
+ 認可サーバ-&gt;&gt;クライアント:⑩アクセストークンを発行
+ クライアント-&gt;&gt;リソースサーバ:⑪アクセストークンを使い、リソースにアクセス
+</div>
+<br>
+②では、consumer_keyとconsumer_secretを<strong>署名(Signature)の形にしてから</strong>渡し(HTTP,POST)、リクエストトークンという文字列を要求します。
+⑨では、③でもらったリクエストトークンを渡し、アクセストークンを要求します。</p>
+<h4 id="shi-zhuang-li-1">実装例</h4>
+<p>　2.0の時と同様に、クライアントはローカルなアプリで、URLはブラウザで開かれるとします。</p>
+<p><div class="mermaid">
+sequenceDiagram
+ユーザー-&gt;&gt;クライアント:①認証開始
+クライアント-&gt;&gt;ブラウザ:＜何もしない＞
+クライアント-&gt;&gt;認可サーバ:②リクエストトークンを要求する
+認可サーバ-&gt;&gt;クライアント:③リクエストトークンを発行する
+クライアント-&gt;&gt;ブラウザ:④認証ページにリダイレクト
+ブラウザ-&gt;&gt;認可サーバ:⑤リクエストトークンを渡す
+認可サーバ-&gt;&gt;ブラウザ:⑥認証画面を表示
+ユーザー-&gt;&gt;ブラウザ:⑦idとPasswordを入力
+ブラウザ-&gt;&gt;認可サーバ:⑦idとPasswordを渡す
+認可サーバ-&gt;&gt;ブラウザ:⑧コールバックURLにリダイレクト
+ブラウザ-&gt;&gt;認可サーバ:⑨リクエストトークンを渡す
+認可サーバ-&gt;&gt;クライアント:⑩アクセストークンを発行する
+クライアント-&gt;&gt;リソースサーバ:⑪アクセストークンを用いてリソースにアクセス
+</div>
+<br></p>
+<p>①ユーザーは、認証開始ボタン等で認証を開始する。
+② クライアントは、認可サーバにredirect_urlとconsumer_keyとconsumer_secretを署名(Signature)にしてから渡し、リクエストトークンを要求する。
+③認可サーバは、クライアントにレスポンスでリクエストトークンを発行する。
+④クライアントは、ブラウザを認証ページにリダイレクトさせる。
+⑤ブラウザは、認可サーバにリクエストトークンを渡す。
+⑥認可サーバは、ブラウザに認証画面を表示する。
+⑦ユーザーは、ブラウザの認証画面を介して認可サーバにidとPasswordを渡す。
+⑧認可サーバはブラウザをコールバックURLにリダイレクトさせる。
+⑨ブラウザは、認可サーバにredirect_urlとリクエストトークンを渡す。
+⑩認可サーバは、クライアントにアクセストークンを発行する。
+⑪クライアントはアクセストークンを用いてリソースサーバからAPIを呼び出す。</p>
+<h4 id="oauth1-0noshu-ming-signature-toha">OAuth1.0の署名(Signature)とは</h4>
+<p><a href="https://syncer.jp/Web/API/OAuth/">https://syncer.jp/Web/API/OAuth/</a> がとてもわかりやすくまとめられています。（現在は、TwitterもOAuth2.0も採用していたような気がします。）
+要約すると...</p>
+<ul>
+<li>
+<p><strong>署名とは、URLとあるトークンを組み合わせて暗号化する</strong>こと</p>
+</li>
+<li>
+<p><strong>OAuth1.0では、HMAC-SHA1という方式で署名を組む</strong></p>
+</li>
+</ul>
+<p>具体的な方法は、</p>
+<p>①consumer_keyとconsumer_secretをURLエンコードし、&amp;でつなげる、これをキーと呼ぶ
+②トークン（リクエストメソッド（POST）、URL、パラメータ）をURLエンコードし、&amp;でつなげる、これをデータと呼ぶ
+③データ、キーを使って、HMAC-SHA1方式のハッシュ値を生成する
+④③で得られた値をbase64エンコードする</p>
+<p>工程にハッシュが含まれているので、<strong>署名は不可逆な暗号</strong>になり、consumer_keyとconsumer_secretを奪おうとする攻撃に対する安全性が非常に高いと言えます。</p>
+<h3 id="1-0to2-0nowei-i">1.0と2.0の違い</h3>
+<p><strong>2.0では、consumer_keyとconsumer_secretをそのままの形で認可サーバに渡している</strong>のに対し、<strong>1.0では、署名という形に変形してから認可サーバに渡しています</strong>。
+そのかわり、<strong>2.0ではリクエストの部分をHTTPSを使うよう強制</strong>し、<strong>認可コード</strong>というパラメータを用いてアクセストークン発行時の本人確認をおこなっています。</p>
+<p>...なんだか1.0のほうが安全そうに見えますね。<strong>1.0は、「consumer_keyとconsumer_secretを盗られたら絶対にダメ、これらを絶対に盗られないようにしよう」という指向</strong>なのに対し、<strong>2.0は、「たとえconsumer_keyとconsumer_secretが盗られたとしても、安全性を保てるようにしよう」という指向</strong>で設計されたようです。</p>
+<p>実際、1.0と2.0はどちらがセキュアか、という議論は<strong>賛否両論</strong>です。</p>
+<p>では一体何が改善されているのでしょう。</p>
+<p>それはズバリ、「<strong>実装が容易になった</strong>」ことです。</p>
+<p>1.0は、特に署名を組む部分の実装が重くて、なかなか手軽に導入できなかったそうですが、2.0は構造を単純にしたことによって、実装が容易になり、今では様々な言語でOAuthを実装するためのライブラリがととのえられています。</p>
+<h2 id="jie-ju-he-gaxi-siinoka">結局、何が嬉しいのか</h2>
+<p>ここまで<strong>ごちゃごちゃ</strong>説明したけれど、いまいち利点が見いだせなかったという方もいると思います。
+先と同じことを、<strong>一般的な（Basic認証と呼ばれる）認証を用いて実装する例と比べる</strong>と、わかりやすく利点が浮き出てきます。</p>
+<div class="mermaid">
+sequenceDiagram
+ ユーザー-&gt;&gt;クライアント : ①認証開始
+ クライアント-&gt;&gt;ユーザー:②認証ページを表示
+ ユーザー-&gt;&gt;クライアント:③idとPasswordを渡す
+ クライアント-&gt;&gt;認可、リソースサーバ:④idとPassswordを使ってログイン、機能を利用する
+</div><br>
+<p>どうでしょう、違いは見えましたか？
+OAuthの最大の特徴、OAuthが安全と謳われる理由は、
+「<strong>サービスプロバイダーのidとpasswordを、クライアントアプリ直接渡さずして、クライアントアプリに任意の権限を与えることができる</strong>」
+です。</p>
+<h4 id="ren-zheng-ren-ke-nogou-zao">認証、認可の構造</h4>
+<p>認証と認可の話を思い出して簡単に図示してみます。</p>
+<p><img src="https://pbs.twimg.com/media/ER7Fa_bUYAA94Sc.jpg" alt="basic" /></p>
+<p>通常の「認証」と呼ばれるフローでは、純粋な認証をidとpasswordを用いて行い、<strong>純粋な認証で得た情報をもとに、認証結果が登録ユーザなら権利を渡す</strong>、のように純粋な認証と純粋な認可を組み合わせています。（一般にはこれを「認証」と呼ぶ気がします）また、クライアントがユーザーと同等の立場で純粋な認証しているのがわかると思います。<strong>認可サーバからしたら、ユーザーとクライアントの見分けが付かない状態</strong>です。そういう状態なので、<strong>認可サーバはユーザーが持つのと同等の権利をクライアントに与えます</strong>。</p>
+<p>一方、OAuthを見てみると、</p>
+<p><img src="https://pbs.twimg.com/media/ER7FbB4UUAEKWho.jpg" alt="oauth" /></p>
+<p>組み合わせ方自体は通常の場合と同じですが、<strong>権利が、認証をしたユーザー本人ではなく、クライアントに渡されている</strong>のがよくわかると思います。わかりにくかったら図のせいです。すみません。</p>
+<p><img src="https://pbs.twimg.com/media/ER7k-QkUUAEFu-C.jpg" alt="aut" /></p>
+<p>クライアントに権利をしたい場合は、本来左のような形で認可を行いたいですが(?)、idとpasswordをクライアントに渡さないために右のように変形します。Basic認証では、認可サーバからみてユーザー＝クライアントだったので、権利もクライアントのものとみなされましたが、OAuthでは、本来はユーザーの持つ権利を、関係のない(?)クライアントに<strong>委譲</strong>しています。</p>
+<h5 id="moyatutositakotomemo-du-riyan">モヤっとしたことメモ、独り言</h5>
+<p>いくつか調べていて、OAuthを「認可の委譲の仕組み」だと主張している記事、文献がいくつかあったけれど、純粋な認可には「誰」という情報が関係なくて、認証情報の出処と認可情報を渡す先が一致する必要はないから、図の左から右のような変形があったとしても、認可を委譲していることにはならないと思う。ということは、認可情報を委譲している、という本記事冒頭での主張も崩れてしまうように思える。</p>
+<p>→認可情報、つまりリソースへのアクセス権限は、本来ユーザー（ユーザーの、サービスプロバイダーのアカウント）が持つものだから、それを委譲するという意味での「認可情報の委譲」、認可処理とつながっている矢印を気にするというよりは、アクセス権の本来の所有者を気にした意味での「委譲」だということ？</p>
+<h3 id="yao-suruni">要するに</h3>
+<p>Basic認証のようにidとpasswordをクライアントアプリに渡してしまうと、クライアントアプリはユーザーと同等に権利を得てしまい、クライアントが悪質な場合、サービスプロバイダーの<strong>アカウントが簡単に乗っ取られてしまったりします</strong>。</p>
+<p>一方、OAuthを用いると、<strong>idとpassword</strong>（図では認証情報とした）<strong>がクライアントアプリの手に渡らないので安心</strong>です。</p>
+<p>また、これ
+<img src="https://pbs.twimg.com/media/ER6g9aZUUAIx0p3.jpg" alt="twitter" /></p>
+<p>を見ると、何やらクライアントが呼び出す機能が事前に告知されているのがわかります。
+<strong>OAuthでは、クライアントはあらかじめサービスプロバイダーに呼び出す機能の情報を登録しておく必要があり、登録した情報は、認証の際に必ずユーザーに見える形で表示される</strong>ので、ユーザーにとって、<strong>ある程度危険を回避することが可能</strong>になります。</p>
+<p>つまり、こういう形です。
+<img src="https://pbs.twimg.com/media/ER7FbIEVAAAd66z.jpg" alt="oau" /></p>
+<p>(?)</p>
+<h2 id="nantonakumatome">なんとなくまとめ</h2>
+<p>これだけ目を通せば、なんとなく知ったふりをできると思います。</p>
+<ul>
+<li>OAuthは、「<strong>認可情報の委譲</strong>」の仕組み</li>
+<li>OAuthは、サービスプロバイダーの<strong>idとpasswordをクライアントアプリに渡さない</strong>ことで安全性を確保している</li>
+<li>OAuthは、<strong>クライアントが必要以上の権限を持たないように事前に設定</strong>する、設定を認証の際にユーザに見せる</li>
+<li>OAuth1.0は、consumer_keyとconsumer_secretを<strong>署名化</strong>することで、これらを<strong>盗られるのを防いでいる</strong>が、<strong>実装が重い</strong></li>
+<li>OAuth2.0は、consumer_keyとconsumer_secretの<strong>保護をHTTPSに任せ</strong>、<strong>認可コード</strong>を導入することでこれらを<strong>盗られた時の対策</strong>をしている、1.0と比べて<strong>実装が軽い</strong></li>
+</ul>
+<p>（実装面はライブラリの普及でクリア？）</p>
+<h2 id="zhong-warini">終わりに</h2>
+<p>いかがでしたか？OAuthというものの概形がなんとなくつかめたでしょうか？
+また、これらを実装するときには、各言語で様々なライブラリが普及しているので、思ったより簡単に実装できると思います。ただライブラリを使うのではなく、内部でこういう処理をしているんだなぁということがわかっていれば、より簡単に実装ができると思います！
+Pythonでは、
+<a href="https://qiita.com/mikan3rd/items/686e4978f9e1111628e9%5D">https://qiita.com/mikan3rd/items/686e4978f9e1111628e9</a>
+等が参考になると思います。</p>
+<p>書いているうちにごちゃごちゃしてしまったり、Twitter関係なくなってしまったりでとても読みにくかったと思います。特に図は最後に読みかえしてわかりにくかったから急いで付け足したようなものなので、見た目があれです。最後まで目を通してくださってありがとうございました！</p>
+<h2 id="can-kao">参考</h2>
+<p><a href="https://dev.classmethod.jp/security/authentication-and-authorization/">https://dev.classmethod.jp/security/authentication-and-authorization/</a></p>
+<p><a href="https://openid-foundation-japan.github.io/rfc6749.ja.html%5D">https://openid-foundation-japan.github.io/rfc6749.ja.html</a></p>
+<p><a href="https://ja.wikipedia.org/wiki/OAuth">https://ja.wikipedia.org/wiki/OAuth</a></p>
+<p><a href="https://qiita.com/TakahikoKawasaki/items/200951e5b5929f840a1f">https://qiita.com/TakahikoKawasaki/items/200951e5b5929f840a1f</a></p>
+</div>
+  <div class="post-footer">
+    <div class="meta">
+      <div class="info">
+        
+        <i class="far fa-sun"></i><span class="date">2020-02-23</span>
+        
+        
+        <i class="fas fa-tags"></i>
+        
+        <a class="tag" href="https://kyawaway.github.io/myblog/tags/backend">&nbsp;backend</a>
+        
+        <a class="tag" href="https://kyawaway.github.io/myblog/tags/oauth">&nbsp;oauth</a>
+        
+        <a class="tag" href="https://kyawaway.github.io/myblog/tags/security">&nbsp;security</a>
+        
+        
+      </div>
+    </div>
+  </div>
+</article>
+<div class="share">
+  <div class="twitter">
+    <a class="fab fa-twitter"
+      href="http://twitter.com/share?text=(過去記事転載)OAuth2.0をざっくり理解する&url=https:&#x2F;&#x2F;kyawaway.github.io&#x2F;myblog&#x2F;post-4&#x2F;&hashtags=backend,oauth,security"></a>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true });</script>
+
+
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    function showLanguages() {
+      let currentDisplay = document.getElementById("languages").style.display;
+      if (currentDisplay == 'none') {
+        document.getElementById("languages").style.display = 'block';
+      } else {
+        document.getElementById("languages").style.display = 'none';
+      }
+    }
+  </script>
+</body>
+
+</html>

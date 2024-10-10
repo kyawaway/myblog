@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html translate="no"  class="theme--kyasual" >
+
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, viewport-fit=cover">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://kyawaway.github.io/myblog/images/apple-touch-icon-144x144.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="120x120" href="https://kyawaway.github.io/myblog/images/apple-touch-icon-120x120.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="https://kyawaway.github.io/myblog/images/apple-touch-icon-72x72.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="57x57" href="https://kyawaway.github.io/myblog/images/apple-touch-icon-57x57.png" />
+  <link rel="short icon" href="https://kyawaway.github.io/myblog/images/favicon.png" type="image/x-icon" />
+  <link rel="stylesheet" href="https://kyawaway.github.io/myblog/style.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap" rel="stylesheet">
+  <title>遊び日記 • Irrefutable Pattern</title>
+  
+  
+  
+</head>
+
+<body>
+  <div id="sidebar" class="animated fadeInDown">
+    <div class="logo-title">
+      <div class="title">
+        <img src=https://kyawaway.github.io/myblog/images/logo.png style="width:127px;" alt="logo" />
+        <h3><a href="https://kyawaway.github.io/myblog/">遊び日記</a></h3>
+        <div class="description">
+          <p>遊びの日記</p>
+        </div>
+      </div>
+    </div>
+    <ul class="social-links"><li><a href="https://github.com/kyawaway" aria-label="Go to Github profile page"><i class="fab fa-github"></i></a></li><li><a href="https://twitter.com/kyawaway" aria-label="Go to Twitter profile page"><i class="fab fa-twitter"></i></a></li>
+      
+    </ul>
+    <div class="footer">
+      
+      <span>Designed based on </span><a href="https://www.getzola.org/themes/anatole-zola/">anatole-zola</a>
+      <div class="by_zola"><a href="https://www.getzola.org/" target="_blank">Proudly published with Zola!</a></div>
+      
+    </div>
+  </div>
+  <div id="main">
+    <div class="page-top animated fadeInDown">
+      <div class="nav">
+        
+        
+        
+        
+        <li><a  href="https://kyawaway.github.io/myblog/">Home</a></li>
+        <li><a  href="https://kyawaway.github.io/myblog/about/">About</a></li><li><a  href="https://kyawaway.github.io/myblog/tags">Tags</a></li><li><a 
+            href="https://kyawaway.github.io/myblog/archive/">Archive</a></li><li><a  href="https://kyawaway.github.io/myblog/links/">Links</a></li></div>
+      <div class="information">
+        <div class="back_btn">
+          <a onclick="window.history.go(-1)" ><i
+              class="fas fa-chevron-left"></i></a>
+        </div>
+        
+        
+        
+        <div class="avatar"><img src="https://kyawaway.github.io/myblog/images/avatar.jpg"></div>
+      </div>
+    </div>
+    <div class="autopagerize_page_element">
+      <div class="content">
+        
+<article class="post animated fadeInDown">
+  <h1><a href="https:&#x2F;&#x2F;kyawaway.github.io&#x2F;myblog&#x2F;post-irrefutable&#x2F;">Irrefutable Pattern</a></h1>
+  
+  <div class="post-content"><p>パターンマッチを非正格に評価することを考える．簡約順序によっては，パターンマッチが失敗してしまう場合がある．</p>
+<pre data-lang="Haskell" style="background-color:#272822;color:#f8f8f2;" class="language-Haskell "><code class="language-Haskell" data-lang="Haskell"><span>returnOne </span><span style="color:#f92672;">=</span><span> const </span><span style="color:#ae81ff;">1
+</span></code></pre>
+<p>この関数に対し，パターンマッチを行うことを考える．</p>
+<p>パターンマッチが成功する例は，</p>
+<pre data-lang="Haskell" style="background-color:#272822;color:#f8f8f2;" class="language-Haskell "><code class="language-Haskell" data-lang="Haskell"><span>(</span><span style="color:#f92672;">\</span><span>(x,y) </span><span style="color:#f92672;">-&gt;</span><span> returnOne y) (</span><span style="color:#ae81ff;">100</span><span>,</span><span style="color:#ae81ff;">100</span><span>)
+</span></code></pre>
+<p>失敗する例としては，</p>
+<pre data-lang="Haskell" style="background-color:#272822;color:#f8f8f2;" class="language-Haskell "><code class="language-Haskell" data-lang="Haskell"><span>(</span><span style="color:#f92672;">\</span><span>(x,y) </span><span style="color:#f92672;">-&gt;</span><span> returnOne y) undefined
+</span></code></pre>
+<p>エラーメッセージは，</p>
+<pre style="background-color:#272822;color:#f8f8f2;"><code><span>*** Exception: Prelude.undefined
+</span><span>CallStack (from HasCallStack):
+</span><span>   error, called at libraries/base/GHC/Err.hs:79:14 in base:GHC.Err
+</span><span>   undefined, called at &lt;interactive&gt;:4:26 in interactive:Ghci4
+</span></code></pre>
+<p><code>(x,y)</code>とundefinedがマッチできなくて怒られている．</p>
+<p>簡約手順としては，</p>
+<pre style="background-color:#272822;color:#f8f8f2;"><code><span>(\(x,y) -&gt; returnOne y) undefined → \undefined -&gt; returnOne y (error)
+</span></code></pre>
+<p>のようになっている．要するに，マッチングが早すぎる．</p>
+<p>一方で，直感的にはこのまま簡約が進んでいっても問題はなさそうである．</p>
+<pre style="background-color:#272822;color:#f8f8f2;"><code><span>\undefined -&gt; returnOne y → returnOne undefined → 1
+</span></code></pre>
+<p>これを解決するために，<strong>irrefutable pattern</strong>なるパターンを考える．</p>
+<h3 id="1-as-pattern">1. as pattern</h3>
+<p><code>variable_name@(some_pattern)</code>のように書く．</p>
+<pre style="background-color:#272822;color:#f8f8f2;"><code><span>&gt; let all@(x:xs) = [1,2,3,4]
+</span><span>&gt; all
+</span><span>[1,2,3,4]
+</span><span>&gt; x
+</span><span>1
+</span><span>&gt; xs
+</span><span>[2,3,4]
+</span></code></pre>
+<h3 id="2-whild-carf-pattern">2. whild carf pattern</h3>
+<p>これは単なるワイルドカード．説明不要．</p>
+<h3 id="3-lazy-pattern">3. lazy pattern</h3>
+<p><code>~</code>で表記する．</p>
+<p>値<code>v</code>の，<code>~pat</code>に対する照合は，<code>pat</code>がなんであろうと成功する．</p>
+<p>これを用いて最初の例を記述する．</p>
+<pre data-lang="Haskell" style="background-color:#272822;color:#f8f8f2;" class="language-Haskell "><code class="language-Haskell" data-lang="Haskell"><span style="color:#f92672;">\~</span><span>(x,y) </span><span style="color:#f92672;">-&gt;</span><span> returnOne y
+</span></code></pre>
+<p>みたいに書くと，最初の想定通りに動く．</p>
+</div>
+  <div class="post-footer">
+    <div class="meta">
+      <div class="info">
+        
+        <i class="far fa-sun"></i><span class="date">2024-01-20</span>
+        
+        
+        <i class="fas fa-tags"></i>
+        
+        <a class="tag" href="https://kyawaway.github.io/myblog/tags/haskell">&nbsp;haskell</a>
+        
+        <a class="tag" href="https://kyawaway.github.io/myblog/tags/functional programming">&nbsp;functional programming</a>
+        
+        
+      </div>
+    </div>
+  </div>
+</article>
+<div class="share">
+  <div class="twitter">
+    <a class="fab fa-twitter"
+      href="http://twitter.com/share?text=Irrefutable Pattern&url=https:&#x2F;&#x2F;kyawaway.github.io&#x2F;myblog&#x2F;post-irrefutable&#x2F;&hashtags=haskell,functional programming"></a>
+  </div>
+</div>
+
+
+
+
+
+
+
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script>
+  MathJax = {
+    tex: {
+      displayMath: [['$$', '$$'], ["\\[", "\\]"]],
+      inlineMath: [['$', '$'], ['\\(', '\\)']]
+    }
+  };
+</script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+  </script>
+
+
+
+
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    function showLanguages() {
+      let currentDisplay = document.getElementById("languages").style.display;
+      if (currentDisplay == 'none') {
+        document.getElementById("languages").style.display = 'block';
+      } else {
+        document.getElementById("languages").style.display = 'none';
+      }
+    }
+  </script>
+</body>
+
+</html>
