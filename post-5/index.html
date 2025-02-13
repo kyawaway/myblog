@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html translate="no"  class="theme--kyasual" >
+
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, viewport-fit=cover">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://kyawaway.github.io/myblog/images/apple-touch-icon-144x144.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="120x120" href="https://kyawaway.github.io/myblog/images/apple-touch-icon-120x120.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="https://kyawaway.github.io/myblog/images/apple-touch-icon-72x72.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="57x57" href="https://kyawaway.github.io/myblog/images/apple-touch-icon-57x57.png" />
+  <link rel="short icon" href="https://kyawaway.github.io/myblog/images/favicon.png" type="image/x-icon" />
+  <link rel="stylesheet" href="https://kyawaway.github.io/myblog/style.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap" rel="stylesheet">
+  <title>遊び日記 • (過去記事転載)DjangoにおけるCSRF対策についてメモ</title>
+  
+  
+  
+</head>
+
+<body>
+  <div id="sidebar" class="animated fadeInDown">
+    <div class="logo-title">
+      <div class="title">
+        <img src=https://kyawaway.github.io/myblog/images/logo.png style="width:127px;" alt="logo" />
+        <h3><a href="https://kyawaway.github.io/myblog/">遊び日記</a></h3>
+        <div class="description">
+          <p>遊びの日記</p>
+        </div>
+      </div>
+    </div>
+    <ul class="social-links"><li><a href="https://github.com/kyawaway" aria-label="Go to Github profile page"><i class="fab fa-github"></i></a></li><li><a href="https://twitter.com/kyawaway" aria-label="Go to Twitter profile page"><i class="fab fa-twitter"></i></a></li>
+      
+    </ul>
+    <div class="footer">
+      
+      <span>Designed based on </span><a href="https://www.getzola.org/themes/anatole-zola/">anatole-zola</a>
+      <div class="by_zola"><a href="https://www.getzola.org/" target="_blank">Proudly published with Zola!</a></div>
+      
+    </div>
+  </div>
+  <div id="main">
+    <div class="page-top animated fadeInDown">
+      <div class="nav">
+        
+        
+        
+        
+        <li><a  href="https://kyawaway.github.io/myblog/">Home</a></li>
+        <li><a  href="https://kyawaway.github.io/myblog/about/">About</a></li><li><a  href="https://kyawaway.github.io/myblog/tags">Tags</a></li><li><a 
+            href="https://kyawaway.github.io/myblog/archive/">Archive</a></li><li><a  href="https://kyawaway.github.io/myblog/links/">Links</a></li></div>
+      <div class="information">
+        <div class="back_btn">
+          <a onclick="window.history.go(-1)" ><i
+              class="fas fa-chevron-left"></i></a>
+        </div>
+        
+        
+        
+        <div class="avatar"><img src="https://kyawaway.github.io/myblog/images/avatar.jpg"></div>
+      </div>
+    </div>
+    <div class="autopagerize_page_element">
+      <div class="content">
+        
+<article class="post animated fadeInDown">
+  <h1><a href="https:&#x2F;&#x2F;kyawaway.github.io&#x2F;myblog&#x2F;post-5&#x2F;">(過去記事転載)DjangoにおけるCSRF対策についてメモ</a></h1>
+  
+  <div class="post-content"><p><span style="color: red; ">※2020年時点の内容です！</span></p>
+<p>チーム開発でDjangoを使うことになって、自分は使うのが初めてなので急いで勉強中です。</p>
+<p>Djangoでは、html上に<code>{% csrf_token %}</code>と記述すると、CSRF対策になるとされています。この記述がどんなふうにCSRF対策になっているかをメモしていきます。</p>
+<h2 id="csrfnohuro">CSRFのフロー</h2>
+<p>まずはCSRFのフローを見ていきます。
+ここでは、例としてTwitterのような投稿型のウェブサイトを想定して(Twitterとかはだいぶ違うけど、イメージとして)、CSRFによる乗っ取り攻撃を例にしてみます。</p>
+<h4 id="zheng-chang-nahuro">①正常なフロー</h4>
+<p>まずはサービスの正常な機能例です。ユーザーがサービスにログインして投稿を行うフローを示します。</p>
+<div class="mermaid">
+sequenceDiagram
+ユーザー-&gt;&gt;ウェブサーバ(正規):①ログインする&#x2F;id,passwordを渡す
+ウェブサーバ(正規)-&gt;&gt;ウェブサーバ(正規):②id,passwordを認証する
+ウェブサーバ(正規)-&gt;&gt;ウェブサーバ(正規):③セッションを作成
+ウェブサーバ(正規)-&gt;&gt;ユーザー:④セッションを渡す、ログイン後ページを表示
+ユーザー-&gt;&gt;ウェブサーバ(正規):⑤投稿を作成、投稿データとセッションを渡す
+ウェブサーバ(正規)-&gt;&gt;ウェブサーバ(正規):⑥セッションidの一致確認後、投稿をアップロード
+</div><div style="text-align: center;">図1:サービスの正常な機能例</div>
+<p>④ではセッションidはCookieによって渡されます。⑥ではCookieによって渡されたセッションidとサーバー側のセッションidを比較します。これによって、サーバーからセッションidを受け取っていない外部からの投稿を受け付けません。</p>
+<h4 id="gong-ji-li-nohuro">②攻撃例のフロー</h4>
+<p>CSRFでの攻撃例は以下の通りです。</p>
+<div class="mermaid">
+sequenceDiagram
+ユーザー-&gt;&gt;ウェブサーバ(正規):①ログインする&#x2F;id,passwordを渡す
+ウェブサーバ(正規)-&gt;&gt;ウェブサーバ(正規):②id,passwordを認証する
+ウェブサーバ(正規)-&gt;&gt;ウェブサーバ(正規):③セッションを作成
+ウェブサーバ(正規)-&gt;&gt;ユーザー:④セッションを渡す、ログイン後ページを表示
+攻撃者--&gt;ユーザー:⑤攻撃用のURLを踏ませる(勝手に踏んでもらう)
+ウェブサーバ(攻撃用)-&gt;&gt;ユーザー:⑥攻撃用のHTMLを返す
+ユーザー-&gt;&gt;ユーザー:⑦攻撃用HTMLに含まれている攻撃用スクリプトによって投稿が作成されている
+
+
+ユーザー-&gt;&gt;ウェブサーバ(正規):⑧(攻撃用スクリプトによって)投稿データを渡す
+
+
+ウェブサーバ(正規)-&gt;&gt;ウェブサーバ(正規):⑨セッションidの一致確認後、投稿をアップロード
+</div><div style="text-align: center;">図2:CSRF攻撃の例</div>
+<p>攻撃用のスクリプトを含んだHTMLの内容については今回は詳しくは触れませんが、外部で作成した投稿をユーザー側に残っているセッションを利用してアップロードさせているという感じです。セッションidはCokkieによって保持されているので、ユーザーの手元から投稿されるような形ならば、スクリプトによって自動で投稿されてもその投稿は正規のセッションidを含みます。</p>
+<h2 id="yi-ban-de-nacsrfdui-ce">一般的なCSRF対策</h2>
+<p>上の図より、CSRFの原因は、<strong>セッションによる本人確認が不十分である</strong>ことがあげられます。</p>
+<p>このことから、<strong>セッション以外で、本人確認を行う何か別の隠しステータスをリアルタイムで用意する必要がある</strong>、という発想が出てきます。</p>
+<p>これを上の図2に対し実装してみます。</p>
+<div class="mermaid">
+sequenceDiagram
+ユーザー-&gt;&gt;ウェブサーバ(正規):①ログインする&#x2F;id,passwordを渡す
+ウェブサーバ(正規)-&gt;&gt;ウェブサーバ(正規):②id,passwordを認証する
+ウェブサーバ(正規)-&gt;&gt;ウェブサーバ(正規):③セッションを作成
+ウェブサーバ(正規)-&gt;&gt;ウェブサーバ(正規):④ランダムな文字列を作成(以後TOKENと呼ぶ)
+ウェブサーバ(正規)-&gt;&gt;ユーザー:⑤セッションid、TOKENを渡す、ログイン後ページを表示
+攻撃者--&gt;ユーザー:⑥攻撃用のURLを踏ませる(勝手に踏んでもらう)
+ウェブサーバ(攻撃用)-&gt;&gt;ユーザー:⑦攻撃用のHTMLを返す
+ユーザー-&gt;&gt;ユーザー:⑧攻撃用HTMLに含まれている攻撃用スクリプトによって投稿が作成されている
+
+
+ユーザー-&gt;&gt;ウェブサーバ(正規):⑨(攻撃用スクリプトによって)投稿データを渡す
+
+
+ウェブサーバ(正規)-&gt;&gt;ウェブサーバ(正規):⑩セッションidは一致するが、TOKENが取得できないのでアプロードできない
+</div><div style="text-align: center;">図3:CSRF攻撃の例</div>  
+<p>このTOKENは、セッションidとは別に<a href="http://www.htmq.com/html/input_hidden.shtml">hidden</a>
+で送ります。
+そのためスクリプトによって自動で投稿されてもTOKENの値は含まれずに、正規のサーバーによってはじくことができます。</p>
+<h2 id="djangono-csrf-token">Djangoの<code>{% csrf_token %}</code></h2>
+<p>本題です。
+書いてある通り、CSRF_TOKENというトークンを発行します。</p>
+<p>HTMLにどう展開されているのかを見てみます。例えば、テンプレートに</p>
+<pre data-lang="html" style="background-color:#272822;color:#f8f8f2;" class="language-html "><code class="language-html" data-lang="html"><span>&lt;</span><span style="color:#f92672;">form </span><span style="color:#a6e22e;">action</span><span>=</span><span style="color:#e6db74;">&quot;auth&quot; </span><span style="color:#a6e22e;">method</span><span>=</span><span style="color:#e6db74;">&quot;post&quot;</span><span>&gt;
+</span><span>    {% csrf_token %}
+</span></code></pre>
+<p>と記述すると、HTMLでは、</p>
+<pre data-lang="html" style="background-color:#272822;color:#f8f8f2;" class="language-html "><code class="language-html" data-lang="html"><span>&lt;</span><span style="color:#f92672;">input </span><span style="color:#a6e22e;">type</span><span>=</span><span style="color:#e6db74;">&#39;hidden&#39; </span><span style="color:#a6e22e;">name</span><span>=</span><span style="color:#e6db74;">&#39;csrfmiddlewaretoken&#39; </span><span style="color:#a6e22e;">value</span><span>=</span><span style="color:#e6db74;">&#39;値&#39; </span><span>/&gt;
+</span></code></pre>
+<p>のように展開されます。</p>
+<p>このhiddenを指定されている<code>csrfmiddlewaretoken</code>というフィールドが、先に挙げた<strong>セッション以外の、本人確認を行う何か別の隠しステータス</strong>、上でいうTOKENにあたります。</p>
+<p>もう少し詳しく、<a href="https://github.com/django/django/blob/master/django/middleware/csrf.py">django.middleware.csrf.pyのソース</a>
+を見ていきます。</p>
+<h5 id="get-new-csrf-token">① _get_new_csrf_token()</h5>
+<p>django/middleware/csrf.py</p>
+<pre data-linenos data-lang="python" style="background-color:#272822;color:#f8f8f2;" class="language-python "><code class="language-python" data-lang="python"><table><tbody><tr><td>70</td><td><span style="font-style:italic;color:#f92672;">def </span><span style="color:#a6e22e;">_get_new_csrf_token</span><span>():
+</span></td></tr><tr><td>71</td><td><span>    </span><span style="color:#f92672;">return </span><span>_mask_cipher_secret(_get_new_csrf_string())
+</span></td></tr></tbody></table></code></pre>
+<p>csrfトークンを生成しているっぽい部分です。<code>_mask_cipher_secret</code>なる関数がcsrfトークンの正体っぽいので探してみます。</p>
+<h5 id="mask-cipher-secret-secret">② _mask_cipher_secret(secret)</h5>
+<p>django/middleware/csrf.py</p>
+<pre data-linenos data-lang="python" style="background-color:#272822;color:#f8f8f2;" class="language-python "><code class="language-python" data-lang="python"><table><tbody><tr><td>57</td><td><span style="font-style:italic;color:#f92672;">def </span><span style="color:#a6e22e;">_mask_cipher_secret</span><span>(</span><span style="font-style:italic;color:#fd971f;">secret</span><span>):
+</span></td></tr><tr><td>58</td><td><span>    </span><span style="color:#75715e;">&quot;&quot;&quot;
+</span></td></tr><tr><td>59</td><td><span style="color:#75715e;">    Given a secret (assumed to be a string of CSRF_ALLOWED_CHARS), generate a
+</span></td></tr><tr><td>60</td><td><span style="color:#75715e;">    token by adding a mask and applying it to the secret.
+</span></td></tr><tr><td>61</td><td><span style="color:#75715e;">    &quot;&quot;&quot;
+</span></td></tr><tr><td>62</td><td><span>    mask </span><span style="color:#f92672;">= </span><span>_get_new_csrf_string()
+</span></td></tr><tr><td>63</td><td><span>    chars </span><span style="color:#f92672;">= </span><span>CSRF_ALLOWED_CHARS
+</span></td></tr><tr><td>64</td><td><span>    pairs </span><span style="color:#f92672;">= </span><span style="color:#66d9ef;">zip</span><span>((chars.index(x) </span><span style="color:#f92672;">for </span><span>x </span><span style="color:#f92672;">in </span><span>secret), (chars.index(x) </span><span style="color:#f92672;">for </span><span>x </span><span style="color:#f92672;">in </span><span>mask))
+</span></td></tr><tr><td>65</td><td><span>    cipher </span><span style="color:#f92672;">= </span><span style="color:#e6db74;">&#39;&#39;</span><span>.join(chars[(x </span><span style="color:#f92672;">+ </span><span>y) </span><span style="color:#f92672;">% </span><span style="color:#66d9ef;">len</span><span>(chars)] </span><span style="color:#f92672;">for </span><span>x, y </span><span style="color:#f92672;">in </span><span>pairs)
+</span></td></tr><tr><td>66</td><td><span>    </span><span style="color:#f92672;">return </span><span>mask </span><span style="color:#f92672;">+ </span><span>cipher
+</span></td></tr></tbody></table></code></pre>
+<p>なんかいろいろ書いてあります。まず、</p>
+<p>django/middleware/csrf.py</p>
+<pre data-linenos data-lang="python" style="background-color:#272822;color:#f8f8f2;" class="language-python "><code class="language-python" data-lang="python"><table><tbody><tr><td>62</td><td><span>    mask </span><span style="color:#f92672;">= </span><span>_get_new_csrf_string()
+</span></td></tr></tbody></table></code></pre>
+<p>という新たな関数が登場しています。これは後ほど見ていきます。</p>
+<p>その下で出てくる<code>CSRF_ALLOWED_CHARS</code>に関しては、</p>
+<p>django/middleware/csrf.py</p>
+<pre data-linenos data-lang="python" style="background-color:#272822;color:#f8f8f2;" class="language-python "><code class="language-python" data-lang="python"><table><tbody><tr><td>32</td><td><span>CSRF_ALLOWED_CHARS </span><span style="color:#f92672;">= </span><span>string.ascii_letters </span><span style="color:#f92672;">+ </span><span>string.digits
+</span></td></tr></tbody></table></code></pre>
+<p>と定義されています。
+<code>string.ascii_letters</code> は、
+文字列定数&quot;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz&quot;ですね。
+<code>string.digits</code> は、
+文字列定数&quot;0123456789&quot;です。
+要するに、<code>CSRF_ALLOWED_CHARS</code>は、アルファベット全てと数字0~9を全部含んだ文字列定数だということです。一体これだけの文字を集めて何をするのでしょう...❓</p>
+<p>django/middleware/csrf.py</p>
+<pre data-linenos data-lang="python" style="background-color:#272822;color:#f8f8f2;" class="language-python "><code class="language-python" data-lang="python"><table><tbody><tr><td>64</td><td><span>    pairs </span><span style="color:#f92672;">= </span><span style="color:#66d9ef;">zip</span><span>((chars.index(x) </span><span style="color:#f92672;">for </span><span>x </span><span style="color:#f92672;">in </span><span>secret), (chars.index(x) </span><span style="color:#f92672;">for </span><span>x </span><span style="color:#f92672;">in </span><span>mask))
+</span></td></tr></tbody></table></code></pre>
+<p>これをもう少し細か見てみます。</p>
+<pre data-lang="python" style="background-color:#272822;color:#f8f8f2;" class="language-python "><code class="language-python" data-lang="python"><span>chars.index(x) </span><span style="color:#f92672;">for </span><span>x </span><span style="color:#f92672;">in </span><span>secret
+</span></code></pre>
+<p>の部分では、<code>secret</code>の要素一つ一つの、<code>chars</code>におけるインデックス(何番目か)を頭から順番に表しています(<code>secret</code>はこの関数、 <code>_mask_cipher_secret</code>(<code>secret</code>)の引数です)、その直後でも<code>secret</code>が<code>mask</code>になっただけで同じことをやっていますね。</p>
+<p><code>zip()</code>は、<code>python</code>で用意されている組み込み関数です、引数で与えられたイテラブルを一つにまとめたイテレータを返します。具体的には、</p>
+<p>zip_example.py</p>
+<pre data-lang="python" style="background-color:#272822;color:#f8f8f2;" class="language-python "><code class="language-python" data-lang="python"><span>x </span><span style="color:#f92672;">= </span><span>[</span><span style="color:#ae81ff;">1</span><span>, </span><span style="color:#ae81ff;">2</span><span>, </span><span style="color:#ae81ff;">3</span><span>]
+</span><span>y </span><span style="color:#f92672;">= </span><span>[</span><span style="color:#ae81ff;">4</span><span>, </span><span style="color:#ae81ff;">5</span><span>, </span><span style="color:#ae81ff;">6</span><span>]
+</span><span>zipped </span><span style="color:#f92672;">= </span><span style="color:#66d9ef;">zip</span><span>(x, y)
+</span><span style="font-style:italic;color:#66d9ef;">list</span><span>(zipped)
+</span><span>[(</span><span style="color:#ae81ff;">1</span><span>, </span><span style="color:#ae81ff;">4</span><span>), (</span><span style="color:#ae81ff;">2</span><span>, </span><span style="color:#ae81ff;">5</span><span>), (</span><span style="color:#ae81ff;">3</span><span>, </span><span style="color:#ae81ff;">6</span><span>)]
+</span></code></pre>
+<p>みたいな感じです。</p>
+<p>つまり、<code>pairs</code>には、<code>secret</code>と<code>mask</code>の要素一つ一つの<code>chars</code>におけるインデックスが頭から順にペアになったイテレータが代入されるということです。</p>
+<pre data-linenos data-lang="python" style="background-color:#272822;color:#f8f8f2;" class="language-python "><code class="language-python" data-lang="python"><table><tbody><tr><td>65</td><td><span>    cipher </span><span style="color:#f92672;">= </span><span style="color:#e6db74;">&#39;&#39;</span><span>.join(chars[(x </span><span style="color:#f92672;">+ </span><span>y) </span><span style="color:#f92672;">% </span><span style="color:#66d9ef;">len</span><span>(chars)] </span><span style="color:#f92672;">for </span><span>x, y </span><span style="color:#f92672;">in </span><span>pairs)
+</span></td></tr></tbody></table></code></pre>
+<p>joinは文字列の結合です。</p>
+<pre data-lang="python" style="background-color:#272822;color:#f8f8f2;" class="language-python "><code class="language-python" data-lang="python"><span style="color:#e6db74;">&#39;&#39;</span><span>.join()
+</span></code></pre>
+<p>というのは、各要素の間を''に、つまりスペースなしで結合するという宣言です。</p>
+<p>要するに<code>cipher</code>には、<code>% len(chars)</code>によって<code>chars[]</code>の最大要素数を超えないようにしながら<code>pairs</code>の2要素を足した数をインデックスとした<code>chars</code>の値をどんどんつなげていた文字列が代入されるという感じですかね？どんだけバラバラにしたいんでしょうね、<code>cipher</code>というだけのことはありますね。</p>
+<p>この<code>cipher</code>と、まだ正体のわかっていない<code>mask</code>を結合したものが<code>_mask_cipher_secret(secret)</code>の返り値です。</p>
+<h5 id="get-new-csrf-string">③ _get_new_csrf_string()</h5>
+<p>次に、<code>_get_new_csrf_token()</code>のときに<code>_mask_cipher_secret()</code>の引数として渡していたり、<code>_mask_cipher_secret()</code>の中身でも登場したりする<code>_get_new_csrf_string()</code>も探してみます。</p>
+<p>django/middleware/csrf.py</p>
+<pre data-linenos data-lang="python" style="background-color:#272822;color:#f8f8f2;" class="language-python "><code class="language-python" data-lang="python"><table><tbody><tr><td>41</td><td><span style="font-style:italic;color:#f92672;">def </span><span style="color:#a6e22e;">_get_new_csrf_string</span><span>():
+</span></td></tr><tr><td>42</td><td><span>    </span><span style="color:#f92672;">return </span><span>get_random_string(CSRF_SECRET_LENGTH, </span><span style="font-style:italic;color:#fd971f;">allowed_chars</span><span style="color:#f92672;">=</span><span>CSRF_ALLOWED_CHARS)
+</span></td></tr></tbody></table></code></pre>
+<p><code>CSRF_SECRET_LENGTH</code>は、</p>
+<p>django/middleware/csrf.py</p>
+<pre data-linenos data-lang="python" style="background-color:#272822;color:#f8f8f2;" class="language-python "><code class="language-python" data-lang="python"><table><tbody><tr><td>30</td><td><span style="color:#ae81ff;">30 </span><span>CSRF_SECRET_LENGTH </span><span style="color:#f92672;">= </span><span style="color:#ae81ff;">32
+</span></td></tr></tbody></table></code></pre>
+<p>と定義されていて、
+<code>CSRF_ALLOWED_CHARS</code>は、前述のとおりアルファベット全てと数字0~9を全部含んだ文字列定数です。</p>
+<p><code>get_ramdom_string</code>は、別のファイルで定義されていました。</p>
+<p>django/utils/cripto.py</p>
+<pre data-linenos data-lang="python" style="background-color:#272822;color:#f8f8f2;" class="language-python "><code class="language-python" data-lang="python"><table><tbody><tr><td>52</td><td><span> </span><span style="color:#75715e;"># RemovedInDjango40Warning: when the deprecation ends, replace with:
+</span></td></tr><tr><td>53</td><td><span> </span><span style="color:#75715e;">#   def get_random_string(length, allowed_chars=&#39;...&#39;):
+</span></td></tr><tr><td>54</td><td><span style="font-style:italic;color:#f92672;">def </span><span style="color:#a6e22e;">get_random_string</span><span>(</span><span style="font-style:italic;color:#fd971f;">length</span><span style="color:#f92672;">=</span><span>NOT_PROVIDED, </span><span style="font-style:italic;color:#fd971f;">allowed_chars</span><span style="color:#f92672;">=</span><span>(
+</span></td></tr><tr><td>55</td><td><span>    </span><span style="color:#e6db74;">&#39;abcdefghijklmnopqrstuvwxyz&#39;
+</span></td></tr><tr><td>56</td><td><span>    </span><span style="color:#e6db74;">&#39;ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789&#39;
+</span></td></tr><tr><td>57</td><td><span>)):
+</span></td></tr><tr><td>58</td><td><span>    </span><span style="color:#75715e;">&quot;&quot;&quot;
+</span></td></tr><tr><td>59</td><td><span style="color:#75715e;">    Return a securely generated random string.
+</span></td></tr><tr><td>60</td><td><span style="color:#75715e;">    The bit length of the returned value can be calculated with the formula:
+</span></td></tr><tr><td>61</td><td><span style="color:#75715e;">       log_2(len(allowed_chars)^length)
+</span></td></tr><tr><td>62</td><td><span style="color:#75715e;">    For example, with default `allowed_chars` (26+26+10), this gives:
+</span></td></tr><tr><td>63</td><td><span style="color:#75715e;">      * length: 12, bit length =~ 71 bits
+</span></td></tr><tr><td>64</td><td><span style="color:#75715e;">      * length: 22, bit length =~ 131 bits
+</span></td></tr><tr><td>65</td><td><span style="color:#75715e;">    &quot;&quot;&quot;
+</span></td></tr><tr><td>66</td><td><span>    </span><span style="color:#f92672;">if </span><span>length </span><span style="color:#f92672;">is </span><span>NOT_PROVIDED:
+</span></td></tr><tr><td>67</td><td><span>        warnings.warn(
+</span></td></tr><tr><td>68</td><td><span>            </span><span style="color:#e6db74;">&#39;Not providing a length argument is deprecated.&#39;</span><span>,
+</span></td></tr><tr><td>69</td><td><span>            RemovedInDjango40Warning,
+</span></td></tr><tr><td>70</td><td><span>        )
+</span></td></tr><tr><td>71</td><td><span>        length </span><span style="color:#f92672;">= </span><span style="color:#ae81ff;">12
+</span></td></tr><tr><td>72</td><td><span>    </span><span style="color:#f92672;">return </span><span style="color:#e6db74;">&#39;&#39;</span><span>.join(secrets.choice(allowed_chars) </span><span style="color:#f92672;">for </span><span>i </span><span style="color:#f92672;">in </span><span style="color:#66d9ef;">range</span><span>(length))
+</span></td></tr></tbody></table></code></pre>
+<p>このようになっています。詳しく説明も書かれていてわかりやすいですね。要するに、</p>
+<p>django/middleware/csrf.py</p>
+<pre data-linenos data-lang="python" style="background-color:#272822;color:#f8f8f2;" class="language-python "><code class="language-python" data-lang="python"><table><tbody><tr><td>41</td><td><span style="font-style:italic;color:#f92672;">def </span><span style="color:#a6e22e;">_get_new_csrf_string</span><span>():
+</span></td></tr><tr><td>42</td><td><span>    </span><span style="color:#f92672;">return </span><span>get_random_string(CSRF_SECRET_LENGTH, </span><span style="font-style:italic;color:#fd971f;">allowed_chars</span><span style="color:#f92672;">=</span><span>CSRF_ALLOWED_CHARS)
+</span></td></tr></tbody></table></code></pre>
+<p>では、およそ180ビット長で<code>CSRF_ALLOWED_CHARS</code>の中からランダムでピックアップされた文字の文字列が返されるということです。</p>
+<h5 id="matome">④ まとめ</h5>
+<p>これらを踏まえて順に遡ってみます。</p>
+<p>django/middleware/csrf.py</p>
+<pre data-linenos data-lang="python" style="background-color:#272822;color:#f8f8f2;" class="language-python "><code class="language-python" data-lang="python"><table><tbody><tr><td>57</td><td><span style="font-style:italic;color:#f92672;">def </span><span style="color:#a6e22e;">_mask_cipher_secret</span><span>(</span><span style="font-style:italic;color:#fd971f;">secret</span><span>):
+</span></td></tr><tr><td>58</td><td><span>    </span><span style="color:#75715e;">&quot;&quot;&quot;
+</span></td></tr><tr><td>59</td><td><span style="color:#75715e;">    Given a secret (assumed to be a string of CSRF_ALLOWED_CHARS), generate a
+</span></td></tr><tr><td>60</td><td><span style="color:#75715e;">    token by adding a mask and applying it to the secret.
+</span></td></tr><tr><td>61</td><td><span style="color:#75715e;">    &quot;&quot;&quot;
+</span></td></tr><tr><td>62</td><td><span>    mask </span><span style="color:#f92672;">= </span><span>_get_new_csrf_string()
+</span></td></tr><tr><td>63</td><td><span>    chars </span><span style="color:#f92672;">= </span><span>CSRF_ALLOWED_CHARS
+</span></td></tr><tr><td>64</td><td><span>    pairs </span><span style="color:#f92672;">= </span><span style="color:#66d9ef;">zip</span><span>((chars.index(x) </span><span style="color:#f92672;">for </span><span>x </span><span style="color:#f92672;">in </span><span>secret), (chars.index(x) </span><span style="color:#f92672;">for </span><span>x </span><span style="color:#f92672;">in </span><span>mask))
+</span></td></tr><tr><td>65</td><td><span>    cipher </span><span style="color:#f92672;">= </span><span style="color:#e6db74;">&#39;&#39;</span><span>.join(chars[(x </span><span style="color:#f92672;">+ </span><span>y) </span><span style="color:#f92672;">% </span><span style="color:#66d9ef;">len</span><span>(chars)] </span><span style="color:#f92672;">for </span><span>x, y </span><span style="color:#f92672;">in </span><span>pairs)
+</span></td></tr><tr><td>66</td><td><span>    </span><span style="color:#f92672;">return </span><span>mask </span><span style="color:#f92672;">+ </span><span>cipher
+</span></td></tr></tbody></table></code></pre>
+<p>これの</p>
+<pre data-linenos data-lang="python" style="background-color:#272822;color:#f8f8f2;" class="language-python "><code class="language-python" data-lang="python"><table><tbody><tr><td>62</td><td><span>    mask </span><span style="color:#f92672;">= </span><span>_get_new_csrf_string()
+</span></td></tr></tbody></table></code></pre>
+<p>では、先ほど眺めた&quot;およそ180ビット長で<code>CSRF_ALLOWED_CHARS</code>の中からランダムでピックアップされた文字の文字列が返される&quot;関数を使って文字列を取得しています。</p>
+<pre data-linenos data-lang="python" style="background-color:#272822;color:#f8f8f2;" class="language-python "><code class="language-python" data-lang="python"><table><tbody><tr><td>64</td><td><span>    pairs </span><span style="color:#f92672;">= </span><span style="color:#66d9ef;">zip</span><span>((chars.index(x) </span><span style="color:#f92672;">for </span><span>x </span><span style="color:#f92672;">in </span><span>secret), (chars.index(x) </span><span style="color:#f92672;">for </span><span>x </span><span style="color:#f92672;">in </span><span>mask))
+</span></td></tr><tr><td>65</td><td><span>    cipher </span><span style="color:#f92672;">= </span><span style="color:#e6db74;">&#39;&#39;</span><span>.join(chars[(x </span><span style="color:#f92672;">+ </span><span>y) </span><span style="color:#f92672;">% </span><span style="color:#66d9ef;">len</span><span>(chars)] </span><span style="color:#f92672;">for </span><span>x, y </span><span style="color:#f92672;">in </span><span>pairs)
+</span></td></tr><tr><td>66</td><td><span>    </span><span style="color:#f92672;">return </span><span>mask </span><span style="color:#f92672;">+ </span><span>cipher
+</span></td></tr></tbody></table></code></pre>
+<p><code>mask</code>の正体がわかったところでもう一度見てみます。
+(64): <code>secret</code>(引数)の文字列の各要素の<code>chars</code>(アルファベット、数字が順番に入ってる)におけるインデックスと、<code>mask</code>(ランダムにアルファベットが入ってるやつ)の各要素の<code>chars</code>におけるインデックスがzipによってまとめられて<code>pairs</code>とされて、
+(65): <code>pairs</code>の要素二組を足した整数番目の<code>chars</code>の要素(<code>chars</code>の大きさで割ったあまりを入れておくことで<code>chars</code>の要素数を超えないようにしている)を、<code>pairs</code>の頭から最後まで順番に結合して文字列にしたものを<code>cipher</code>とし、
+(66): (バラバラの)<code>mask</code>と、(もっとバラバラの)<code>cipher</code>を結合した文字列を返している、
+といった具合です。注釈どおりのことをやっていますね。</p>
+<p>これでようやく一番最初まで遡れます。</p>
+<p>django/middleware/csrf.py</p>
+<pre data-linenos data-lang="python" style="background-color:#272822;color:#f8f8f2;" class="language-python "><code class="language-python" data-lang="python"><table><tbody><tr><td>70</td><td><span style="font-style:italic;color:#f92672;">def </span><span style="color:#a6e22e;">_get_new_csrf_token</span><span>():
+</span></td></tr><tr><td>71</td><td><span>    </span><span style="color:#f92672;">return </span><span>_mask_cipher_secret(_get_new_csrf_string())
+</span></td></tr></tbody></table></code></pre>
+<p>上の<code>_mask_cipher_secret</code> の引数<code>secret</code>に、<code>_get_new_csrf_string()</code>、つまりランダムに文字をピックアップして文字列として返すやつを指定しているという構造です。<code>mask</code>とは別の場所で呼ぶことで<code>mask</code>と<code>secret</code>が異なる文字列になるようにしているのかな？</p>
+<p>以上が<code>CSRF_TOKEN</code>の構造です。ただランダムに文字列を生成しているのではなく、暗号らしくだいぶバラバラにしているのがわかったと思います。</p>
+<p>ただHTML上でランダムな文字列を生成してそれをTOKENとするだけでは、乱数生成の手法によっては再現可能になってしまう危険性があるところを、Djangoでは<code>{% csrf_token %}</code>と記述するだけでこんな <del>面倒くさい</del> 堅牢そうな文字列をCSRF対策のトークンとして実装することができる、というわけです。本当に書き得ですね。</p>
+<h3 id="zhong-warini">終わりに</h3>
+<p>便利ですねぇ</p>
+<p>CSRFについては、僕も全然わかっていない部分があったりして、かなり適当な記述になってしまったので、補完してください。</p>
+<h3 id="can-kao">参考</h3>
+<p><a href="https://docs.djangoproject.com/en/3.1/ref/csrf/">https://docs.djangoproject.com/en/3.1/ref/csrf/</a></p>
+<p><a href="http://www.htmq.com/html/input_hidden.shtml">http://www.htmq.com/html/input_hidden.shtml</a></p>
+<p><a href="https://github.com/django/django/blob/master/django/middleware/csrf.py%5D">https://github.com/django/django/blob/master/django/middleware/csrf.py</a></p>
+<p><a href="https://medium-company.com/%E3%82%AF%E3%83%AD%E3%82%B9%E3%82%B5%E3%82%A4%E3%83%88%E3%83%AA%E3%82%AF%E3%82%A8%E3%82%B9%E3%83%88%E3%83%95%E3%82%A9%E3%83%BC%E3%82%B8%E3%82%A7%E3%83%AA/">https://medium-company.com/%E3%82%AF%E3%83%AD%E3%82%B9%E3%82%B5%E3%82%A4%E3%83%88%E3%83%AA%E3%82%AF%E3%82%A8%E3%82%B9%E3%83%88%E3%83%95%E3%82%A9%E3%83%BC%E3%82%B8%E3%82%A7%E3%83%AA/</a></p>
+</div>
+  <div class="post-footer">
+    <div class="meta">
+      <div class="info">
+        
+        <i class="far fa-sun"></i><span class="date">2020-10-20</span>
+        
+        
+        <i class="fas fa-tags"></i>
+        
+        <a class="tag" href="https://kyawaway.github.io/myblog/tags/backend">&nbsp;backend</a>
+        
+        <a class="tag" href="https://kyawaway.github.io/myblog/tags/python">&nbsp;python</a>
+        
+        <a class="tag" href="https://kyawaway.github.io/myblog/tags/django">&nbsp;django</a>
+        
+        <a class="tag" href="https://kyawaway.github.io/myblog/tags/security">&nbsp;security</a>
+        
+        
+      </div>
+    </div>
+  </div>
+</article>
+<div class="share">
+  <div class="twitter">
+    <a class="fab fa-twitter"
+      href="http://twitter.com/share?text=(過去記事転載)DjangoにおけるCSRF対策についてメモ&url=https:&#x2F;&#x2F;kyawaway.github.io&#x2F;myblog&#x2F;post-5&#x2F;&hashtags=backend,python,django,security"></a>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true });</script>
+
+
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    function showLanguages() {
+      let currentDisplay = document.getElementById("languages").style.display;
+      if (currentDisplay == 'none') {
+        document.getElementById("languages").style.display = 'block';
+      } else {
+        document.getElementById("languages").style.display = 'none';
+      }
+    }
+  </script>
+</body>
+
+</html>

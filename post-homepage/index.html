@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html translate="no"  class="theme--kyasual" >
+
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, viewport-fit=cover">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://kyawaway.github.io/myblog/images/apple-touch-icon-144x144.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="120x120" href="https://kyawaway.github.io/myblog/images/apple-touch-icon-120x120.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="https://kyawaway.github.io/myblog/images/apple-touch-icon-72x72.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="57x57" href="https://kyawaway.github.io/myblog/images/apple-touch-icon-57x57.png" />
+  <link rel="short icon" href="https://kyawaway.github.io/myblog/images/favicon.png" type="image/x-icon" />
+  <link rel="stylesheet" href="https://kyawaway.github.io/myblog/style.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap" rel="stylesheet">
+  <title>遊び日記 • zolaでホームページを立てた</title>
+  
+  
+  
+</head>
+
+<body>
+  <div id="sidebar" class="animated fadeInDown">
+    <div class="logo-title">
+      <div class="title">
+        <img src=https://kyawaway.github.io/myblog/images/logo.png style="width:127px;" alt="logo" />
+        <h3><a href="https://kyawaway.github.io/myblog/">遊び日記</a></h3>
+        <div class="description">
+          <p>遊びの日記</p>
+        </div>
+      </div>
+    </div>
+    <ul class="social-links"><li><a href="https://github.com/kyawaway" aria-label="Go to Github profile page"><i class="fab fa-github"></i></a></li><li><a href="https://twitter.com/kyawaway" aria-label="Go to Twitter profile page"><i class="fab fa-twitter"></i></a></li>
+      
+    </ul>
+    <div class="footer">
+      
+      <span>Designed based on </span><a href="https://www.getzola.org/themes/anatole-zola/">anatole-zola</a>
+      <div class="by_zola"><a href="https://www.getzola.org/" target="_blank">Proudly published with Zola!</a></div>
+      
+    </div>
+  </div>
+  <div id="main">
+    <div class="page-top animated fadeInDown">
+      <div class="nav">
+        
+        
+        
+        
+        <li><a  href="https://kyawaway.github.io/myblog/">Home</a></li>
+        <li><a  href="https://kyawaway.github.io/myblog/about/">About</a></li><li><a  href="https://kyawaway.github.io/myblog/tags">Tags</a></li><li><a 
+            href="https://kyawaway.github.io/myblog/archive/">Archive</a></li><li><a  href="https://kyawaway.github.io/myblog/links/">Links</a></li></div>
+      <div class="information">
+        <div class="back_btn">
+          <a onclick="window.history.go(-1)" ><i
+              class="fas fa-chevron-left"></i></a>
+        </div>
+        
+        
+        
+        <div class="avatar"><img src="https://kyawaway.github.io/myblog/images/avatar.jpg"></div>
+      </div>
+    </div>
+    <div class="autopagerize_page_element">
+      <div class="content">
+        
+<article class="post animated fadeInDown">
+  <h1><a href="https:&#x2F;&#x2F;kyawaway.github.io&#x2F;myblog&#x2F;post-homepage&#x2F;">zolaでホームページを立てた</a></h1>
+  
+  <div class="post-content"><p>Rust製のSSGであるところの<a href="https://www.getzola.org/">zola</a>を用いて簡単にホームページを作ってみた．最も，このブログもzola製だが．</p>
+<h2 id="mono">モノ</h2>
+<p><a href="https://www.ueda.info.waseda.ac.jp/~takyu/">これ．</a>時間の割の結構いい感じに仕上がったと思う．</p>
+<p>repo: <a href="https://github.com/kyawaway/mypage">https://github.com/kyawaway/mypage</a></p>
+<h2 id="dong-ji">動機</h2>
+<p>ｵｻﾚなポートフォリオが欲しい気分だった．</p>
+<h2 id="liu-re">流れ</h2>
+<p>大部分は<a href="https://github.com/VersBinarii/hermit_zola">hermit</a>なるテーマを流用した．SSGのライトユーザはテーマを選んでちょろっと書き換えて終わりだと思うが，例に漏れずちょろっとやっていった．</p>
+<h3 id="dao-ru">導入</h3>
+<ol>
+<li>
+<p><a href="https://www.getzola.org/documentation/getting-started/installation/">https://www.getzola.org/documentation/getting-started/installation/</a>を参考にインストール，動作確認する．</p>
+</li>
+<li>
+<p><a href="https://github.com/VersBinarii/hermit_zola">https://github.com/VersBinarii/hermit_zola</a>をcloneし，中身を拝借する．本当は生zolaプロジェクトのconfigに設定を少し書き込めばよしなにやってくれるが，面倒なので丸ごと拝借した．.gitは消そう．</p>
+</li>
+<li>
+<p>中身を書き換えて終わり．ホームのリンクの設定に注意．</p>
+</li>
+</ol>
+<p>簡単すぎる．</p>
+<h3 id="bian-geng-dian">変更点</h3>
+<p>配色はかなり変えた．sassファイルの，_predefined.scssとかに使いそうな色を定義しておいて，style.scssをそこそろ書き換えた．といっても，だいたいはcolorとかでファイル内検索して好きな色に書き換えるだけだし，何も難しいことはない．</p>
+<p>あとは申し訳程度にpaddingをいじったり，あとホームにアイコンをデカデカと掲げた．それくらい．</p>
+<h2 id="jie-lun">結論</h2>
+<p>超簡単．みんなも軽率にやろう．</p>
+</div>
+  <div class="post-footer">
+    <div class="meta">
+      <div class="info">
+        
+        <i class="far fa-sun"></i><span class="date">2023-09-30</span>
+        
+        
+        <i class="fas fa-tags"></i>
+        
+        <a class="tag" href="https://kyawaway.github.io/myblog/tags/zola">&nbsp;zola</a>
+        
+        <a class="tag" href="https://kyawaway.github.io/myblog/tags/html">&nbsp;html</a>
+        
+        <a class="tag" href="https://kyawaway.github.io/myblog/tags/css">&nbsp;css</a>
+        
+        <a class="tag" href="https://kyawaway.github.io/myblog/tags/design">&nbsp;design</a>
+        
+        
+      </div>
+    </div>
+  </div>
+</article>
+<div class="share">
+  <div class="twitter">
+    <a class="fab fa-twitter"
+      href="http://twitter.com/share?text=zolaでホームページを立てた&url=https:&#x2F;&#x2F;kyawaway.github.io&#x2F;myblog&#x2F;post-homepage&#x2F;&hashtags=zola,html,css,design"></a>
+  </div>
+</div>
+
+
+
+
+
+
+
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script>
+  MathJax = {
+    tex: {
+      displayMath: [['$$', '$$'], ["\\[", "\\]"]],
+      inlineMath: [['$', '$'], ['\\(', '\\)']]
+    }
+  };
+</script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+  </script>
+
+
+
+
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    function showLanguages() {
+      let currentDisplay = document.getElementById("languages").style.display;
+      if (currentDisplay == 'none') {
+        document.getElementById("languages").style.display = 'block';
+      } else {
+        document.getElementById("languages").style.display = 'none';
+      }
+    }
+  </script>
+</body>
+
+</html>

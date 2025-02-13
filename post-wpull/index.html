@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html translate="no"  class="theme--kyasual" >
+
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, viewport-fit=cover">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://kyawaway.github.io/myblog/images/apple-touch-icon-144x144.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="120x120" href="https://kyawaway.github.io/myblog/images/apple-touch-icon-120x120.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="https://kyawaway.github.io/myblog/images/apple-touch-icon-72x72.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="57x57" href="https://kyawaway.github.io/myblog/images/apple-touch-icon-57x57.png" />
+  <link rel="short icon" href="https://kyawaway.github.io/myblog/images/favicon.png" type="image/x-icon" />
+  <link rel="stylesheet" href="https://kyawaway.github.io/myblog/style.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap" rel="stylesheet">
+  <title>遊び日記 • Pull-Equivalenceに関する個人的解釈</title>
+  
+  
+  
+</head>
+
+<body>
+  <div id="sidebar" class="animated fadeInDown">
+    <div class="logo-title">
+      <div class="title">
+        <img src=https://kyawaway.github.io/myblog/images/logo.png style="width:127px;" alt="logo" />
+        <h3><a href="https://kyawaway.github.io/myblog/">遊び日記</a></h3>
+        <div class="description">
+          <p>遊びの日記</p>
+        </div>
+      </div>
+    </div>
+    <ul class="social-links"><li><a href="https://github.com/kyawaway" aria-label="Go to Github profile page"><i class="fab fa-github"></i></a></li><li><a href="https://twitter.com/kyawaway" aria-label="Go to Twitter profile page"><i class="fab fa-twitter"></i></a></li>
+      
+    </ul>
+    <div class="footer">
+      
+      <span>Designed based on </span><a href="https://www.getzola.org/themes/anatole-zola/">anatole-zola</a>
+      <div class="by_zola"><a href="https://www.getzola.org/" target="_blank">Proudly published with Zola!</a></div>
+      
+    </div>
+  </div>
+  <div id="main">
+    <div class="page-top animated fadeInDown">
+      <div class="nav">
+        
+        
+        
+        
+        <li><a  href="https://kyawaway.github.io/myblog/">Home</a></li>
+        <li><a  href="https://kyawaway.github.io/myblog/about/">About</a></li><li><a  href="https://kyawaway.github.io/myblog/tags">Tags</a></li><li><a 
+            href="https://kyawaway.github.io/myblog/archive/">Archive</a></li><li><a  href="https://kyawaway.github.io/myblog/links/">Links</a></li></div>
+      <div class="information">
+        <div class="back_btn">
+          <a onclick="window.history.go(-1)" ><i
+              class="fas fa-chevron-left"></i></a>
+        </div>
+        
+        
+        
+        <div class="avatar"><img src="https://kyawaway.github.io/myblog/images/avatar.jpg"></div>
+      </div>
+    </div>
+    <div class="autopagerize_page_element">
+      <div class="content">
+        
+<article class="post animated fadeInDown">
+  <h1><a href="https:&#x2F;&#x2F;kyawaway.github.io&#x2F;myblog&#x2F;post-wpull&#x2F;">Pull-Equivalenceに関する個人的解釈</a></h1>
+  
+  <div class="post-content"><p>MELL Proof Netsに関する細かい話．</p>
+<p>代入表現の文脈で，こんな規則が登場することがある<sup class="footnote-reference"><a href="#1">1</a></sup>：</p>
+<div style="text-align: center">
+    <img src="https://pbs.twimg.com/media/GZgXpB5bYAAkDVD?format=jpg&name=large" width='50%'>
+</div>
+<div style="text-align: center">
+    <img src="https://pbs.twimg.com/media/GZgXpB4aAAEjgVZ?format=jpg&name=large" width='50%'>
+</div>
+<p>Promotion Boxに$?c$セルや$?w$セルを出したり入れたりしても良いという規則．この図においては同値関係として導入されているが，文献によっては両向きの書換え規則になってたり，片方だけしかなかったりする．</p>
+<p>(余談だが，少なくとも$?w$に関しては図を見る限り明らかに対象な規則ではない．実際，$?w$のBoxに入れる方向の規則によってカット除去の合流性が失われることが知られている<sup class="footnote-reference"><a href="#2">2</a></sup>)</p>
+<p>多くの文献では，$?c$に関しては両向き許し<sup class="footnote-reference"><a href="#3">3</a></sup>，$?w$に関しては，Boxから取り出す方向のみを許している<sup class="footnote-reference"><a href="#4">4</a></sup>．</p>
+<p>これらの文献に倣い，$?c$を両向き許す，$?w$を取り出す方向のみ許すとして，これらのグラフ書換えの観点からの解釈を考える．</p>
+<p>exponentialのセルの役割は，論理式の複製，削除である．つまり，exponentialのセルはハイパーリンクとみなしても何ら問題ない．</p>
+<p>これらのセルをハイパーリンクとみなすと，</p>
+<ol>
+<li>
+<p>$?c$は，生のハイパーリンクがBoxの中にあっても外にあっても本質的には同じであることを表す．</p>
+</li>
+<li>
+<p>$?w$は，ハイパーリンクを終端させる役割を持つが，このようなゴミはなるべくBoxの外に出しておきたい(外にある状態を正規系とする)．</p>
+</li>
+</ol>
+<p>のような気持ちが見えてくる．</p>
+<hr />
+<div class="footnote-definition" id="1"><sup class="footnote-definition-label">1</sup>
+<p>Vaux, L.: <strong>λ-calcul différentiel et logique classique : interactions calcula- toires.</strong> Theses, Université de la Méditerranée - Aix-Marseille II (Jan 2007), <a href="https://theses.hal.science/tel-00194149">https://theses.hal.science/tel-00194149</a></p>
+</div>
+<div class="footnote-definition" id="2"><sup class="footnote-definition-label">2</sup>
+<p>P. Tranquilli, <strong>Intuitionistic differential nets and lambda-calculus,</strong> Theoretical Computer Science, vol. 412, no. 20, pp. 1979–1997, (2011) <a href="https://doi.org/10.1016/j.tcs.2010.12.022">https://doi.org/10.1016/j.tcs.2010.12.022</a>.
+MELLではなくDifferential Interaction Netsについての話だが．．．</p>
+</div>
+<div class="footnote-definition" id="3"><sup class="footnote-definition-label">3</sup>
+<p>Di Cosmo, R., Guerrini, S.: <strong>Strong Normalization of Proof Nets Modulo Structural Congruences.</strong> In: Narendran, P., Rusinowitch, M. (eds.) Rewriting Techniques and Applications. pp. 75–89. Springer Berlin Heidelberg, Berlin, Heidelberg (1999)</p>
+</div>
+<div class="footnote-definition" id="4"><sup class="footnote-definition-label">4</sup>
+<p>Accattoli, B.: <strong>Linear Logic and Strong Normalization</strong>. In: van Raams- donk, F. (ed.) 24th International Conference on Rewriting Techniques and Applications (RTA 2013). Leibniz International Proceedings in Informatics (LIPIcs), vol. 21, pp. 39–54. Schloss Dagstuhl – Leibniz-Zentrum für Infor- matik, Dagstuhl, Germany (2013).
+<a href="https://doi.org/10.4230/LIPIcs.RTA.2013.39">https://doi.org/10.4230/LIPIcs.RTA.2013.39</a>,
+iSSN: 1868-8969</p>
+</div>
+</div>
+  <div class="post-footer">
+    <div class="meta">
+      <div class="info">
+        
+        <i class="far fa-sun"></i><span class="date">2024-10-10</span>
+        
+        
+        <i class="fas fa-tags"></i>
+        
+        <a class="tag" href="https://kyawaway.github.io/myblog/tags/poem">&nbsp;poem</a>
+        
+        <a class="tag" href="https://kyawaway.github.io/myblog/tags/linear logic">&nbsp;linear logic</a>
+        
+        <a class="tag" href="https://kyawaway.github.io/myblog/tags/proof nets">&nbsp;proof nets</a>
+        
+        
+      </div>
+    </div>
+  </div>
+</article>
+<div class="share">
+  <div class="twitter">
+    <a class="fab fa-twitter"
+      href="http://twitter.com/share?text=Pull-Equivalenceに関する個人的解釈&url=https:&#x2F;&#x2F;kyawaway.github.io&#x2F;myblog&#x2F;post-wpull&#x2F;&hashtags=poem,linear logic,proof nets"></a>
+  </div>
+</div>
+
+
+
+
+
+
+
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script>
+  MathJax = {
+    tex: {
+      displayMath: [['$$', '$$'], ["\\[", "\\]"]],
+      inlineMath: [['$', '$'], ['\\(', '\\)']]
+    }
+  };
+</script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+  </script>
+
+
+
+
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    function showLanguages() {
+      let currentDisplay = document.getElementById("languages").style.display;
+      if (currentDisplay == 'none') {
+        document.getElementById("languages").style.display = 'block';
+      } else {
+        document.getElementById("languages").style.display = 'none';
+      }
+    }
+  </script>
+</body>
+
+</html>

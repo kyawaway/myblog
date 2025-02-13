@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html translate="no"  class="theme--kyasual" >
+
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, viewport-fit=cover">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://kyawaway.github.io/myblog/images/apple-touch-icon-144x144.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="120x120" href="https://kyawaway.github.io/myblog/images/apple-touch-icon-120x120.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="https://kyawaway.github.io/myblog/images/apple-touch-icon-72x72.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="57x57" href="https://kyawaway.github.io/myblog/images/apple-touch-icon-57x57.png" />
+  <link rel="short icon" href="https://kyawaway.github.io/myblog/images/favicon.png" type="image/x-icon" />
+  <link rel="stylesheet" href="https://kyawaway.github.io/myblog/style.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap" rel="stylesheet">
+  <title>遊び日記 • mason-lspによるelm-lspの導入ではまった</title>
+  
+  
+  
+</head>
+
+<body>
+  <div id="sidebar" class="animated fadeInDown">
+    <div class="logo-title">
+      <div class="title">
+        <img src=https://kyawaway.github.io/myblog/images/logo.png style="width:127px;" alt="logo" />
+        <h3><a href="https://kyawaway.github.io/myblog/">遊び日記</a></h3>
+        <div class="description">
+          <p>遊びの日記</p>
+        </div>
+      </div>
+    </div>
+    <ul class="social-links"><li><a href="https://github.com/kyawaway" aria-label="Go to Github profile page"><i class="fab fa-github"></i></a></li><li><a href="https://twitter.com/kyawaway" aria-label="Go to Twitter profile page"><i class="fab fa-twitter"></i></a></li>
+      
+    </ul>
+    <div class="footer">
+      
+      <span>Designed based on </span><a href="https://www.getzola.org/themes/anatole-zola/">anatole-zola</a>
+      <div class="by_zola"><a href="https://www.getzola.org/" target="_blank">Proudly published with Zola!</a></div>
+      
+    </div>
+  </div>
+  <div id="main">
+    <div class="page-top animated fadeInDown">
+      <div class="nav">
+        
+        
+        
+        
+        <li><a  href="https://kyawaway.github.io/myblog/">Home</a></li>
+        <li><a  href="https://kyawaway.github.io/myblog/about/">About</a></li><li><a  href="https://kyawaway.github.io/myblog/tags">Tags</a></li><li><a 
+            href="https://kyawaway.github.io/myblog/archive/">Archive</a></li><li><a  href="https://kyawaway.github.io/myblog/links/">Links</a></li></div>
+      <div class="information">
+        <div class="back_btn">
+          <a onclick="window.history.go(-1)" ><i
+              class="fas fa-chevron-left"></i></a>
+        </div>
+        
+        
+        
+        <div class="avatar"><img src="https://kyawaway.github.io/myblog/images/avatar.jpg"></div>
+      </div>
+    </div>
+    <div class="autopagerize_page_element">
+      <div class="content">
+        
+<article class="post animated fadeInDown">
+  <h1><a href="https:&#x2F;&#x2F;kyawaway.github.io&#x2F;myblog&#x2F;post-6&#x2F;">mason-lspによるelm-lspの導入ではまった</a></h1>
+  
+  <div class="post-content"><h2 id="xian-xiang">現象</h2>
+<p>neovim 0.91</p>
+<p>mason-lsp + mason-lsp-config でelm-lspをインストールし，.elmファイルを開いたところ，以下のエラーが出た：</p>
+<pre style="background-color:#272822;color:#f8f8f2;"><code><span>Error executing vim.schedule lua callback: ...w/Cellar/neovim/0.9.1/share/nvim/runtime/lua/vim/lsp.lua:1309
+</span><span>: RPC[Error] code_name = InternalError, message = &quot;Request initialize failed with message: ENOENT: no such
+</span><span>file or directory, open &#39;../../.local/share/nvim/mason/packages/elm-language-server/node_modules/@elm-tooli
+</span><span>ng/elm-language-server/out/common/tree-sitter-elm.wasm&#39;&quot;
+</span><span>stack traceback:
+</span><span>        [C]: in function &#39;assert&#39;
+</span><span>        ...w/Cellar/neovim/0.9.1/share/nvim/runtime/lua/vim/lsp.lua:1309: in function &#39;&#39;
+</span><span>        vim/_editor.lua: in function &lt;vim/_editor.lua:0&gt;
+</span><span>Press ENTER or type command to continue
+</span></code></pre>
+<p>tree-sitter-elm.wasmが無いよと言われている．はてさてどうしたものか．</p>
+<h2 id="yuan-yin">原因</h2>
+<p>~/.local/share/nvim/mason/packages/elm-language-server/node_modules/@elm-tooling/elm-language-server/out/common をみてみると，確かにtree-sitter-elm.wasmは無い．</p>
+<p>色々眺めているうちに，
+~/.local/share/nvim/mason/packages/elm-language-server/node_modules/@elm-tooling/elm-language-server/out にtree-sitter-elm.wasmがあるのを発見した．これをcommon/に移動したら，正しく動いた．</p>
+<p>なんだったんだろう．</p>
+</div>
+  <div class="post-footer">
+    <div class="meta">
+      <div class="info">
+        
+        <i class="far fa-sun"></i><span class="date">2023-09-09</span>
+        
+        
+        <i class="fas fa-tags"></i>
+        
+        <a class="tag" href="https://kyawaway.github.io/myblog/tags/neovim">&nbsp;neovim</a>
+        
+        <a class="tag" href="https://kyawaway.github.io/myblog/tags/lsp">&nbsp;lsp</a>
+        
+        <a class="tag" href="https://kyawaway.github.io/myblog/tags/elm">&nbsp;elm</a>
+        
+        
+      </div>
+    </div>
+  </div>
+</article>
+<div class="share">
+  <div class="twitter">
+    <a class="fab fa-twitter"
+      href="http://twitter.com/share?text=mason-lspによるelm-lspの導入ではまった&url=https:&#x2F;&#x2F;kyawaway.github.io&#x2F;myblog&#x2F;post-6&#x2F;&hashtags=neovim,lsp,elm"></a>
+  </div>
+</div>
+
+
+
+
+
+
+
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script>
+  MathJax = {
+    tex: {
+      displayMath: [['$$', '$$'], ["\\[", "\\]"]],
+      inlineMath: [['$', '$'], ['\\(', '\\)']]
+    }
+  };
+</script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+  </script>
+
+
+
+
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    function showLanguages() {
+      let currentDisplay = document.getElementById("languages").style.display;
+      if (currentDisplay == 'none') {
+        document.getElementById("languages").style.display = 'block';
+      } else {
+        document.getElementById("languages").style.display = 'none';
+      }
+    }
+  </script>
+</body>
+
+</html>

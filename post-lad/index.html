@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html translate="no"  class="theme--kyasual" >
+
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, viewport-fit=cover">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://kyawaway.github.io/myblog/images/apple-touch-icon-144x144.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="120x120" href="https://kyawaway.github.io/myblog/images/apple-touch-icon-120x120.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="https://kyawaway.github.io/myblog/images/apple-touch-icon-72x72.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="57x57" href="https://kyawaway.github.io/myblog/images/apple-touch-icon-57x57.png" />
+  <link rel="short icon" href="https://kyawaway.github.io/myblog/images/favicon.png" type="image/x-icon" />
+  <link rel="stylesheet" href="https://kyawaway.github.io/myblog/style.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap" rel="stylesheet">
+  <title>遊び日記 • 地理座標系と平面直角座標系の変換</title>
+  
+  
+  
+</head>
+
+<body>
+  <div id="sidebar" class="animated fadeInDown">
+    <div class="logo-title">
+      <div class="title">
+        <img src=https://kyawaway.github.io/myblog/images/logo.png style="width:127px;" alt="logo" />
+        <h3><a href="https://kyawaway.github.io/myblog/">遊び日記</a></h3>
+        <div class="description">
+          <p>遊びの日記</p>
+        </div>
+      </div>
+    </div>
+    <ul class="social-links"><li><a href="https://github.com/kyawaway" aria-label="Go to Github profile page"><i class="fab fa-github"></i></a></li><li><a href="https://twitter.com/kyawaway" aria-label="Go to Twitter profile page"><i class="fab fa-twitter"></i></a></li>
+      
+    </ul>
+    <div class="footer">
+      
+      <span>Designed based on </span><a href="https://www.getzola.org/themes/anatole-zola/">anatole-zola</a>
+      <div class="by_zola"><a href="https://www.getzola.org/" target="_blank">Proudly published with Zola!</a></div>
+      
+    </div>
+  </div>
+  <div id="main">
+    <div class="page-top animated fadeInDown">
+      <div class="nav">
+        
+        
+        
+        
+        <li><a  href="https://kyawaway.github.io/myblog/">Home</a></li>
+        <li><a  href="https://kyawaway.github.io/myblog/about/">About</a></li><li><a  href="https://kyawaway.github.io/myblog/tags">Tags</a></li><li><a 
+            href="https://kyawaway.github.io/myblog/archive/">Archive</a></li><li><a  href="https://kyawaway.github.io/myblog/links/">Links</a></li></div>
+      <div class="information">
+        <div class="back_btn">
+          <a onclick="window.history.go(-1)" ><i
+              class="fas fa-chevron-left"></i></a>
+        </div>
+        
+        
+        
+        <div class="avatar"><img src="https://kyawaway.github.io/myblog/images/avatar.jpg"></div>
+      </div>
+    </div>
+    <div class="autopagerize_page_element">
+      <div class="content">
+        
+<article class="post animated fadeInDown">
+  <h1><a href="https:&#x2F;&#x2F;kyawaway.github.io&#x2F;myblog&#x2F;post-lad&#x2F;">地理座標系と平面直角座標系の変換</a></h1>
+  
+  <div class="post-content"><p>緯度経度で表される地理座標系を，メートルのx,y座標に変換したい．</p>
+<h2 id="qian-ti">前提</h2>
+<p>なんでもいいが，ここでは処理はTypeScriptで記述する．</p>
+<p>以下の，地理座標系を表す<code>GetCoordinate</code>型を，平面直交座標系を表す<code>PlaneCoordinate</code>型に変換することを考える．</p>
+<pre data-lang="TypeScript" style="background-color:#272822;color:#f8f8f2;" class="language-TypeScript "><code class="language-TypeScript" data-lang="TypeScript"><span style="font-style:italic;color:#66d9ef;">interface </span><span>GeoCoordinate {
+</span><span>  latitude</span><span style="color:#f92672;">: </span><span style="font-style:italic;color:#66d9ef;">number</span><span>;
+</span><span>  longitude</span><span style="color:#f92672;">: </span><span style="font-style:italic;color:#66d9ef;">number</span><span>;
+</span><span>};
+</span><span>
+</span><span style="font-style:italic;color:#66d9ef;">interface </span><span>PlaneCoordinate {
+</span><span>  x</span><span style="color:#f92672;">: </span><span style="font-style:italic;color:#66d9ef;">number</span><span>;
+</span><span>  y</span><span style="color:#f92672;">: </span><span style="font-style:italic;color:#66d9ef;">number</span><span>;
+</span><span>};
+</span><span>
+</span><span style="font-style:italic;color:#66d9ef;">const </span><span style="color:#a6e22e;">GeoToPlane</span><span style="color:#f92672;">= </span><span>(</span><span style="font-style:italic;color:#fd971f;">geo</span><span style="color:#f92672;">: </span><span>GeoCoordinate)</span><span style="color:#f92672;">: </span><span>PlaneCoordinate  </span><span style="font-style:italic;color:#66d9ef;">=&gt; </span><span>{
+</span><span>  </span><span style="color:#75715e;">//奇跡的な処理
+</span><span>  </span><span style="color:#f92672;">return </span><span>{x: hoge, y:huga};
+</span><span>};
+</span></code></pre>
+<p>球形（しかも楕円）の表面上の距離を単純な平面の直角座標に変換するので，難儀である．どう考えても面倒．</p>
+<h2 id="zhen-mian-mu-niyaranai">真面目にやらない</h2>
+<p>日本においては，緯度に110000を，経度に91000をかけるとだいたいいい感じの値になることが知られている．</p>
+<pre data-lang="TypeScript" style="background-color:#272822;color:#f8f8f2;" class="language-TypeScript "><code class="language-TypeScript" data-lang="TypeScript"><span style="font-style:italic;color:#66d9ef;">const </span><span style="color:#a6e22e;">GeoToPlaneDodge </span><span style="color:#f92672;">= </span><span>(</span><span style="font-style:italic;color:#fd971f;">geo</span><span style="color:#f92672;">: </span><span>GeoCoordinate)</span><span style="color:#f92672;">: </span><span>PlaneCoordinate  </span><span style="font-style:italic;color:#66d9ef;">=&gt; </span><span>{
+</span><span>  </span><span style="color:#f92672;">return </span><span>{x: geo.latitude </span><span style="color:#f92672;">* </span><span style="color:#ae81ff;">110000</span><span>, y:geo.latitude </span><span style="color:#f92672;">* </span><span style="color:#ae81ff;">91000</span><span>};
+</span><span>};
+</span></code></pre>
+<p>これは，日本の（多分東京の）緯度経度から概算された値を定数として使っているだけなので，より高精度の値が必要な場合や，海外で使用する場合は当然NG．</p>
+<h2 id="zhen-mian-mu-niyaru">真面目にやる</h2>
+<p>ちゃんと地球の形状を考慮して，真面目に変換する．</p>
+<p>一方で，地球の完璧な形状をほげするのは不可能なので，人間が扱える図形に近似して考える．具体的には，回転楕円体として扱う．ここで，パラメータは測地基準系1980（GRS80）を採用する．</p>
+<ul>
+<li>長半径: 6378137</li>
+<li>扁平率の逆数: 298.257222101</li>
+</ul>
+<p>また，平面直角座標系の原点に関しては，</p>
+<p>このように，地球を回転楕円体とみなして投影を行う手法を<a href="https://ja.wikipedia.org/wiki/%E3%82%AC%E3%82%A6%E3%82%B9%E3%83%BB%E3%82%AF%E3%83%AA%E3%83%A5%E3%83%BC%E3%82%B2%E3%83%AB%E5%9B%B3%E6%B3%95">Gauss-Krüger 投影</a>というらしい．</p>
+<p>（<a href="https://www.gsi.go.jp/sokuchikijun/datum-main.html">https://www.gsi.go.jp/sokuchikijun/datum-main.html</a>等．）</p>
+<h3 id="dao-chu-nozhun-bei">導出の準備</h3>
+<p>Gauss-Krüger 投影は，回転楕円体から平面への等角写像の一種である．これは，投影しようとする範囲の中心地点を通る子午線（中央子午線）の子午線弧長を保存している．</p>
+<p>いくつか流儀であるが，今日日本においては，楕円体の第三扁平率のみを係数に含む冪級数展開により表す手法が普及している．今回はこれを用いる．</p>
+<h3 id="shu-shi-wobing-beru">数式を並べる</h3>
+<p><a href="https://vldb.gsi.go.jp/sokuchi/surveycalc/surveycalc/algorithm/bl2xy/bl2xy.htm">https://vldb.gsi.go.jp/sokuchi/surveycalc/surveycalc/algorithm/bl2xy/bl2xy.htm</a> 参照．</p>
+<h4 id="parameta">パラメータ：</h4>
+<p>$\phi$:緯度[$rad$]，$\lambda$:経度[$rad$]</p>
+<pre data-lang="typescript" style="background-color:#272822;color:#f8f8f2;" class="language-typescript "><code class="language-typescript" data-lang="typescript"><span style="font-style:italic;color:#66d9ef;">interface </span><span>GeoCoordinate {
+</span><span>  latitude</span><span style="color:#f92672;">: </span><span style="font-style:italic;color:#66d9ef;">number</span><span>;
+</span><span>  longitude</span><span style="color:#f92672;">: </span><span style="font-style:italic;color:#66d9ef;">number</span><span>;
+</span><span>};
+</span></code></pre>
+<p>$\phi_0,\lambda_0$: 平面直角座標系原点の緯度経度[$rad$]</p>
+<pre data-lang="typescript" style="background-color:#272822;color:#f8f8f2;" class="language-typescript "><code class="language-typescript" data-lang="typescript"><span style="font-style:italic;color:#66d9ef;">const </span><span>phi_0</span><span style="color:#f92672;">:</span><span style="font-style:italic;color:#66d9ef;">number </span><span style="color:#f92672;">= </span><span>hoge;
+</span><span>
+</span><span style="font-style:italic;color:#66d9ef;">const </span><span>lambda_0</span><span style="color:#f92672;">:</span><span style="font-style:italic;color:#66d9ef;">number </span><span style="color:#f92672;">= </span><span>hoge;
+</span></code></pre>
+<p>$a=$6378131:楕円体長半径[$m$]</p>
+<p>$F=$298.257222101:楕円体の扁平率の逆数</p>
+<p>$m_0=$0.9999:平面直角座標系の$x$軸における縮尺係数</p>
+<pre data-lang="typescript" style="background-color:#272822;color:#f8f8f2;" class="language-typescript "><code class="language-typescript" data-lang="typescript"><span style="font-style:italic;color:#66d9ef;">const </span><span>a</span><span style="color:#f92672;">:</span><span style="font-style:italic;color:#66d9ef;">number </span><span style="color:#f92672;">= </span><span style="color:#ae81ff;">6378131</span><span>;
+</span><span>
+</span><span style="font-style:italic;color:#66d9ef;">const </span><span>F</span><span style="color:#f92672;">:</span><span style="font-style:italic;color:#66d9ef;">number </span><span style="color:#f92672;">= </span><span style="color:#ae81ff;">298.257222101</span><span>;
+</span><span>
+</span><span style="font-style:italic;color:#66d9ef;">const </span><span>m_0</span><span style="color:#f92672;">:</span><span style="font-style:italic;color:#66d9ef;">number </span><span style="color:#f92672;">= </span><span style="color:#ae81ff;">0.9999</span><span>;
+</span></code></pre>
+<h4 id="ji-suan">計算</h4>
+<p>$\phi, \lambda$を受け取り，平面直角座標$x,y$を返す．</p>
+<p>まず，第三扁平率$n$は，以下のように定義される：</p>
+<p>$$n = \frac{1}{2F-1}$$</p>
+<pre data-lang="typescript" style="background-color:#272822;color:#f8f8f2;" class="language-typescript "><code class="language-typescript" data-lang="typescript"><span style="font-style:italic;color:#66d9ef;">const </span><span>n </span><span style="color:#f92672;">= </span><span style="color:#ae81ff;">1 </span><span style="color:#f92672;">/ </span><span>(</span><span style="color:#ae81ff;">2</span><span style="color:#f92672;">*</span><span>F </span><span style="color:#f92672;">- </span><span style="color:#ae81ff;">1</span><span>);
+</span></code></pre>
+<p>$A_i(i=0,1,...,5)$:</p>
+<p>$$A_0 = 1 + \frac{n^2}{4} + \frac{n^3}{64}$$</p>
+<p>$$A_1 = -\frac{3}{2}\left( n - \frac{n^3}{8} - \frac{n^5}{64} \right)$$</p>
+<p>$$A_2 = \frac{15}{16}\left( n^2 - \frac{n^4}{4} \right)$$</p>
+<p>$$A_3 = -\frac{35}{48}\left( n^3 - \frac{5n^5}{16} \right)$$</p>
+<p>$$A_4 = \frac{315}{512}n^4$$</p>
+<p>$$A_5 = \frac{693}{1280}n^5$$</p>
+<pre data-lang="typescript" style="background-color:#272822;color:#f8f8f2;" class="language-typescript "><code class="language-typescript" data-lang="typescript"><span style="font-style:italic;color:#66d9ef;">const </span><span>A_List</span><span style="color:#f92672;">: </span><span style="font-style:italic;color:#66d9ef;">number</span><span>[] </span><span style="color:#f92672;">= </span><span>[
+</span><span>  </span><span style="color:#ae81ff;">1 </span><span style="color:#f92672;">+ </span><span>(n</span><span style="color:#f92672;">^</span><span style="color:#ae81ff;">2 </span><span style="color:#f92672;">/ </span><span style="color:#ae81ff;">4</span><span>) </span><span style="color:#f92672;">+ </span><span>(n</span><span style="color:#f92672;">^</span><span style="color:#ae81ff;">3 </span><span style="color:#f92672;">/ </span><span style="color:#ae81ff;">64</span><span>),
+</span><span>  </span><span style="color:#f92672;">-</span><span>(</span><span style="color:#ae81ff;">3</span><span style="color:#f92672;">/</span><span style="color:#ae81ff;">2</span><span>) </span><span style="color:#f92672;">* </span><span>(n </span><span style="color:#f92672;">- </span><span>((n</span><span style="color:#f92672;">^</span><span style="color:#ae81ff;">3</span><span>) </span><span style="color:#f92672;">/ </span><span style="color:#ae81ff;">8</span><span>) </span><span style="color:#f92672;">- </span><span>((n</span><span style="color:#f92672;">^</span><span style="color:#ae81ff;">5</span><span>) </span><span style="color:#f92672;">/ </span><span style="color:#ae81ff;">64</span><span>)),
+</span><span>  (</span><span style="color:#ae81ff;">15</span><span style="color:#f92672;">/</span><span style="color:#ae81ff;">16</span><span>) </span><span style="color:#f92672;">* </span><span>(n</span><span style="color:#f92672;">^</span><span style="color:#ae81ff;">2 </span><span style="color:#f92672;">- </span><span>((n</span><span style="color:#f92672;">^</span><span style="color:#ae81ff;">4</span><span>) </span><span style="color:#f92672;">/ </span><span style="color:#ae81ff;">4</span><span>)),
+</span><span>  </span><span style="color:#f92672;">-</span><span>(</span><span style="color:#ae81ff;">35</span><span style="color:#f92672;">/</span><span style="color:#ae81ff;">48</span><span>) </span><span style="color:#f92672;">* </span><span>(n</span><span style="color:#f92672;">^</span><span style="color:#ae81ff;">3 </span><span style="color:#f92672;">- </span><span>((</span><span style="color:#ae81ff;">5</span><span style="color:#f92672;">*</span><span>n</span><span style="color:#f92672;">^</span><span style="color:#ae81ff;">5</span><span>) </span><span style="color:#f92672;">/ </span><span style="color:#ae81ff;">16</span><span>)),
+</span><span>  </span><span style="color:#ae81ff;">315</span><span style="color:#f92672;">/</span><span style="color:#ae81ff;">512 </span><span style="color:#f92672;">* </span><span>n</span><span style="color:#f92672;">^</span><span style="color:#ae81ff;">4</span><span>,
+</span><span>  </span><span style="color:#ae81ff;">693</span><span style="color:#f92672;">/</span><span style="color:#ae81ff;">1280 </span><span style="color:#f92672;">* </span><span>n</span><span style="color:#f92672;">^</span><span style="color:#ae81ff;">5
+</span><span>];
+</span></code></pre>
+<p>$\alpha_i(i=1,2,...,5)$:</p>
+<p>$$\alpha_1 = \frac{1}{2}n - \frac{2}{3}n^2 + \frac{5}{16}n^3 - \frac{41}{180}n^4 - \frac{127}{288}n^5$$</p>
+<p>$$\alpha_2 = \frac{13}{48}n^2 - \frac{3}{5}n^3 + \frac{557}{1440}n^4 + \frac{281}{630}n^5$$</p>
+<p>$$\alpha_3 = \frac{61}{240}n^3 - \frac{103}{140}n^4 + \frac{15061}{26880}n^5$$</p>
+<p>$$\alpha_4 = \frac{49561}{161280}n^4 - \frac{179}{168}n^5$$</p>
+<p>$$\alpha_5 = \frac{34729}{80640}n^5$$</p>
+<pre data-lang="typescript" style="background-color:#272822;color:#f8f8f2;" class="language-typescript "><code class="language-typescript" data-lang="typescript"><span style="font-style:italic;color:#66d9ef;">const </span><span>alpha_List</span><span style="color:#f92672;">:</span><span style="font-style:italic;color:#66d9ef;">number</span><span>[] </span><span style="color:#f92672;">= </span><span>[
+</span><span>  (</span><span style="color:#ae81ff;">1</span><span style="color:#f92672;">/</span><span style="color:#ae81ff;">2</span><span>)</span><span style="color:#f92672;">*</span><span>n </span><span style="color:#f92672;">- </span><span>(</span><span style="color:#ae81ff;">2</span><span style="color:#f92672;">/</span><span style="color:#ae81ff;">3</span><span>)</span><span style="color:#f92672;">*</span><span>(n</span><span style="color:#f92672;">^</span><span style="color:#ae81ff;">2</span><span>) </span><span style="color:#f92672;">+ </span><span>(</span><span style="color:#ae81ff;">5</span><span style="color:#f92672;">/</span><span style="color:#ae81ff;">16</span><span>)</span><span style="color:#f92672;">*</span><span>(n</span><span style="color:#f92672;">^</span><span style="color:#ae81ff;">3</span><span>) </span><span style="color:#f92672;">- </span><span>(</span><span style="color:#ae81ff;">41</span><span style="color:#f92672;">/</span><span style="color:#ae81ff;">180</span><span>)</span><span style="color:#f92672;">*</span><span>(n</span><span style="color:#f92672;">^</span><span style="color:#ae81ff;">4</span><span>) </span><span style="color:#f92672;">- </span><span>(</span><span style="color:#ae81ff;">127</span><span style="color:#f92672;">/</span><span style="color:#ae81ff;">288</span><span>)</span><span style="color:#f92672;">*</span><span>(n</span><span style="color:#f92672;">^</span><span style="color:#ae81ff;">5</span><span>),
+</span><span>  (</span><span style="color:#ae81ff;">13</span><span style="color:#f92672;">/</span><span style="color:#ae81ff;">48</span><span>)</span><span style="color:#f92672;">*</span><span>(n</span><span style="color:#f92672;">^</span><span style="color:#ae81ff;">2</span><span>) </span><span style="color:#f92672;">- </span><span>(</span><span style="color:#ae81ff;">3</span><span style="color:#f92672;">/</span><span style="color:#ae81ff;">5</span><span>)</span><span style="color:#f92672;">*</span><span>(n</span><span style="color:#f92672;">^</span><span style="color:#ae81ff;">3</span><span>) </span><span style="color:#f92672;">+ </span><span>(</span><span style="color:#ae81ff;">557</span><span style="color:#f92672;">/</span><span style="color:#ae81ff;">1440</span><span>)</span><span style="color:#f92672;">*</span><span>(n</span><span style="color:#f92672;">^</span><span style="color:#ae81ff;">4</span><span>) </span><span style="color:#f92672;">+ </span><span>(</span><span style="color:#ae81ff;">281</span><span style="color:#f92672;">/</span><span style="color:#ae81ff;">630</span><span>)</span><span style="color:#f92672;">*</span><span>(n</span><span style="color:#f92672;">^</span><span style="color:#ae81ff;">5</span><span>),
+</span><span>  (</span><span style="color:#ae81ff;">61</span><span style="color:#f92672;">/</span><span style="color:#ae81ff;">240</span><span>)</span><span style="color:#f92672;">*</span><span>(n</span><span style="color:#f92672;">^</span><span style="color:#ae81ff;">3</span><span>) </span><span style="color:#f92672;">- </span><span>(</span><span style="color:#ae81ff;">103</span><span style="color:#f92672;">/</span><span style="color:#ae81ff;">140</span><span>)</span><span style="color:#f92672;">*</span><span>(n</span><span style="color:#f92672;">^</span><span style="color:#ae81ff;">4</span><span>) </span><span style="color:#f92672;">+ </span><span>(</span><span style="color:#ae81ff;">15061</span><span style="color:#f92672;">/</span><span style="color:#ae81ff;">26880</span><span>)</span><span style="color:#f92672;">*</span><span>(n</span><span style="color:#f92672;">^</span><span style="color:#ae81ff;">5</span><span>),
+</span><span>  (</span><span style="color:#ae81ff;">49561</span><span style="color:#f92672;">/</span><span style="color:#ae81ff;">161280</span><span>)</span><span style="color:#f92672;">*</span><span>(n</span><span style="color:#f92672;">^</span><span style="color:#ae81ff;">4</span><span>) </span><span style="color:#f92672;">- </span><span>(</span><span style="color:#ae81ff;">179</span><span style="color:#f92672;">/</span><span style="color:#ae81ff;">168</span><span>)</span><span style="color:#f92672;">*</span><span>(n</span><span style="color:#f92672;">^</span><span style="color:#ae81ff;">5</span><span>),
+</span><span>  (</span><span style="color:#ae81ff;">34729</span><span style="color:#f92672;">/</span><span style="color:#ae81ff;">80640</span><span>)</span><span style="color:#f92672;">*</span><span>(n</span><span style="color:#f92672;">^</span><span style="color:#ae81ff;">5</span><span>)
+</span><span>];
+</span></code></pre>
+<p>$\bar{S_{\phi_0}},\bar{A}$:</p>
+<p>$$\bar{S_{\phi_0}} = \frac{m_0a}{1+n}\left( A_0\phi_0 + \Sigma^5_{j=1} A_j \sin{(2j\phi_0)} \right)$$</p>
+<p>$$\bar{A} = \frac{m_0a}{1+n}A_0$$</p>
+<pre data-lang="typescript" style="background-color:#272822;color:#f8f8f2;" class="language-typescript "><code class="language-typescript" data-lang="typescript"><span style="font-style:italic;color:#66d9ef;">const </span><span>bar_S_phi_0 </span><span style="color:#f92672;">= </span><span>(m_0</span><span style="color:#f92672;">*</span><span>a </span><span style="color:#f92672;">/ </span><span>(</span><span style="color:#ae81ff;">1</span><span style="color:#f92672;">+</span><span>n)) </span><span style="color:#f92672;">* </span><span>(A_0</span><span style="color:#f92672;">*</span><span>phi_0 </span><span style="color:#f92672;">+ </span><span>A_List.</span><span style="color:#a6e22e;">map</span><span>((</span><span style="font-style:italic;color:#fd971f;">A</span><span>, </span><span style="font-style:italic;color:#fd971f;">j</span><span>) </span><span style="font-style:italic;color:#66d9ef;">=&gt; </span><span>A </span><span style="color:#f92672;">* </span><span style="color:#66d9ef;">Math</span><span>.</span><span style="color:#66d9ef;">sin</span><span>(</span><span style="color:#ae81ff;">2</span><span style="color:#f92672;">*</span><span>j</span><span style="color:#f92672;">*</span><span>phi_0) ).</span><span style="color:#a6e22e;">reduce</span><span>((</span><span style="font-style:italic;color:#fd971f;">a</span><span>, </span><span style="font-style:italic;color:#fd971f;">b</span><span>) </span><span style="font-style:italic;color:#66d9ef;">=&gt; </span><span>a</span><span style="color:#f92672;">+</span><span>b, </span><span style="color:#ae81ff;">0</span><span>));
+</span><span>
+</span><span style="font-style:italic;color:#66d9ef;">const </span><span>bar_A </span><span style="color:#f92672;">= </span><span>(m_0 </span><span style="color:#f92672;">/ </span><span>(</span><span style="color:#ae81ff;">1</span><span style="color:#f92672;">+</span><span>n)) </span><span style="color:#f92672;">* </span><span>A_0;
+</span></code></pre>
+<p>$\lambda_\epsilon, \lambda_s$:</p>
+<p>$$\lambda_\epsilon = \cos(\lambda - \lambda_0)$$</p>
+<p>$$\lambda_s = \sin(\lambda - \lambda_0)$$</p>
+<pre data-lang="typescript" style="background-color:#272822;color:#f8f8f2;" class="language-typescript "><code class="language-typescript" data-lang="typescript"><span style="font-style:italic;color:#66d9ef;">const </span><span>lambda_epsilon </span><span style="color:#f92672;">= </span><span style="color:#66d9ef;">Math</span><span>.</span><span style="color:#66d9ef;">cos</span><span>(lambda </span><span style="color:#f92672;">- </span><span>lambda_0);
+</span><span>
+</span><span style="font-style:italic;color:#66d9ef;">const </span><span>lambda_s </span><span style="color:#f92672;">= </span><span style="color:#66d9ef;">Math</span><span>.</span><span style="color:#66d9ef;">sin</span><span>(lambda </span><span style="color:#f92672;">- </span><span>lambda_0);
+</span></code></pre>
+<p>$t,\bar{t}$:</p>
+<p>$$t = \sinh{\left(\tanh^{-1}\sin{\phi} - \frac{2\sqrt{n}}{1+n}\tanh^{-1}\left(\left[ \frac{2\sqrt{n}}{1+n}\sin{\phi}\right]\right)\right)}$$</p>
+<p>$$\bar{t} = \sqrt{1+t^2}$$</p>
+<pre data-lang="typsscript" style="background-color:#272822;color:#f8f8f2;" class="language-typsscript "><code class="language-typsscript" data-lang="typsscript"><span>const t = Math.sinh(Math.atanh(Math.sin(phi)) - (2*Math.sqrt(n) / (1+n)) * Math.atanh( (2*Math.sqrt(n) / (1+n)) * Math.sin(phi) ));
+</span><span>
+</span><span>const bar_t = Math.sqrt(1 + t^2);
+</span></code></pre>
+<p>$\xi, \eta$:</p>
+<p>$$\xi = \tan^{-1}\left(\frac{t}{\lambda_\epsilon}\right)$$</p>
+<p>$$\eta = \tan^{-1}\left(\frac{\lambda_s}{t}\right)$$</p>
+<pre data-lang="typescript" style="background-color:#272822;color:#f8f8f2;" class="language-typescript "><code class="language-typescript" data-lang="typescript"><span style="font-style:italic;color:#66d9ef;">const </span><span>xi </span><span style="color:#f92672;">= </span><span style="color:#66d9ef;">Math</span><span>.</span><span style="color:#66d9ef;">atan</span><span>(t </span><span style="color:#f92672;">/ </span><span>lambda_epsilon);
+</span><span>
+</span><span style="font-style:italic;color:#66d9ef;">const </span><span>eta </span><span style="color:#f92672;">= </span><span style="color:#66d9ef;">Math</span><span>.</span><span style="color:#66d9ef;">atan</span><span>(lambda_s </span><span style="color:#f92672;">/ </span><span>t);
+</span></code></pre>
+<p>$x,y$:</p>
+<p>$$x = \bar{A} (\xi + \Sigma^5_{j=1} \alpha \sin{(2j\xi)} \cosh{(2j\eta)}) - \bar{S_{\phi_0}}$$</p>
+<p>$$y = \bar{A} (\eta + \Sigma^5_{j=1} \alpha \sin{(2j\xi)} \cosh{(2j\eta)})$$</p>
+<pre data-lang="typescript" style="background-color:#272822;color:#f8f8f2;" class="language-typescript "><code class="language-typescript" data-lang="typescript"><span style="font-style:italic;color:#66d9ef;">const </span><span>x </span><span style="color:#f92672;">= </span><span>bar_A </span><span style="color:#f92672;">* </span><span>(xi </span><span style="color:#f92672;">+ </span><span>alpha_List.</span><span style="color:#a6e22e;">map</span><span>((</span><span style="font-style:italic;color:#fd971f;">alpha</span><span>, </span><span style="font-style:italic;color:#fd971f;">j</span><span>) </span><span style="font-style:italic;color:#66d9ef;">=&gt; </span><span>alpha </span><span style="color:#f92672;">* </span><span style="color:#66d9ef;">Math</span><span>.</span><span style="color:#66d9ef;">sin</span><span>(</span><span style="color:#ae81ff;">2</span><span style="color:#f92672;">*</span><span>j</span><span style="color:#f92672;">*</span><span>xi) </span><span style="color:#f92672;">* </span><span style="color:#66d9ef;">Math</span><span>.</span><span style="color:#66d9ef;">cosh</span><span>(</span><span style="color:#ae81ff;">2</span><span style="color:#f92672;">*</span><span>j</span><span style="color:#f92672;">*</span><span>eta) ).</span><span style="color:#a6e22e;">reduce</span><span>((</span><span style="font-style:italic;color:#fd971f;">a</span><span>, </span><span style="font-style:italic;color:#fd971f;">b</span><span>) </span><span style="font-style:italic;color:#66d9ef;">=&gt; </span><span>a</span><span style="color:#f92672;">+</span><span>b, </span><span style="color:#ae81ff;">0</span><span>)) </span><span style="color:#f92672;">- </span><span>bar_S_phi_0;
+</span><span>
+</span><span style="font-style:italic;color:#66d9ef;">const </span><span>y </span><span style="color:#f92672;">= </span><span>bar_A </span><span style="color:#f92672;">* </span><span>(eta </span><span style="color:#f92672;">+ </span><span>alpha_List.</span><span style="color:#a6e22e;">map</span><span>((</span><span style="font-style:italic;color:#fd971f;">alpha</span><span>, </span><span style="font-style:italic;color:#fd971f;">j</span><span>) </span><span style="font-style:italic;color:#66d9ef;">=&gt; </span><span>alpha </span><span style="color:#f92672;">* </span><span style="color:#66d9ef;">Math</span><span>.</span><span style="color:#66d9ef;">sin</span><span>(</span><span style="color:#ae81ff;">2</span><span style="color:#f92672;">*</span><span>j</span><span style="color:#f92672;">*</span><span>xi) </span><span style="color:#f92672;">* </span><span style="color:#66d9ef;">Math</span><span>.</span><span style="color:#66d9ef;">cosh</span><span>(</span><span style="color:#ae81ff;">2</span><span style="color:#f92672;">*</span><span>j</span><span style="color:#f92672;">*</span><span>eta) ).</span><span style="color:#a6e22e;">reduce</span><span>((</span><span style="font-style:italic;color:#fd971f;">a</span><span>, </span><span style="font-style:italic;color:#fd971f;">b</span><span>) </span><span style="font-style:italic;color:#66d9ef;">=&gt; </span><span>a</span><span style="color:#f92672;">+</span><span>b, </span><span style="color:#ae81ff;">0</span><span>));
+</span></code></pre>
+<h4 id="matome">まとめ</h4>
+<pre data-lang="typescript" style="background-color:#272822;color:#f8f8f2;" class="language-typescript "><code class="language-typescript" data-lang="typescript"><span style="font-style:italic;color:#66d9ef;">interface </span><span>GeoCoordinate {
+</span><span>  latitude</span><span style="color:#f92672;">: </span><span style="font-style:italic;color:#66d9ef;">number</span><span>;
+</span><span>  longitude</span><span style="color:#f92672;">: </span><span style="font-style:italic;color:#66d9ef;">number</span><span>;
+</span><span>};
+</span><span>
+</span><span style="font-style:italic;color:#66d9ef;">interface </span><span>PlaneCoordinate {
+</span><span>  x</span><span style="color:#f92672;">: </span><span style="font-style:italic;color:#66d9ef;">number</span><span>;
+</span><span>  y</span><span style="color:#f92672;">: </span><span style="font-style:italic;color:#66d9ef;">number</span><span>;
+</span><span>};
+</span><span>
+</span><span style="font-style:italic;color:#66d9ef;">interface </span><span>Configure {
+</span><span>  latitude_origin</span><span style="color:#f92672;">: </span><span style="font-style:italic;color:#66d9ef;">number</span><span>;
+</span><span>  longitude_origin</span><span style="color:#f92672;">: </span><span style="font-style:italic;color:#66d9ef;">number</span><span>;
+</span><span>  long_lad</span><span style="color:#f92672;">: </span><span style="font-style:italic;color:#66d9ef;">number</span><span>;
+</span><span>  oblateness</span><span style="color:#f92672;">: </span><span style="font-style:italic;color:#66d9ef;">number</span><span>;
+</span><span>  scale_factor</span><span style="color:#f92672;">: </span><span style="font-style:italic;color:#66d9ef;">number</span><span>;
+</span><span>};
+</span><span>
+</span><span style="font-style:italic;color:#66d9ef;">const </span><span style="color:#a6e22e;">get_A_List </span><span style="color:#f92672;">= </span><span>(</span><span style="font-style:italic;color:#fd971f;">n</span><span style="color:#f92672;">:</span><span style="font-style:italic;color:#66d9ef;">number</span><span>)</span><span style="color:#f92672;">:</span><span style="font-style:italic;color:#66d9ef;">number</span><span>[] </span><span style="font-style:italic;color:#66d9ef;">=&gt; </span><span>{
+</span><span>  </span><span style="color:#f92672;">return </span><span>[
+</span><span>    </span><span style="color:#ae81ff;">1 </span><span style="color:#f92672;">+ </span><span>(n</span><span style="color:#f92672;">^</span><span style="color:#ae81ff;">2 </span><span style="color:#f92672;">/ </span><span style="color:#ae81ff;">4</span><span>) </span><span style="color:#f92672;">+ </span><span>(n</span><span style="color:#f92672;">^</span><span style="color:#ae81ff;">3 </span><span style="color:#f92672;">/ </span><span style="color:#ae81ff;">64</span><span>),
+</span><span>    </span><span style="color:#f92672;">-</span><span>(</span><span style="color:#ae81ff;">3</span><span style="color:#f92672;">/</span><span style="color:#ae81ff;">2</span><span>) </span><span style="color:#f92672;">* </span><span>(n </span><span style="color:#f92672;">- </span><span>((n</span><span style="color:#f92672;">^</span><span style="color:#ae81ff;">3</span><span>) </span><span style="color:#f92672;">/ </span><span style="color:#ae81ff;">8</span><span>) </span><span style="color:#f92672;">- </span><span>((n</span><span style="color:#f92672;">^</span><span style="color:#ae81ff;">5</span><span>) </span><span style="color:#f92672;">/ </span><span style="color:#ae81ff;">64</span><span>)),
+</span><span>    (</span><span style="color:#ae81ff;">15</span><span style="color:#f92672;">/</span><span style="color:#ae81ff;">16</span><span>) </span><span style="color:#f92672;">* </span><span>(n</span><span style="color:#f92672;">^</span><span style="color:#ae81ff;">2 </span><span style="color:#f92672;">- </span><span>((n</span><span style="color:#f92672;">^</span><span style="color:#ae81ff;">4</span><span>) </span><span style="color:#f92672;">/ </span><span style="color:#ae81ff;">4</span><span>)),
+</span><span>    </span><span style="color:#f92672;">-</span><span>(</span><span style="color:#ae81ff;">35</span><span style="color:#f92672;">/</span><span style="color:#ae81ff;">48</span><span>) </span><span style="color:#f92672;">* </span><span>(n</span><span style="color:#f92672;">^</span><span style="color:#ae81ff;">3 </span><span style="color:#f92672;">- </span><span>((</span><span style="color:#ae81ff;">5</span><span style="color:#f92672;">*</span><span>n</span><span style="color:#f92672;">^</span><span style="color:#ae81ff;">5</span><span>) </span><span style="color:#f92672;">/ </span><span style="color:#ae81ff;">16</span><span>)),
+</span><span>    </span><span style="color:#ae81ff;">315</span><span style="color:#f92672;">/</span><span style="color:#ae81ff;">512 </span><span style="color:#f92672;">* </span><span>n</span><span style="color:#f92672;">^</span><span style="color:#ae81ff;">4</span><span>,
+</span><span>    </span><span style="color:#ae81ff;">693</span><span style="color:#f92672;">/</span><span style="color:#ae81ff;">1280 </span><span style="color:#f92672;">* </span><span>n</span><span style="color:#f92672;">^</span><span style="color:#ae81ff;">5
+</span><span>  ];
+</span><span>};
+</span><span>
+</span><span style="font-style:italic;color:#66d9ef;">const </span><span style="color:#a6e22e;">get_alpha_List</span><span style="color:#f92672;">= </span><span>(</span><span style="font-style:italic;color:#fd971f;">n</span><span style="color:#f92672;">:</span><span style="font-style:italic;color:#66d9ef;">number</span><span>)</span><span style="color:#f92672;">:</span><span style="font-style:italic;color:#66d9ef;">number</span><span>[]  </span><span style="font-style:italic;color:#66d9ef;">=&gt; </span><span>{
+</span><span>  </span><span style="color:#f92672;">return </span><span>[
+</span><span>    </span><span style="color:#ae81ff;">0</span><span>,
+</span><span>    (</span><span style="color:#ae81ff;">1</span><span style="color:#f92672;">/</span><span style="color:#ae81ff;">2</span><span>)</span><span style="color:#f92672;">*</span><span>n </span><span style="color:#f92672;">- </span><span>(</span><span style="color:#ae81ff;">2</span><span style="color:#f92672;">/</span><span style="color:#ae81ff;">3</span><span>)</span><span style="color:#f92672;">*</span><span>(n</span><span style="color:#f92672;">^</span><span style="color:#ae81ff;">2</span><span>) </span><span style="color:#f92672;">+ </span><span>(</span><span style="color:#ae81ff;">5</span><span style="color:#f92672;">/</span><span style="color:#ae81ff;">16</span><span>)</span><span style="color:#f92672;">*</span><span>(n</span><span style="color:#f92672;">^</span><span style="color:#ae81ff;">3</span><span>) </span><span style="color:#f92672;">- </span><span>(</span><span style="color:#ae81ff;">41</span><span style="color:#f92672;">/</span><span style="color:#ae81ff;">180</span><span>)</span><span style="color:#f92672;">*</span><span>(n</span><span style="color:#f92672;">^</span><span style="color:#ae81ff;">4</span><span>) </span><span style="color:#f92672;">- </span><span>(</span><span style="color:#ae81ff;">127</span><span style="color:#f92672;">/</span><span style="color:#ae81ff;">288</span><span>)</span><span style="color:#f92672;">*</span><span>(n</span><span style="color:#f92672;">^</span><span style="color:#ae81ff;">5</span><span>),
+</span><span>    (</span><span style="color:#ae81ff;">13</span><span style="color:#f92672;">/</span><span style="color:#ae81ff;">48</span><span>)</span><span style="color:#f92672;">*</span><span>(n</span><span style="color:#f92672;">^</span><span style="color:#ae81ff;">2</span><span>) </span><span style="color:#f92672;">- </span><span>(</span><span style="color:#ae81ff;">3</span><span style="color:#f92672;">/</span><span style="color:#ae81ff;">5</span><span>)</span><span style="color:#f92672;">*</span><span>(n</span><span style="color:#f92672;">^</span><span style="color:#ae81ff;">3</span><span>) </span><span style="color:#f92672;">+ </span><span>(</span><span style="color:#ae81ff;">557</span><span style="color:#f92672;">/</span><span style="color:#ae81ff;">1440</span><span>)</span><span style="color:#f92672;">*</span><span>(n</span><span style="color:#f92672;">^</span><span style="color:#ae81ff;">4</span><span>) </span><span style="color:#f92672;">+ </span><span>(</span><span style="color:#ae81ff;">281</span><span style="color:#f92672;">/</span><span style="color:#ae81ff;">630</span><span>)</span><span style="color:#f92672;">*</span><span>(n</span><span style="color:#f92672;">^</span><span style="color:#ae81ff;">5</span><span>),
+</span><span>    (</span><span style="color:#ae81ff;">61</span><span style="color:#f92672;">/</span><span style="color:#ae81ff;">240</span><span>)</span><span style="color:#f92672;">*</span><span>(n</span><span style="color:#f92672;">^</span><span style="color:#ae81ff;">3</span><span>) </span><span style="color:#f92672;">- </span><span>(</span><span style="color:#ae81ff;">103</span><span style="color:#f92672;">/</span><span style="color:#ae81ff;">140</span><span>)</span><span style="color:#f92672;">*</span><span>(n</span><span style="color:#f92672;">^</span><span style="color:#ae81ff;">4</span><span>) </span><span style="color:#f92672;">+ </span><span>(</span><span style="color:#ae81ff;">15061</span><span style="color:#f92672;">/</span><span style="color:#ae81ff;">26880</span><span>)</span><span style="color:#f92672;">*</span><span>(n</span><span style="color:#f92672;">^</span><span style="color:#ae81ff;">5</span><span>),
+</span><span>    (</span><span style="color:#ae81ff;">49561</span><span style="color:#f92672;">/</span><span style="color:#ae81ff;">161280</span><span>)</span><span style="color:#f92672;">*</span><span>(n</span><span style="color:#f92672;">^</span><span style="color:#ae81ff;">4</span><span>) </span><span style="color:#f92672;">- </span><span>(</span><span style="color:#ae81ff;">179</span><span style="color:#f92672;">/</span><span style="color:#ae81ff;">168</span><span>)</span><span style="color:#f92672;">*</span><span>(n</span><span style="color:#f92672;">^</span><span style="color:#ae81ff;">5</span><span>),
+</span><span>    (</span><span style="color:#ae81ff;">34729</span><span style="color:#f92672;">/</span><span style="color:#ae81ff;">80640</span><span>)</span><span style="color:#f92672;">*</span><span>(n</span><span style="color:#f92672;">^</span><span style="color:#ae81ff;">5</span><span>)
+</span><span>  ];
+</span><span>};
+</span><span>
+</span><span style="font-style:italic;color:#66d9ef;">const </span><span style="color:#a6e22e;">get_bar_S_phi_0　</span><span style="color:#f92672;">= </span><span>(</span><span style="font-style:italic;color:#fd971f;">m_0</span><span style="color:#f92672;">: </span><span style="font-style:italic;color:#66d9ef;">number</span><span>, </span><span style="font-style:italic;color:#fd971f;">a</span><span style="color:#f92672;">:</span><span style="font-style:italic;color:#66d9ef;">number</span><span>, </span><span style="font-style:italic;color:#fd971f;">n</span><span style="color:#f92672;">:</span><span style="font-style:italic;color:#66d9ef;">number</span><span>, </span><span style="font-style:italic;color:#fd971f;">A_List</span><span style="color:#f92672;">:</span><span style="font-style:italic;color:#66d9ef;">number</span><span>[], </span><span style="font-style:italic;color:#fd971f;">phi_0</span><span style="color:#f92672;">:</span><span style="font-style:italic;color:#66d9ef;">number</span><span>)</span><span style="color:#f92672;">: </span><span style="font-style:italic;color:#66d9ef;">number  =&gt; </span><span>{
+</span><span>  </span><span style="color:#f92672;">return </span><span>(m_0</span><span style="color:#f92672;">*</span><span>a </span><span style="color:#f92672;">/ </span><span>(</span><span style="color:#ae81ff;">1</span><span style="color:#f92672;">+</span><span>n)) </span><span style="color:#f92672;">* </span><span>(A_List[</span><span style="color:#ae81ff;">0</span><span>] </span><span style="color:#f92672;">* </span><span>phi_0 </span><span style="color:#f92672;">+ </span><span>A_List.</span><span style="color:#a6e22e;">map</span><span>((</span><span style="font-style:italic;color:#fd971f;">A</span><span>, </span><span style="font-style:italic;color:#fd971f;">j</span><span>) </span><span style="font-style:italic;color:#66d9ef;">=&gt; </span><span>A </span><span style="color:#f92672;">* </span><span style="color:#66d9ef;">Math</span><span>.</span><span style="color:#66d9ef;">sin</span><span>(</span><span style="color:#ae81ff;">2</span><span style="color:#f92672;">*</span><span>j</span><span style="color:#f92672;">*</span><span>phi_0) ).</span><span style="color:#a6e22e;">reduce</span><span>((</span><span style="font-style:italic;color:#fd971f;">a</span><span>, </span><span style="font-style:italic;color:#fd971f;">b</span><span>) </span><span style="font-style:italic;color:#66d9ef;">=&gt; </span><span>a</span><span style="color:#f92672;">+</span><span>b, </span><span style="color:#ae81ff;">0</span><span>));
+</span><span>};
+</span><span>
+</span><span style="font-style:italic;color:#66d9ef;">const </span><span style="color:#a6e22e;">get_bar_A </span><span style="color:#f92672;">= </span><span>(</span><span style="font-style:italic;color:#fd971f;">m_0</span><span style="color:#f92672;">:</span><span style="font-style:italic;color:#66d9ef;">number</span><span>, </span><span style="font-style:italic;color:#fd971f;">n</span><span style="color:#f92672;">:</span><span style="font-style:italic;color:#66d9ef;">number</span><span>, </span><span style="font-style:italic;color:#fd971f;">A_List</span><span style="color:#f92672;">:</span><span style="font-style:italic;color:#66d9ef;">number</span><span>[])</span><span style="color:#f92672;">: </span><span style="font-style:italic;color:#66d9ef;">number =&gt; </span><span>{
+</span><span>
+</span><span>  </span><span style="color:#f92672;">return </span><span>(m_0 </span><span style="color:#f92672;">/ </span><span>(</span><span style="color:#ae81ff;">1</span><span style="color:#f92672;">+</span><span>n)) </span><span style="color:#f92672;">* </span><span>A_List[</span><span style="color:#ae81ff;">0</span><span>];
+</span><span>};
+</span><span>
+</span><span style="font-style:italic;color:#66d9ef;">const </span><span style="color:#a6e22e;">get_lambda_epsilon </span><span style="color:#f92672;">= </span><span>(</span><span style="font-style:italic;color:#fd971f;">lambda</span><span style="color:#f92672;">:</span><span style="font-style:italic;color:#66d9ef;">number</span><span>, </span><span style="font-style:italic;color:#fd971f;">lambda_0</span><span style="color:#f92672;">:</span><span style="font-style:italic;color:#66d9ef;">number</span><span>)</span><span style="color:#f92672;">: </span><span style="font-style:italic;color:#66d9ef;">number =&gt; </span><span>{
+</span><span>  </span><span style="color:#f92672;">return </span><span style="color:#66d9ef;">Math</span><span>.</span><span style="color:#66d9ef;">cos</span><span>(lambda </span><span style="color:#f92672;">- </span><span>lambda_0);
+</span><span>};
+</span><span>
+</span><span style="font-style:italic;color:#66d9ef;">const </span><span style="color:#a6e22e;">get_lambda_s </span><span style="color:#f92672;">= </span><span>(</span><span style="font-style:italic;color:#fd971f;">lambda</span><span style="color:#f92672;">:</span><span style="font-style:italic;color:#66d9ef;">number</span><span>, </span><span style="font-style:italic;color:#fd971f;">lambda_0</span><span style="color:#f92672;">:</span><span style="font-style:italic;color:#66d9ef;">number</span><span>)</span><span style="color:#f92672;">: </span><span style="font-style:italic;color:#66d9ef;">number =&gt; </span><span>{
+</span><span>  </span><span style="color:#f92672;">return </span><span style="color:#66d9ef;">Math</span><span>.</span><span style="color:#66d9ef;">sin</span><span>(lambda </span><span style="color:#f92672;">- </span><span>lambda_0);
+</span><span>};
+</span><span>
+</span><span style="font-style:italic;color:#66d9ef;">const </span><span style="color:#a6e22e;">get_t </span><span style="color:#f92672;">= </span><span>(</span><span style="font-style:italic;color:#fd971f;">n</span><span style="color:#f92672;">:</span><span style="font-style:italic;color:#66d9ef;">number</span><span>, </span><span style="font-style:italic;color:#fd971f;">phi</span><span style="color:#f92672;">:</span><span style="font-style:italic;color:#66d9ef;">number</span><span>)</span><span style="color:#f92672;">: </span><span style="font-style:italic;color:#66d9ef;">number =&gt; </span><span>{
+</span><span>  </span><span style="color:#f92672;">return </span><span style="color:#66d9ef;">Math</span><span>.</span><span style="color:#66d9ef;">sinh</span><span>(</span><span style="color:#66d9ef;">Math</span><span>.</span><span style="color:#66d9ef;">atanh</span><span>(</span><span style="color:#66d9ef;">Math</span><span>.</span><span style="color:#66d9ef;">sin</span><span>(phi)) </span><span style="color:#f92672;">- </span><span>(</span><span style="color:#ae81ff;">2</span><span style="color:#f92672;">*</span><span style="color:#66d9ef;">Math</span><span>.</span><span style="color:#66d9ef;">sqrt</span><span>(n) </span><span style="color:#f92672;">/ </span><span>(</span><span style="color:#ae81ff;">1</span><span style="color:#f92672;">+</span><span>n)) </span><span style="color:#f92672;">* </span><span style="color:#66d9ef;">Math</span><span>.</span><span style="color:#66d9ef;">atanh</span><span>( (</span><span style="color:#ae81ff;">2</span><span style="color:#f92672;">*</span><span style="color:#66d9ef;">Math</span><span>.</span><span style="color:#66d9ef;">sqrt</span><span>(n) </span><span style="color:#f92672;">/ </span><span>(</span><span style="color:#ae81ff;">1</span><span style="color:#f92672;">+</span><span>n)) </span><span style="color:#f92672;">* </span><span style="color:#66d9ef;">Math</span><span>.</span><span style="color:#66d9ef;">sin</span><span>(phi) ));
+</span><span>};
+</span><span>
+</span><span style="font-style:italic;color:#66d9ef;">const </span><span style="color:#a6e22e;">get_bar_t </span><span style="color:#f92672;">= </span><span>(</span><span style="font-style:italic;color:#fd971f;">t</span><span style="color:#f92672;">:</span><span style="font-style:italic;color:#66d9ef;">number</span><span>)</span><span style="color:#f92672;">: </span><span style="font-style:italic;color:#66d9ef;">number =&gt; </span><span>{
+</span><span>  </span><span style="color:#f92672;">return </span><span style="color:#66d9ef;">Math</span><span>.</span><span style="color:#66d9ef;">sqrt</span><span>(</span><span style="color:#ae81ff;">1 </span><span style="color:#f92672;">+ </span><span>t</span><span style="color:#f92672;">^</span><span style="color:#ae81ff;">2</span><span>);
+</span><span>};
+</span><span>
+</span><span style="font-style:italic;color:#66d9ef;">const </span><span style="color:#a6e22e;">get_xi </span><span style="color:#f92672;">= </span><span>(</span><span style="font-style:italic;color:#fd971f;">t</span><span style="color:#f92672;">:</span><span style="font-style:italic;color:#66d9ef;">number</span><span>, </span><span style="font-style:italic;color:#fd971f;">lambda_epsilon</span><span style="color:#f92672;">:</span><span style="font-style:italic;color:#66d9ef;">number</span><span>)</span><span style="color:#f92672;">: </span><span style="font-style:italic;color:#66d9ef;">number =&gt; </span><span>{
+</span><span>  </span><span style="color:#f92672;">return </span><span style="color:#66d9ef;">Math</span><span>.</span><span style="color:#66d9ef;">atan</span><span>(t </span><span style="color:#f92672;">/ </span><span>lambda_epsilon);
+</span><span>};
+</span><span>
+</span><span style="font-style:italic;color:#66d9ef;">const </span><span style="color:#a6e22e;">get_eta </span><span style="color:#f92672;">= </span><span>(</span><span style="font-style:italic;color:#fd971f;">lambda_s</span><span style="color:#f92672;">:</span><span style="font-style:italic;color:#66d9ef;">number</span><span>, </span><span style="font-style:italic;color:#fd971f;">t</span><span style="color:#f92672;">:</span><span style="font-style:italic;color:#66d9ef;">number</span><span>)</span><span style="color:#f92672;">: </span><span style="font-style:italic;color:#66d9ef;">number =&gt; </span><span>{
+</span><span>  </span><span style="color:#f92672;">return </span><span style="color:#66d9ef;">Math</span><span>.</span><span style="color:#66d9ef;">atan</span><span>(lambda_s </span><span style="color:#f92672;">/ </span><span>t);
+</span><span>};
+</span><span>
+</span><span>
+</span><span style="font-style:italic;color:#66d9ef;">const </span><span style="color:#a6e22e;">GeoToPlane </span><span style="color:#f92672;">= </span><span>(</span><span style="font-style:italic;color:#fd971f;">geo</span><span style="color:#f92672;">: </span><span>GeoCoordinate, </span><span style="font-style:italic;color:#fd971f;">config</span><span style="color:#f92672;">: </span><span>Configure)</span><span style="color:#f92672;">: </span><span>PlaneCoordinate </span><span style="font-style:italic;color:#66d9ef;">=&gt; </span><span>{
+</span><span>  </span><span style="font-style:italic;color:#66d9ef;">const </span><span>latitude </span><span style="color:#f92672;">= </span><span>geo.latitude;
+</span><span>  </span><span style="font-style:italic;color:#66d9ef;">const </span><span>longitude </span><span style="color:#f92672;">= </span><span>geo.longitude;
+</span><span>
+</span><span>  </span><span style="font-style:italic;color:#66d9ef;">const </span><span>latitude_origin</span><span style="color:#f92672;">:</span><span style="font-style:italic;color:#66d9ef;">number </span><span style="color:#f92672;">= </span><span>config.latitude_origin;
+</span><span>  </span><span style="font-style:italic;color:#66d9ef;">const </span><span>longitude_origin</span><span style="color:#f92672;">:</span><span style="font-style:italic;color:#66d9ef;">number </span><span style="color:#f92672;">= </span><span>config.longitude_origin;
+</span><span>  </span><span style="font-style:italic;color:#66d9ef;">const </span><span>long_lad</span><span style="color:#f92672;">:</span><span style="font-style:italic;color:#66d9ef;">number </span><span style="color:#f92672;">= </span><span>config.long_lad;
+</span><span>  </span><span style="font-style:italic;color:#66d9ef;">const </span><span>oblateness</span><span style="color:#f92672;">:</span><span style="font-style:italic;color:#66d9ef;">number </span><span style="color:#f92672;">= </span><span>config.oblateness;
+</span><span>  </span><span style="font-style:italic;color:#66d9ef;">const </span><span>scale_factor</span><span style="color:#f92672;">:</span><span style="font-style:italic;color:#66d9ef;">number </span><span style="color:#f92672;">= </span><span>config.scale_factor;
+</span><span>
+</span><span>  </span><span style="font-style:italic;color:#66d9ef;">const </span><span>n</span><span style="color:#f92672;">:</span><span style="font-style:italic;color:#66d9ef;">number </span><span style="color:#f92672;">= </span><span style="color:#ae81ff;">1 </span><span style="color:#f92672;">/ </span><span>(</span><span style="color:#ae81ff;">2 </span><span style="color:#f92672;">* </span><span>oblateness </span><span style="color:#f92672;">- </span><span style="color:#ae81ff;">1</span><span>);
+</span><span>
+</span><span>  </span><span style="font-style:italic;color:#66d9ef;">const </span><span>A_List</span><span style="color:#f92672;">:</span><span style="font-style:italic;color:#66d9ef;">number</span><span>[] </span><span style="color:#f92672;">= </span><span style="color:#a6e22e;">get_A_List</span><span>(n);
+</span><span>  </span><span style="font-style:italic;color:#66d9ef;">const </span><span>alpha_List</span><span style="color:#f92672;">:</span><span style="font-style:italic;color:#66d9ef;">number</span><span>[] </span><span style="color:#f92672;">= </span><span style="color:#a6e22e;">get_alpha_List</span><span>(n);
+</span><span>
+</span><span>  </span><span style="font-style:italic;color:#66d9ef;">const </span><span>bar_S_phi_0 </span><span style="color:#f92672;">= </span><span style="color:#a6e22e;">get_bar_S_phi_0</span><span>(scale_factor, long_lad, n, A_List, latitude_origin);
+</span><span>  </span><span style="font-style:italic;color:#66d9ef;">const </span><span>bar_A </span><span style="color:#f92672;">= </span><span style="color:#a6e22e;">get_bar_A</span><span>(scale_factor, n, A_List);
+</span><span>
+</span><span>  </span><span style="font-style:italic;color:#66d9ef;">const </span><span>lambda_epsilon </span><span style="color:#f92672;">= </span><span style="color:#a6e22e;">get_lambda_epsilon</span><span>(longitude, longitude_origin);
+</span><span>  </span><span style="font-style:italic;color:#66d9ef;">const </span><span>lambda_s </span><span style="color:#f92672;">= </span><span style="color:#a6e22e;">get_lambda_s</span><span>(longitude, longitude_origin);
+</span><span>  </span><span style="font-style:italic;color:#66d9ef;">const </span><span>t </span><span style="color:#f92672;">= </span><span style="color:#a6e22e;">get_t</span><span>(n, latitude);
+</span><span>  </span><span style="font-style:italic;color:#66d9ef;">const </span><span>bar_t </span><span style="color:#f92672;">= </span><span style="color:#a6e22e;">get_bar_t</span><span>(t);
+</span><span>  </span><span style="font-style:italic;color:#66d9ef;">const </span><span>xi </span><span style="color:#f92672;">= </span><span style="color:#a6e22e;">get_xi</span><span>(t, lambda_epsilon);
+</span><span>  </span><span style="font-style:italic;color:#66d9ef;">const </span><span>eta </span><span style="color:#f92672;">= </span><span style="color:#a6e22e;">get_eta</span><span>(lambda_s, t);
+</span><span>
+</span><span>  </span><span style="font-style:italic;color:#66d9ef;">const </span><span>x </span><span style="color:#f92672;">= </span><span>bar_A </span><span style="color:#f92672;">* </span><span>(xi </span><span style="color:#f92672;">+ </span><span>alpha_List.</span><span style="color:#a6e22e;">map</span><span>((</span><span style="font-style:italic;color:#fd971f;">alpha</span><span>, </span><span style="font-style:italic;color:#fd971f;">j</span><span>) </span><span style="font-style:italic;color:#66d9ef;">=&gt; </span><span>alpha </span><span style="color:#f92672;">* </span><span style="color:#66d9ef;">Math</span><span>.</span><span style="color:#66d9ef;">sin</span><span>(</span><span style="color:#ae81ff;">2</span><span style="color:#f92672;">*</span><span>j</span><span style="color:#f92672;">*</span><span>xi) </span><span style="color:#f92672;">* </span><span style="color:#66d9ef;">Math</span><span>.</span><span style="color:#66d9ef;">cosh</span><span>(</span><span style="color:#ae81ff;">2</span><span style="color:#f92672;">*</span><span>j</span><span style="color:#f92672;">*</span><span>eta) ).</span><span style="color:#a6e22e;">reduce</span><span>((</span><span style="font-style:italic;color:#fd971f;">a</span><span>, </span><span style="font-style:italic;color:#fd971f;">b</span><span>) </span><span style="font-style:italic;color:#66d9ef;">=&gt; </span><span>a</span><span style="color:#f92672;">+</span><span>b, </span><span style="color:#ae81ff;">0</span><span>)) </span><span style="color:#f92672;">- </span><span>bar_S_phi_0;
+</span><span>  </span><span style="font-style:italic;color:#66d9ef;">const </span><span>y </span><span style="color:#f92672;">= </span><span>bar_A </span><span style="color:#f92672;">* </span><span>(eta </span><span style="color:#f92672;">+ </span><span>alpha_List.</span><span style="color:#a6e22e;">map</span><span>((</span><span style="font-style:italic;color:#fd971f;">alpha</span><span>, </span><span style="font-style:italic;color:#fd971f;">j</span><span>) </span><span style="font-style:italic;color:#66d9ef;">=&gt; </span><span>alpha </span><span style="color:#f92672;">* </span><span style="color:#66d9ef;">Math</span><span>.</span><span style="color:#66d9ef;">sin</span><span>(</span><span style="color:#ae81ff;">2</span><span style="color:#f92672;">*</span><span>j</span><span style="color:#f92672;">*</span><span>xi) </span><span style="color:#f92672;">* </span><span style="color:#66d9ef;">Math</span><span>.</span><span style="color:#66d9ef;">cosh</span><span>(</span><span style="color:#ae81ff;">2</span><span style="color:#f92672;">*</span><span>j</span><span style="color:#f92672;">*</span><span>eta) ).</span><span style="color:#a6e22e;">reduce</span><span>((</span><span style="font-style:italic;color:#fd971f;">a</span><span>, </span><span style="font-style:italic;color:#fd971f;">b</span><span>) </span><span style="font-style:italic;color:#66d9ef;">=&gt; </span><span>a</span><span style="color:#f92672;">+</span><span>b, </span><span style="color:#ae81ff;">0</span><span>));
+</span><span>
+</span><span>  </span><span style="color:#f92672;">return </span><span>{
+</span><span>      x: x,
+</span><span>      y: y,
+</span><span>  };
+</span><span>};
+</span></code></pre>
+<p>テストはしてません．</p>
+<p>めんどい．</p>
+<h2 id="can-kao">参考</h2>
+<ol>
+<li>
+<p><a href="https://www.gsi.go.jp/common/000061216.pdf">https://www.gsi.go.jp/common/000061216.pdf</a></p>
+</li>
+<li>
+<p><a href="https://vldb.gsi.go.jp/sokuchi/surveycalc/surveycalc/algorithm/bl2xy/bl2xy.htm">https://vldb.gsi.go.jp/sokuchi/surveycalc/surveycalc/algorithm/bl2xy/bl2xy.htm</a></p>
+</li>
+<li>
+<p><a href="https://sw1227.hatenablog.com/entry/2018/11/30/200702">https://sw1227.hatenablog.com/entry/2018/11/30/200702</a></p>
+</li>
+</ol>
+</div>
+  <div class="post-footer">
+    <div class="meta">
+      <div class="info">
+        
+        <i class="far fa-sun"></i><span class="date">2024-02-17</span>
+        
+        
+        <i class="fas fa-tags"></i>
+        
+        <a class="tag" href="https://kyawaway.github.io/myblog/tags/math">&nbsp;math</a>
+        
+        <a class="tag" href="https://kyawaway.github.io/myblog/tags/typescript">&nbsp;typescript</a>
+        
+        
+      </div>
+    </div>
+  </div>
+</article>
+<div class="share">
+  <div class="twitter">
+    <a class="fab fa-twitter"
+      href="http://twitter.com/share?text=地理座標系と平面直角座標系の変換&url=https:&#x2F;&#x2F;kyawaway.github.io&#x2F;myblog&#x2F;post-lad&#x2F;&hashtags=math,typescript"></a>
+  </div>
+</div>
+
+
+
+
+
+
+
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script>
+  MathJax = {
+    tex: {
+      displayMath: [['$$', '$$'], ["\\[", "\\]"]],
+      inlineMath: [['$', '$'], ['\\(', '\\)']]
+    }
+  };
+</script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+  </script>
+
+
+
+
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    function showLanguages() {
+      let currentDisplay = document.getElementById("languages").style.display;
+      if (currentDisplay == 'none') {
+        document.getElementById("languages").style.display = 'block';
+      } else {
+        document.getElementById("languages").style.display = 'none';
+      }
+    }
+  </script>
+</body>
+
+</html>

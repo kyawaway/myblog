@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html translate="no"  class="theme--kyasual" >
+
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, viewport-fit=cover">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://kyawaway.github.io/myblog/images/apple-touch-icon-144x144.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="120x120" href="https://kyawaway.github.io/myblog/images/apple-touch-icon-120x120.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="https://kyawaway.github.io/myblog/images/apple-touch-icon-72x72.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="57x57" href="https://kyawaway.github.io/myblog/images/apple-touch-icon-57x57.png" />
+  <link rel="short icon" href="https://kyawaway.github.io/myblog/images/favicon.png" type="image/x-icon" />
+  <link rel="stylesheet" href="https://kyawaway.github.io/myblog/style.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap" rel="stylesheet">
+  <title>遊び日記 • Agda Installation</title>
+  
+  
+  
+</head>
+
+<body>
+  <div id="sidebar" class="animated fadeInDown">
+    <div class="logo-title">
+      <div class="title">
+        <img src=https://kyawaway.github.io/myblog/images/logo.png style="width:127px;" alt="logo" />
+        <h3><a href="https://kyawaway.github.io/myblog/">遊び日記</a></h3>
+        <div class="description">
+          <p>遊びの日記</p>
+        </div>
+      </div>
+    </div>
+    <ul class="social-links"><li><a href="https://github.com/kyawaway" aria-label="Go to Github profile page"><i class="fab fa-github"></i></a></li><li><a href="https://twitter.com/kyawaway" aria-label="Go to Twitter profile page"><i class="fab fa-twitter"></i></a></li>
+      
+    </ul>
+    <div class="footer">
+      
+      <span>Designed based on </span><a href="https://www.getzola.org/themes/anatole-zola/">anatole-zola</a>
+      <div class="by_zola"><a href="https://www.getzola.org/" target="_blank">Proudly published with Zola!</a></div>
+      
+    </div>
+  </div>
+  <div id="main">
+    <div class="page-top animated fadeInDown">
+      <div class="nav">
+        
+        
+        
+        
+        <li><a  href="https://kyawaway.github.io/myblog/">Home</a></li>
+        <li><a  href="https://kyawaway.github.io/myblog/about/">About</a></li><li><a  href="https://kyawaway.github.io/myblog/tags">Tags</a></li><li><a 
+            href="https://kyawaway.github.io/myblog/archive/">Archive</a></li><li><a  href="https://kyawaway.github.io/myblog/links/">Links</a></li></div>
+      <div class="information">
+        <div class="back_btn">
+          <a onclick="window.history.go(-1)" ><i
+              class="fas fa-chevron-left"></i></a>
+        </div>
+        
+        
+        
+        <div class="avatar"><img src="https://kyawaway.github.io/myblog/images/avatar.jpg"></div>
+      </div>
+    </div>
+    <div class="autopagerize_page_element">
+      <div class="content">
+        
+<article class="post animated fadeInDown">
+  <h1><a href="https:&#x2F;&#x2F;kyawaway.github.io&#x2F;myblog&#x2F;agda-install&#x2F;">Agda Installation</a></h1>
+  
+  <div class="post-content"><p>公式ドキュメントが微妙に不親切だったので，自分でまとめる．</p>
+<h2 id="1-agdaben-ti">1. Agda本体</h2>
+<h3 id="a-homebrewjing-you">a. Homebrew経由</h3>
+<p>Homebrewがある場合は，</p>
+<pre data-lang="shell" style="background-color:#272822;color:#f8f8f2;" class="language-shell "><code class="language-shell" data-lang="shell"><span>brew install agda
+</span></code></pre>
+<p>楽ちん．</p>
+<h3 id="b-aptjing-you">b. apt経由</h3>
+<p>aptでも入れられる．あんまり信頼できないバージョンが入ることもあると思うが，さっき手元で試した感じ最新バージョンが入ったしこれでも大丈夫そう．</p>
+<pre data-lang="shell" style="background-color:#272822;color:#f8f8f2;" class="language-shell "><code class="language-shell" data-lang="shell"><span>sudo apt-get install zlib1g-dev libncurses5-dev agda
+</span></code></pre>
+<p>楽ちん．</p>
+<h3 id="c-cabaljing-you">c. Cabal経由</h3>
+<p>Cabalから落とすのが一番安心できるが，大変だし時間もかかる．</p>
+<p><a href="https://agda.readthedocs.io/en/latest/getting-started/installation.html#install-agda">ドキュメント</a>参照．</p>
+<p>Haskellの環境からインストールする．Haskellの環境構築には一悶着あるが，こだわりがない場合は<a href="https://www.haskell.org/ghcup/">GHCup</a>経由でCabalをinstallして，Cabalからagdaをinstallしてもらう．（2024年現在はghcupからstackもcabalも全部入れるのが主流っぽい）</p>
+<pre data-lang="shell" style="background-color:#272822;color:#f8f8f2;" class="language-shell "><code class="language-shell" data-lang="shell"><span>curl --proto &#39;=https&#39; --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh
+</span></code></pre>
+<p>続いて，各種ツールのセットアップを行う：</p>
+<pre data-lang="shell" style="background-color:#272822;color:#f8f8f2;" class="language-shell "><code class="language-shell" data-lang="shell"><span>ghcup tui
+</span></code></pre>
+<p>でrecommendedを選ぶ．すると，ghcup，HLS(HaskellのLanguage Server)，Stack(ghcのインストール，プロジェクトのビルド，ライブラリ管理ができる)，Cabal(プロジェクトのビルド，ライブラリ管理ができる)，GHC(Glasgow Haskell Compiler )がinstallできる．</p>
+<p>完了したら，念のためインストールできているか確認する．</p>
+<pre data-lang="shell" style="background-color:#272822;color:#f8f8f2;" class="language-shell "><code class="language-shell" data-lang="shell"><span>cabal --version
+</span></code></pre>
+<p>続いてAgdaのインストールに入る．あとは<a href="https://agda.readthedocs.io/en/latest/getting-started/installation.html#install-agda">ドキュメント</a>と同じ．</p>
+<pre data-lang="shell" style="background-color:#272822;color:#f8f8f2;" class="language-shell "><code class="language-shell" data-lang="shell"><span>apt-get install zlib1g-dev libncurses5-dev
+</span></code></pre>
+<pre data-lang="shell" style="background-color:#272822;color:#f8f8f2;" class="language-shell "><code class="language-shell" data-lang="shell"><span>cabal update
+</span><span>cabal install alex happy
+</span></code></pre>
+<pre data-lang="shell" style="background-color:#272822;color:#f8f8f2;" class="language-shell "><code class="language-shell" data-lang="shell"><span>cabal update
+</span><span>cabal install Agda
+</span></code></pre>
+<p>けっこう時間がかかる．終わったら<code>agda</code>が叩けるか試す．</p>
+<pre data-lang="shell" style="background-color:#272822;color:#f8f8f2;" class="language-shell "><code class="language-shell" data-lang="shell"><span>agda --version
+</span></code></pre>
+<h2 id="2-agda-standard-libraries">2. Agda Standard Libraries</h2>
+<p>これも入れないとろくな証明を書けない．が，<a href="https://agda.readthedocs.io/en/latest/tools/package-system.html#package-system">ドキュメント</a>にはあんまり親切に書いていない．</p>
+<p>実はagdaをインストールした時点で既に入ってはいるが，そのままでは呼び出せないのでなんとかする必要がある．</p>
+<ul>
+<li>
+<p>aptで入れたら<code>usr/share/lock</code>とかのどこかに<code>standard-library.agda-lib</code>がある．</p>
+</li>
+<li>
+<p>Homebrewで入れたら<code>/opt/homebrew/Cellar/agda/2.6.4.3_1/lib/agda</code> とかに<code>standard-library.agda-lib</code>がある．</p>
+</li>
+</ul>
+<p>これらを認識するためのファイルがある<code>$AGDA_DIR</code>を設定する．なんでも良いが，<code>.agda</code>なるディレクトリを用意する．</p>
+<pre data-lang="shell" style="background-color:#272822;color:#f8f8f2;" class="language-shell "><code class="language-shell" data-lang="shell"><span>cd
+</span><span>mkdir .agda
+</span><span>echo export AGDA_DIR=&quot;~/.agda&quot; &gt;&gt; ~/.bash_profile
+</span><span>source .bash_profile
+</span></code></pre>
+<p>続いて，<code>.agda</code>の中身を作る．こんな感じの構成を用意していく．</p>
+<pre data-lang="shell" style="background-color:#272822;color:#f8f8f2;" class="language-shell "><code class="language-shell" data-lang="shell"><span>.
+</span><span>├── defaults
+</span><span>└── libraries
+</span></code></pre>
+<pre data-lang="shell" style="background-color:#272822;color:#f8f8f2;" class="language-shell "><code class="language-shell" data-lang="shell"><span>cd .agda
+</span><span>touch defaults
+</span><span>touch libraries
+</span></code></pre>
+<p><code>defaults</code>の中身は，</p>
+<pre data-lang="shell" style="background-color:#272822;color:#f8f8f2;" class="language-shell "><code class="language-shell" data-lang="shell"><span>standard-library
+</span></code></pre>
+<p><code>libraries</code>の中身は，</p>
+<pre data-lang="shell" style="background-color:#272822;color:#f8f8f2;" class="language-shell "><code class="language-shell" data-lang="shell"><span>/PATH-TO-AGDA-STDLIB/standard-library.agda-lib
+</span></code></pre>
+<p><code>PATH-TO-AGDA-STDLIB</code>は，<code>standard-library.agda-lib</code>があるパスを入れる．</p>
+<p>どうしても見つからない場合は，.agda内に落としてしまうのでもよい．（正直こっちの方が保守しやすいしおすすめ）</p>
+<pre data-lang="shell" style="background-color:#272822;color:#f8f8f2;" class="language-shell "><code class="language-shell" data-lang="shell"><span>.
+</span><span>├── defaults
+</span><span>├── lib
+</span><span>│   └── agda-stdlib
+</span><span>│        └── ...
+</span><span>└── libraries
+</span></code></pre>
+<p><code>lib</code>内に <code>agda-stdlib</code>を落とす．</p>
+<pre data-lang="shell" style="background-color:#272822;color:#f8f8f2;" class="language-shell "><code class="language-shell" data-lang="shell"><span>cd lib
+</span><span>git clone https://github.com/agda/agda-stdlib.git
+</span><span>cd ..
+</span></code></pre>
+<p>この場合の<code>libraries</code>の中身は，</p>
+<pre data-lang="shell" style="background-color:#272822;color:#f8f8f2;" class="language-shell "><code class="language-shell" data-lang="shell"><span>~/.agda/lib/agda-stdlib/standard-library.agda-lib
+</span></code></pre>
+<p>になる．</p>
+<p>これでok．</p>
+<h2 id="3-editor-setup">3. Editor Setup</h2>
+<p>ここからは，実際にサンプルコードを用意して動作確認する．</p>
+<h3 id="vscode">VSCode</h3>
+<p><code>agda-mode</code>を入れる．</p>
+<p>入ったら，以下のような<code>hello.agda</code>ファイルを用意して，</p>
+<pre data-lang="agda:hello.agda" style="background-color:#272822;color:#f8f8f2;" class="language-agda:hello.agda "><code class="language-agda:hello.agda" data-lang="agda:hello.agda"><span>data Greeting : Set where
+</span><span>  hello : Greeting
+</span><span>
+</span><span>greet : Greeting
+</span><span>greet = hello
+</span></code></pre>
+<p><code>C-c</code>-<code>C-l</code>を押す．(<code>C-n</code>は<code>Control-n</code>)</p>
+<p>なんか下にAll Done.と出てきたらok．ここで，agdaのインストールに失敗している場合は，agdaが無いぞと怒られる．</p>
+<p>続いて，以下の<code>data.agda</code>ファイルを用意し，同様に<code>C-c</code>-<code>C-l</code>を押す：</p>
+<pre data-lang="agda:data.agda" style="background-color:#272822;color:#f8f8f2;" class="language-agda:data.agda "><code class="language-agda:data.agda" data-lang="agda:data.agda"><span>module type where
+</span><span>open import Data.Nat
+</span><span>a : ?
+</span><span>a = 1
+</span></code></pre>
+<p>なんか下に</p>
+<pre style="background-color:#272822;color:#f8f8f2;"><code><span>*All Goals*
+</span><span>?0 : Set
+</span></code></pre>
+<p>と出てくればok．ここで，agda-stdlibの読み込みに失敗している場合は，<code>Data.Set</code>が無いぞと怒られる．</p>
+<h3 id="emacs">emacs</h3>
+<p>準備中．agda-modeを使う．</p>
+<h3 id="neovim">neovim</h3>
+<p>準備中．agda-nvimかcornelisを使う．</p>
+</div>
+  <div class="post-footer">
+    <div class="meta">
+      <div class="info">
+        
+        <i class="far fa-sun"></i><span class="date">2024-07-08</span>
+        
+        
+        <i class="fas fa-tags"></i>
+        
+        <a class="tag" href="https://kyawaway.github.io/myblog/tags/agda">&nbsp;agda</a>
+        
+        
+      </div>
+    </div>
+  </div>
+</article>
+<div class="share">
+  <div class="twitter">
+    <a class="fab fa-twitter"
+      href="http://twitter.com/share?text=Agda Installation&url=https:&#x2F;&#x2F;kyawaway.github.io&#x2F;myblog&#x2F;agda-install&#x2F;&hashtags=agda"></a>
+  </div>
+</div>
+
+
+
+
+
+
+
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script>
+  MathJax = {
+    tex: {
+      displayMath: [['$$', '$$'], ["\\[", "\\]"]],
+      inlineMath: [['$', '$'], ['\\(', '\\)']]
+    }
+  };
+</script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+  </script>
+
+
+
+
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    function showLanguages() {
+      let currentDisplay = document.getElementById("languages").style.display;
+      if (currentDisplay == 'none') {
+        document.getElementById("languages").style.display = 'block';
+      } else {
+        document.getElementById("languages").style.display = 'none';
+      }
+    }
+  </script>
+</body>
+
+</html>
