@@ -1600,7 +1600,12 @@ html.theme--kyasual {
       }
 
       table {
-        text-align: center;
+        font-size: inherit;
+      }
+
+      td, th {
+        font-size: inherit;
+        padding: 0px;
       }
 
       .rotate {
