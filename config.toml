@@ -3,9 +3,8 @@ compile_sass = true
 # highlight_code = true
 build_search_index = false
 
-[markdown]
-highlight_code = true
-highlight_theme = "monokai"
+[markdown.highlighting]
+theme = "monokai"
 
 [languages.en]
 title = "遊び日記"
