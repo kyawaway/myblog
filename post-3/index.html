@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html translate="no"  class="theme--kyasual" >
+
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, viewport-fit=cover">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://kyawaway.github.io/myblog/images/apple-touch-icon-144x144.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="120x120" href="https://kyawaway.github.io/myblog/images/apple-touch-icon-120x120.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="https://kyawaway.github.io/myblog/images/apple-touch-icon-72x72.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="57x57" href="https://kyawaway.github.io/myblog/images/apple-touch-icon-57x57.png" />
+  <link rel="short icon" href="https://kyawaway.github.io/myblog/images/favicon.png" type="image/x-icon" />
+  <link rel="stylesheet" href="https://kyawaway.github.io/myblog/style.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap" rel="stylesheet">
+  <title>遊び日記 • (過去記事転載)ライブラリに頼らずにニューラルネットワークを実装する</title>
+  
+  
+  
+</head>
+
+<body>
+  <div id="sidebar" class="animated fadeInDown">
+    <div class="logo-title">
+      <div class="title">
+        <img src=https://kyawaway.github.io/myblog/images/logo.png style="width:127px;" alt="logo" />
+        <h3><a href="https://kyawaway.github.io/myblog/">遊び日記</a></h3>
+        <div class="description">
+          <p>遊びの日記</p>
+        </div>
+      </div>
+    </div>
+    <ul class="social-links"><li><a href="https://github.com/kyawaway" aria-label="Go to Github profile page"><i class="fab fa-github"></i></a></li><li><a href="https://twitter.com/kyawaway" aria-label="Go to Twitter profile page"><i class="fab fa-twitter"></i></a></li>
+      
+    </ul>
+    <div class="footer">
+      
+      <span>Designed based on </span><a href="https://www.getzola.org/themes/anatole-zola/">anatole-zola</a>
+      <div class="by_zola"><a href="https://www.getzola.org/" target="_blank">Proudly published with Zola!</a></div>
+      
+    </div>
+  </div>
+  <div id="main">
+    <div class="page-top animated fadeInDown">
+      <div class="nav">
+        
+        
+        
+        
+        <li><a  href="https://kyawaway.github.io/myblog/">Home</a></li>
+        <li><a  href="https://kyawaway.github.io/myblog/about/">About</a></li><li><a  href="https://kyawaway.github.io/myblog/tags">Tags</a></li><li><a 
+            href="https://kyawaway.github.io/myblog/archive/">Archive</a></li><li><a  href="https://kyawaway.github.io/myblog/links/">Links</a></li></div>
+      <div class="information">
+        <div class="back_btn">
+          <a onclick="window.history.go(-1)" ><i
+              class="fas fa-chevron-left"></i></a>
+        </div>
+        
+        
+        
+        <div class="avatar"><img src="https://kyawaway.github.io/myblog/images/avatar.jpg"></div>
+      </div>
+    </div>
+    <div class="autopagerize_page_element">
+      <div class="content">
+        
+<article class="post animated fadeInDown">
+  <h1><a href="https:&#x2F;&#x2F;kyawaway.github.io&#x2F;myblog&#x2F;post-3&#x2F;">(過去記事転載)ライブラリに頼らずにニューラルネットワークを実装する</a></h1>
+  
+  <div class="post-content"><h2 id="hazimeni">はじめに</h2>
+<p>本記事では、著書「<a href="https://www.amazon.co.jp/%E3%82%BC%E3%83%AD%E3%81%8B%E3%82%89%E4%BD%9C%E3%82%8BDeep-Learning-%E2%80%95Python%E3%81%A7%E5%AD%A6%E3%81%B6%E3%83%87%E3%82%A3%E3%83%BC%E3%83%97%E3%83%A9%E3%83%BC%E3%83%8B%E3%83%B3%E3%82%B0%E3%81%AE%E7%90%86%E8%AB%96%E3%81%A8%E5%AE%9F%E8%A3%85-%E6%96%8E%E8%97%A4-%E5%BA%B7%E6%AF%85/dp/4873117585">ゼロから始めるDeep Learning</a>」を参考に、Pythonで、<strong>ライブラリを極力使わずに</strong> 2層のニューラルネットワークを実装、MNISTの画像データの学習を実装していきます。</p>
+<h2 id="huan-jing">環境</h2>
+<ul>
+<li>
+<p>CPU:第７世代intel corei7</p>
+</li>
+<li>
+<p>OS:Windows10home</p>
+</li>
+<li>
+<p>Language:Python3.6.5</p>
+</li>
+</ul>
+<h2 id="ge-zhong-guan-shu-noshi-zhuang">各種関数の実装</h2>
+<p>ディープラーニングを実装する前に、実装に必要な要素をfunctionsというファイルにまとめます。また、ほとんどの関数でnumpyを使います。numpyは使ってもいいですよね？</p>
+<pre data-lang="Python" class="language-Python "><code class="language-Python" data-lang="Python">import numpy as np
+</code></pre>
+<h3 id="huo-xing-hua-guan-shu">活性化関数</h3>
+<p>活性化関数は、各ニューロンへの入力を整形するのに用いる関数です。今回はシグモイド関数のみ使用していますが、ReLuも有名なので実装しました。</p>
+<h4 id="sigumoidoguan-shu">シグモイド関数</h4>
+<p>シグモイド関数は、</p>
+<p>$$f(x) = \frac{1}{(1 + e^{-x})}$$</p>
+<p>で表される、入力の値の0から1の間に収めるための関数です。これをそのまま実装します。</p>
+<pre data-lang="python" class="language-python "><code class="language-python" data-lang="python">def sigmoid(x):
+    return 1 &#x2F; (1 + np.exp(-x))    
+</code></pre>
+<h5 id="sigumoidoguan-shu-nogou-pei">シグモイド関数の勾配</h5>
+<p>シグモイド関数の勾配を逆伝播で求めます。</p>
+<p>まず、計算グラフで$f(x) = \frac{1}{(1 - e^{-x})}$をそのまま表現します。</p>
+<p><img src="https://pbs.twimg.com/media/ETDjI-wUUAAbU1q.jpg" alt="" /></p>
+<p>次に、$\frac{1}{(1 - e^{-x})}=y$とし、逆伝播していきます。</p>
+<p><img src="https://pbs.twimg.com/media/ETDjJAeVAAElaz-.jpg" alt="" /></p>
+<p>以上より、$f(x) = \frac{1}{(1 - e^{-x})}$の勾配は</p>
+<p>$$\frac{\partial L}{\partial y}y^2\exp(-x)$$</p>
+<p>これを整理して、
+$$\frac{\partial L}{\partial y}y(1-y)$$
+で表されることがわかりました。これをそのまま実装します。</p>
+<pre data-lang="python" class="language-python "><code class="language-python" data-lang="python">def sigmoid_grad(x):
+    return (1.0 - sigmoid(x)) * sigmoid(x)
+</code></pre>
+<h4 id="relu">ReLu</h4>
+<p>Reluは、入力が0以下の時は0を、0より大きい時はそのままの値を返す関数です。</p>
+<pre data-lang="python" class="language-python "><code class="language-python" data-lang="python">def relu(x):
+    return np.maximum(0, x)        
+</code></pre>
+<p>numpyのmaximumは、引数を２つ取り、値の大きいほうを返すメソッドで、0とreluの引数をmaximumで比較することでReLuを実装しています。</p>
+<h3 id="sun-shi-guan-shu">損失関数</h3>
+<p>損失関数は、学習の誤差、どれだけ間違えたかを出力します。勾配法によってこの値を小さくします。
+ニューラルネットワークの出力と教師データを引数にとり、その誤差を出力します。今回使うのは交差エントロピー誤差ですが、有名な二乗和誤差も実装してみました。</p>
+<h4 id="er-cheng-he-wu-chai">二乗和誤差</h4>
+<p>二乗和誤差は、</p>
+<p>$$E = \frac{1}{2}\sum_{n}(y_k - t_k)^2$$</p>
+<p>で表されます。誤差の二乗の和です。</p>
+<pre data-lang="python" class="language-python "><code class="language-python" data-lang="python">def sum_squared_error(y, t):
+    return 0.5 * np.sum((y-t)**2)
+</code></pre>
+<h4 id="jiao-chai-entoropiwu-chai">交差エントロピー誤差</h4>
+<p>交差エントロピー誤差は、</p>
+<p>$$E = -\sum_{k}t_k \log{y_k}$$</p>
+<p>で表されます。今回行うのはバッチデータに対する学習なので、</p>
+<p>$$E = -\frac{1}{N}\sum_{n} \sum_{k}t_{nk} \log{y_{nk}}$$</p>
+<p>のようにN個の訓練データの誤差平均を出すような形にします。</p>
+<pre data-lang="python" class="language-python "><code class="language-python" data-lang="python">def cross_entropy_error(y, t):
+    if y.ndim == 1:
+        t = t.reshape(1, t.size)
+        y = y.reshape(1, y.size)
+
+
+    if t.size == y.size:
+        t = t.argmax(axis=1)
+
+    batch_size = y.shape[0]
+    return -np.sum(np.log(y[np.arange(batch_size), t] + 1e-7)) &#x2F; batch_size
+</code></pre>
+<p>y(ニューラルネットワークの出力)の次元が１の場合は、データ一つあたりの誤差を計算するためにデータを整形しバッチの枚数で正規化します。
+<code>y[np.arrange(batch_size),t]</code>は、各データの正解ラベルに対応するニューラルネットワークの出力を抽出します。今回はｔがラベル表現なので、このような形をとりました。
+また、<code>y[np.arrange(batch_size),t]</code>の値が０になった時、np.log(0)=-∞になってしまうので、それを避けるために1e-7のような微小な数を加えています。</p>
+<h3 id="chu-li-ceng">出力層</h3>
+<h4 id="heng-chang-guan-shu">恒常関数</h4>
+<p>恒常関数は、出力層の中でも、入力された値をそのまま返す関数です。主に分類問題で使います。実装も、</p>
+<pre data-lang="python" class="language-python "><code class="language-python" data-lang="python"> def constant(x):
+    return x
+</code></pre>
+<p>のように簡単です。</p>
+<h4 id="sohutomatukusuguan-shu">ソフトマックス関数</h4>
+<p>ソフトマックス関数は、主に回帰問題で使います。</p>
+<p>$$y_k = \frac{\exp(a_k)}{\sum_{i=1}^{n}\exp(a_i)}$$
+ここで、
+$y_k$($k = 0,1,...$)は出力層のニューロン、
+$a_k$($k=0,1,...$)は、出力層に対する入力層の各ニューロンです。
+分母を見ると分かる通り、全ての出力が、全ての入力から影響を受けます。</p>
+<p>このままの形で使用すると、$a_k$の値が大きくなってくると簡単にオーバーフローを起こしてしまうので、任意定数$C$を用いて、</p>
+<p>$$
+\begin{aligned}
+y_k &amp;= \frac{C\exp(a_k)}{C\sum_{i=1}^{n}\exp(a_i)} \\
+&amp;= \frac{\exp(a_k +\log{C})}{\sum_{i=1}^{n}\exp(a_i+\log{C})}  \\
+&amp;= \frac{\exp(a_k+C')}{\sum_{i=1}^{n}\exp(a_i+C')}
+\end{aligned}
+$$</p>
+<p>で対策します。
+$C'$は、入力信号の中で最大の値を用いるのが一般的で、今回もそのように実装します。</p>
+<pre data-lang="python" class="language-python "><code class="language-python" data-lang="python">def softmax(x):
+    if x.ndim == 2:
+        x = x.T
+        x = x - np.max(x, axis=0)
+        y = np.exp(x) &#x2F; np.sum(np.exp(x), axis=0)
+        return y.T
+
+    x = x - np.max(x)
+    return np.exp(x) &#x2F; np.sum(np.exp(x))
+</code></pre>
+<h2 id="2ceng-niyurarunetutowakunoshi-zhuang">２層ニューラルネットワークの実装</h2>
+<p>TwoLayerNetというクラスの形で実装します。</p>
+<pre data-lang="python" class="language-python "><code class="language-python" data-lang="python">import sys, os
+import numpy as np
+sys.path.append(os.pardir)  
+from functions import *
+</code></pre>
+<p>numpyのほかに、親ディレクトリのファイルをインポートするための設定に必要なライブラリも使っていますが、本質から外れるので説明は省きます。上で実装した関数たちが入っているfunctionsファイルもインポートします。</p>
+<p>次は、クラス本体です。</p>
+<pre data-lang="python" class="language-python "><code class="language-python" data-lang="python">class TwoLayerNet:
+
+    def __init__(self, input_size, hidden_size, output_size, weight_init_std=0.01):
+
+        self.params = {}
+        self.params[&#x27;W1&#x27;] = weight_init_std * np.random.randn(input_size, hidden_size)
+        self.params[&#x27;b1&#x27;] = np.zeros(hidden_size)
+        self.params[&#x27;W2&#x27;] = weight_init_std * np.random.randn(hidden_size, output_size)
+        self.params[&#x27;b2&#x27;] = np.zeros(output_size)
+
+    def predict(self, x):
+        W1, W2 = self.params[&#x27;W1&#x27;], self.params[&#x27;W2&#x27;]
+        b1, b2 = self.params[&#x27;b1&#x27;], self.params[&#x27;b2&#x27;]
+
+        a1 = np.dot(x, W1) + b1
+        z1 = sigmoid(a1)
+        a2 = np.dot(z1, W2) + b2
+        y = softmax(a2)
+
+        return y
+
+
+    def loss(self, x, t):
+        y = self.predict(x)
+
+        return cross_entropy_error(y, t)
+
+    def accuracy(self, x, t):
+        y = self.predict(x)
+        y = np.argmax(y, axis=1)
+        t = np.argmax(t, axis=1)
+
+        accuracy = np.sum(y == t) &#x2F; float(x.shape[0])
+        return accuracy
+
+
+    def numerical_gradient(self, x, t):
+        loss_W = lambda W: self.loss(x, t)
+
+        grads = {}
+        grads[&#x27;W1&#x27;] = numerical_gradient(loss_W, self.params[&#x27;W1&#x27;])
+        grads[&#x27;b1&#x27;] = numerical_gradient(loss_W, self.params[&#x27;b1&#x27;])
+        grads[&#x27;W2&#x27;] = numerical_gradient(loss_W, self.params[&#x27;W2&#x27;])
+        grads[&#x27;b2&#x27;] = numerical_gradient(loss_W, self.params[&#x27;b2&#x27;])
+
+        return grads
+
+    def gradient(self, x, t):
+        W1, W2 = self.params[&#x27;W1&#x27;], self.params[&#x27;W2&#x27;]
+        b1, b2 = self.params[&#x27;b1&#x27;], self.params[&#x27;b2&#x27;]
+        grads = {}
+
+        batch_num = x.shape[0]
+
+
+        a1 = np.dot(x, W1) + b1
+        z1 = sigmoid(a1)
+        a2 = np.dot(z1, W2) + b2
+        y = softmax(a2)
+
+
+        dy = (y - t) &#x2F; batch_num
+        grads[&#x27;W2&#x27;] = np.dot(z1.T, dy)
+        grads[&#x27;b2&#x27;] = np.sum(dy, axis=0)
+
+        dz1 = np.dot(dy, W2.T)
+        da1 = sigmoid_grad(a1) * dz1
+        grads[&#x27;W1&#x27;] = np.dot(x.T, da1)
+        grads[&#x27;b1&#x27;] = np.sum(da1, axis=0)
+
+        return grads
+</code></pre>
+<p>最初に宣言した<code>params</code>は辞書型で、各層の重み(W)とバイアス(b)を保持するために使います
+。
+<code>grad</code>は辞書型で、各層の重み(W)とバイアス(b)の勾配を保持します。</p>
+<p><code>__ init__</code>メソッドは、()入力層のニューロン数、隠れ層のニューロン数、出力層のニューロン数)を引数にとり、各値の初期化をします。</p>
+<p><code>predict</code>メソッドは、画像データを引数にとり、各層に順番に流し込んでいきます。（活性化関数はシグモイド関数、出力関数はソフトマックス関数）</p>
+<p><code>loss</code>メソッドは、(画像データ、正解ラベル)を引数にとり、損失関数(交差エントロピー誤差)を通した値を返します。</p>
+<p><code>accurary</code>メソッドは、(画像データ、正解ラベル)を引数にとり、認識の制度を返します。</p>
+<p><code>numerical_gradient</code>メソッドは、数値微分を用いて勾配を求めます。損失関数を各ニューロンの重みで偏微分しています。途中でlamnda式を使っている箇所がありますが、この部分は <code>self.loss(x, t)</code>を実行する関数を宣言しているのとあまり意味は変わりません。記述がシンプルで済むので取り入れています。</p>
+<p><code>gradient</code>メソッドでは、誤差逆伝播法を使って勾配を求めます。逆伝播で求めたシグモイド関数の勾配<code>sigmoid_grad</code>を使っています。</p>
+<h2 id="2ceng-niyurarunetutowakuwoshi-tutaxue-xi-noshi-zhuang">２層ニューラルネットワークを使った学習の実装</h2>
+<p>上で実装した２層ニューラルネットワークを実際に使っていきます。</p>
+<pre data-lang="python" class="language-python "><code class="language-python" data-lang="python">import sys, os
+sys.path.append(os.pardir)  
+import numpy as np
+import matplotlib.pyplot as plt
+from dataset.mnist import load_mnist
+from two_layer import TwoLayerNet
+</code></pre>
+<p>numpyとmatplotlibのほかに、先ほどと同じように親ディレクトリのファイルをインポートするための設定に必要なライブラリも使っていますが、本質から外れるので説明は省きます。要は、mnist.pyがインポートできればOKです。（今回は、本でデータセットがまとめられていたのでそれをダウンロードしてそのまま使用しました。）
+それから、上で実装したTwoLayerNetのインポートも忘れずに行います。</p>
+<pre data-lang="python" class="language-python "><code class="language-python" data-lang="python">(x_train, t_train), (x_test, t_test) = load_mnist(normalize=True, one_hot_label=True)
+
+network = TwoLayerNet(input_size=784, hidden_size=50, output_size=10)
+
+iters_num = 10000  
+train_size = x_train.shape[0]
+batch_size = 100
+learning_rate = 0.1
+
+train_loss_list = []
+train_acc_list = []
+test_acc_list = []
+
+iter_per_epoch = max(train_size &#x2F; batch_size, 1)
+</code></pre>
+<p>networkを、各パラメータを指定したTwoLayerNet型のインスタンスにします。
+<code>iters_num</code>で訓練データ数を、<code>batch_size</code>でミニバッチの数を指定します。</p>
+<p><code>iter_per_epoch</code>とは、エポック（見た通り、訓練データ数/ミニバッチ数）を計算して代入しています。</p>
+<pre data-lang="python" class="language-python "><code class="language-python" data-lang="python">for i in range(iters_num):
+    batch_mask = np.random.choice(train_size, batch_size)
+    x_batch = x_train[batch_mask]
+    t_batch = t_train[batch_mask]
+
+    grad = network.gradient(x_batch, t_batch)
+
+    for key in (&#x27;W1&#x27;, &#x27;b1&#x27;, &#x27;W2&#x27;, &#x27;b2&#x27;):
+        network.params[key] -= learning_rate * grad[key]
+
+    loss = network.loss(x_batch, t_batch)
+    train_loss_list.append(loss)
+
+    if i % iter_per_epoch == 0:
+        train_acc = network.accuracy(x_train, t_train)
+        test_acc = network.accuracy(x_test, t_test)
+        train_acc_list.append(train_acc)
+        test_acc_list.append(test_acc)
+        print(&quot;train acc, test acc | &quot; + str(train_acc) + &quot;, &quot; + str(test_acc))
+
+
+markers = {&#x27;train&#x27;: &#x27;o&#x27;, &#x27;test&#x27;: &#x27;s&#x27;}
+x = np.arange(len(train_acc_list))
+</code></pre>
+<p><code>grad</code>に勾配の値を入れるときに、順伝播(数値微分)を用いるなら<code>numerical_gradient</code>を、逆伝播を用いるなら<code>gradient</code>を使用します。</p>
+<p>認識精度を計算する際、データ一つあたりではなく１エポックごとに精度を計算しています。（そこまで高精度な結果はいらないので）</p>
+<p>最後に、結果（認識精度の変化）をグラフで出力します。</p>
+<pre data-lang="python" class="language-python "><code class="language-python" data-lang="python">plt.plot(x, train_acc_list, label=&#x27;train acc&#x27;)
+plt.plot(x, test_acc_list, label=&#x27;test acc&#x27;, linestyle=&#x27;--&#x27;)
+plt.xlabel(&quot;epochs&quot;)
+plt.ylabel(&quot;accuracy&quot;)
+plt.ylim(0, 1.0)
+plt.legend(loc=&#x27;lower right&#x27;)
+plt.show()
+</code></pre>
+<h4 id="chu-li-jie-guo">出力結果</h4>
+<p>逆伝播：
+<img src="https://pbs.twimg.com/media/ETD55_kUcAEtBer.png" alt="" /></p>
+<p>15秒ほどでプロットまで終わりました。学習が進むにつれて損失が少なくなっている様子がわかります。また、trainデータとtestデータのグラフがほぼ重なっているので、過学習も起こっていません。</p>
+<p>順伝播の場合は、10分ほど待っても最初のエポックの計算しか終わりませんでした。そういうものならいいけれど、何か問題があるのかな...</p>
+<h2 id="owarini">おわりに</h2>
+<p>参考にするとか言っておきながら、ほとんど丸コピになってしまいました...
+機械学習、深層学習という分野は、初学のうちはライブラリの使い方ゲ―のようになってしまう気がしますが（僕もほとんど何も知らないので言い切れませんが）、このように自分の手で一からアルゴリズムを実装してみるのもまた楽しいです。</p>
+</div>
+  <div class="post-footer">
+    <div class="meta">
+      <div class="info">
+        
+        <i class="far fa-sun"></i><span class="date">2020-02-15</span>
+        
+        
+        <i class="fas fa-tags"></i>
+        
+        <a class="tag" href="https://kyawaway.github.io/myblog/tags/python">&nbsp;python</a>
+        
+        <a class="tag" href="https://kyawaway.github.io/myblog/tags/deep-learning">&nbsp;deep-learning</a>
+        
+        
+      </div>
+    </div>
+  </div>
+</article>
+<div class="share">
+  <div class="twitter">
+    <a class="fab fa-twitter"
+      href="http://twitter.com/share?text=(過去記事転載)ライブラリに頼らずにニューラルネットワークを実装する&url=https:&#x2F;&#x2F;kyawaway.github.io&#x2F;myblog&#x2F;post-3&#x2F;&hashtags=python,deep-learning"></a>
+  </div>
+</div>
+
+
+
+
+
+
+
+<script>
+  MathJax = {
+    tex: {
+      displayMath: [['$$', '$$'], ["\\[", "\\]"]],
+      inlineMath: [['$', '$'], ['\\(', '\\)']]
+    }
+  };
+</script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+  </script>
+
+
+
+
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    function showLanguages() {
+      let currentDisplay = document.getElementById("languages").style.display;
+      if (currentDisplay == 'none') {
+        document.getElementById("languages").style.display = 'block';
+      } else {
+        document.getElementById("languages").style.display = 'none';
+      }
+    }
+  </script>
+</body>
+
+</html>

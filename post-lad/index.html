@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html translate="no"  class="theme--kyasual" >
+
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, viewport-fit=cover">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://kyawaway.github.io/myblog/images/apple-touch-icon-144x144.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="120x120" href="https://kyawaway.github.io/myblog/images/apple-touch-icon-120x120.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="https://kyawaway.github.io/myblog/images/apple-touch-icon-72x72.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="57x57" href="https://kyawaway.github.io/myblog/images/apple-touch-icon-57x57.png" />
+  <link rel="short icon" href="https://kyawaway.github.io/myblog/images/favicon.png" type="image/x-icon" />
+  <link rel="stylesheet" href="https://kyawaway.github.io/myblog/style.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap" rel="stylesheet">
+  <title>遊び日記 • 地理座標系と平面直角座標系の変換</title>
+  
+  
+  
+</head>
+
+<body>
+  <div id="sidebar" class="animated fadeInDown">
+    <div class="logo-title">
+      <div class="title">
+        <img src=https://kyawaway.github.io/myblog/images/logo.png style="width:127px;" alt="logo" />
+        <h3><a href="https://kyawaway.github.io/myblog/">遊び日記</a></h3>
+        <div class="description">
+          <p>遊びの日記</p>
+        </div>
+      </div>
+    </div>
+    <ul class="social-links"><li><a href="https://github.com/kyawaway" aria-label="Go to Github profile page"><i class="fab fa-github"></i></a></li><li><a href="https://twitter.com/kyawaway" aria-label="Go to Twitter profile page"><i class="fab fa-twitter"></i></a></li>
+      
+    </ul>
+    <div class="footer">
+      
+      <span>Designed based on </span><a href="https://www.getzola.org/themes/anatole-zola/">anatole-zola</a>
+      <div class="by_zola"><a href="https://www.getzola.org/" target="_blank">Proudly published with Zola!</a></div>
+      
+    </div>
+  </div>
+  <div id="main">
+    <div class="page-top animated fadeInDown">
+      <div class="nav">
+        
+        
+        
+        
+        <li><a  href="https://kyawaway.github.io/myblog/">Home</a></li>
+        <li><a  href="https://kyawaway.github.io/myblog/about/">About</a></li><li><a  href="https://kyawaway.github.io/myblog/tags">Tags</a></li><li><a 
+            href="https://kyawaway.github.io/myblog/archive/">Archive</a></li><li><a  href="https://kyawaway.github.io/myblog/links/">Links</a></li></div>
+      <div class="information">
+        <div class="back_btn">
+          <a onclick="window.history.go(-1)" ><i
+              class="fas fa-chevron-left"></i></a>
+        </div>
+        
+        
+        
+        <div class="avatar"><img src="https://kyawaway.github.io/myblog/images/avatar.jpg"></div>
+      </div>
+    </div>
+    <div class="autopagerize_page_element">
+      <div class="content">
+        
+<article class="post animated fadeInDown">
+  <h1><a href="https:&#x2F;&#x2F;kyawaway.github.io&#x2F;myblog&#x2F;post-lad&#x2F;">地理座標系と平面直角座標系の変換</a></h1>
+  
+  <div class="post-content"><p>緯度経度で表される地理座標系を，メートルのx,y座標に変換したい．</p>
+<h2 id="qian-ti">前提</h2>
+<p>なんでもいいが，ここでは処理はTypeScriptで記述する．</p>
+<p>以下の，地理座標系を表す<code>GetCoordinate</code>型を，平面直交座標系を表す<code>PlaneCoordinate</code>型に変換することを考える．</p>
+<pre data-lang="TypeScript" class="language-TypeScript "><code class="language-TypeScript" data-lang="TypeScript">interface GeoCoordinate {
+  latitude: number;
+  longitude: number;
+};
+
+interface PlaneCoordinate {
+  x: number;
+  y: number;
+};
+
+const GeoToPlane= (geo: GeoCoordinate): PlaneCoordinate  =&gt; {
+  &#x2F;&#x2F;奇跡的な処理
+  return {x: hoge, y:huga};
+};
+</code></pre>
+<p>球形（しかも楕円）の表面上の距離を単純な平面の直角座標に変換するので，難儀である．どう考えても面倒．</p>
+<h2 id="zhen-mian-mu-niyaranai">真面目にやらない</h2>
+<p>日本においては，緯度に110000を，経度に91000をかけるとだいたいいい感じの値になることが知られている．</p>
+<pre data-lang="TypeScript" class="language-TypeScript "><code class="language-TypeScript" data-lang="TypeScript">const GeoToPlaneDodge = (geo: GeoCoordinate): PlaneCoordinate  =&gt; {
+  return {x: geo.latitude * 110000, y:geo.latitude * 91000};
+};
+</code></pre>
+<p>これは，日本の（多分東京の）緯度経度から概算された値を定数として使っているだけなので，より高精度の値が必要な場合や，海外で使用する場合は当然NG．</p>
+<h2 id="zhen-mian-mu-niyaru">真面目にやる</h2>
+<p>ちゃんと地球の形状を考慮して，真面目に変換する．</p>
+<p>一方で，地球の完璧な形状をほげするのは不可能なので，人間が扱える図形に近似して考える．具体的には，回転楕円体として扱う．ここで，パラメータは測地基準系1980（GRS80）を採用する．</p>
+<ul>
+<li>長半径: 6378137</li>
+<li>扁平率の逆数: 298.257222101</li>
+</ul>
+<p>また，平面直角座標系の原点に関しては，</p>
+<p>このように，地球を回転楕円体とみなして投影を行う手法を<a href="https://ja.wikipedia.org/wiki/%E3%82%AC%E3%82%A6%E3%82%B9%E3%83%BB%E3%82%AF%E3%83%AA%E3%83%A5%E3%83%BC%E3%82%B2%E3%83%AB%E5%9B%B3%E6%B3%95">Gauss-Krüger 投影</a>というらしい．</p>
+<p>（<a href="https://www.gsi.go.jp/sokuchikijun/datum-main.html">https://www.gsi.go.jp/sokuchikijun/datum-main.html</a>等．）</p>
+<h3 id="dao-chu-nozhun-bei">導出の準備</h3>
+<p>Gauss-Krüger 投影は，回転楕円体から平面への等角写像の一種である．これは，投影しようとする範囲の中心地点を通る子午線（中央子午線）の子午線弧長を保存している．</p>
+<p>いくつか流儀であるが，今日日本においては，楕円体の第三扁平率のみを係数に含む冪級数展開により表す手法が普及している．今回はこれを用いる．</p>
+<h3 id="shu-shi-wobing-beru">数式を並べる</h3>
+<p><a href="https://vldb.gsi.go.jp/sokuchi/surveycalc/surveycalc/algorithm/bl2xy/bl2xy.htm">https://vldb.gsi.go.jp/sokuchi/surveycalc/surveycalc/algorithm/bl2xy/bl2xy.htm</a> 参照．</p>
+<h4 id="parameta">パラメータ：</h4>
+<p>$\phi$:緯度[$rad$]，$\lambda$:経度[$rad$]</p>
+<pre data-lang="typescript" class="language-typescript "><code class="language-typescript" data-lang="typescript">interface GeoCoordinate {
+  latitude: number;
+  longitude: number;
+};
+</code></pre>
+<p>$\phi_0,\lambda_0$: 平面直角座標系原点の緯度経度[$rad$]</p>
+<pre data-lang="typescript" class="language-typescript "><code class="language-typescript" data-lang="typescript">const phi_0:number = hoge;
+
+const lambda_0:number = hoge;
+</code></pre>
+<p>$a=$6378131:楕円体長半径[$m$]</p>
+<p>$F=$298.257222101:楕円体の扁平率の逆数</p>
+<p>$m_0=$0.9999:平面直角座標系の$x$軸における縮尺係数</p>
+<pre data-lang="typescript" class="language-typescript "><code class="language-typescript" data-lang="typescript">const a:number = 6378131;
+
+const F:number = 298.257222101;
+
+const m_0:number = 0.9999;
+</code></pre>
+<h4 id="ji-suan">計算</h4>
+<p>$\phi, \lambda$を受け取り，平面直角座標$x,y$を返す．</p>
+<p>まず，第三扁平率$n$は，以下のように定義される：</p>
+<p>$$n = \frac{1}{2F-1}$$</p>
+<pre data-lang="typescript" class="language-typescript "><code class="language-typescript" data-lang="typescript">const n = 1 &#x2F; (2*F - 1);
+</code></pre>
+<p>$A_i(i=0,1,...,5)$:</p>
+<p>$$A_0 = 1 + \frac{n^2}{4} + \frac{n^3}{64}$$</p>
+<p>$$A_1 = -\frac{3}{2}\left( n - \frac{n^3}{8} - \frac{n^5}{64} \right)$$</p>
+<p>$$A_2 = \frac{15}{16}\left( n^2 - \frac{n^4}{4} \right)$$</p>
+<p>$$A_3 = -\frac{35}{48}\left( n^3 - \frac{5n^5}{16} \right)$$</p>
+<p>$$A_4 = \frac{315}{512}n^4$$</p>
+<p>$$A_5 = \frac{693}{1280}n^5$$</p>
+<pre data-lang="typescript" class="language-typescript "><code class="language-typescript" data-lang="typescript">const A_List: number[] = [
+  1 + (n^2 &#x2F; 4) + (n^3 &#x2F; 64),
+  -(3&#x2F;2) * (n - ((n^3) &#x2F; 8) - ((n^5) &#x2F; 64)),
+  (15&#x2F;16) * (n^2 - ((n^4) &#x2F; 4)),
+  -(35&#x2F;48) * (n^3 - ((5*n^5) &#x2F; 16)),
+  315&#x2F;512 * n^4,
+  693&#x2F;1280 * n^5
+];
+</code></pre>
+<p>$\alpha_i(i=1,2,...,5)$:</p>
+<p>$$\alpha_1 = \frac{1}{2}n - \frac{2}{3}n^2 + \frac{5}{16}n^3 - \frac{41}{180}n^4 - \frac{127}{288}n^5$$</p>
+<p>$$\alpha_2 = \frac{13}{48}n^2 - \frac{3}{5}n^3 + \frac{557}{1440}n^4 + \frac{281}{630}n^5$$</p>
+<p>$$\alpha_3 = \frac{61}{240}n^3 - \frac{103}{140}n^4 + \frac{15061}{26880}n^5$$</p>
+<p>$$\alpha_4 = \frac{49561}{161280}n^4 - \frac{179}{168}n^5$$</p>
+<p>$$\alpha_5 = \frac{34729}{80640}n^5$$</p>
+<pre data-lang="typescript" class="language-typescript "><code class="language-typescript" data-lang="typescript">const alpha_List:number[] = [
+  (1&#x2F;2)*n - (2&#x2F;3)*(n^2) + (5&#x2F;16)*(n^3) - (41&#x2F;180)*(n^4) - (127&#x2F;288)*(n^5),
+  (13&#x2F;48)*(n^2) - (3&#x2F;5)*(n^3) + (557&#x2F;1440)*(n^4) + (281&#x2F;630)*(n^5),
+  (61&#x2F;240)*(n^3) - (103&#x2F;140)*(n^4) + (15061&#x2F;26880)*(n^5),
+  (49561&#x2F;161280)*(n^4) - (179&#x2F;168)*(n^5),
+  (34729&#x2F;80640)*(n^5)
+];
+</code></pre>
+<p>$\bar{S_{\phi_0}},\bar{A}$:</p>
+<p>$$\bar{S_{\phi_0}} = \frac{m_0a}{1+n}\left( A_0\phi_0 + \Sigma^5_{j=1} A_j \sin{(2j\phi_0)} \right)$$</p>
+<p>$$\bar{A} = \frac{m_0a}{1+n}A_0$$</p>
+<pre data-lang="typescript" class="language-typescript "><code class="language-typescript" data-lang="typescript">const bar_S_phi_0 = (m_0*a &#x2F; (1+n)) * (A_0*phi_0 + A_List.map((A, j) =&gt; A * Math.sin(2*j*phi_0) ).reduce((a, b) =&gt; a+b, 0));
+
+const bar_A = (m_0 &#x2F; (1+n)) * A_0;
+</code></pre>
+<p>$\lambda_\epsilon, \lambda_s$:</p>
+<p>$$\lambda_\epsilon = \cos(\lambda - \lambda_0)$$</p>
+<p>$$\lambda_s = \sin(\lambda - \lambda_0)$$</p>
+<pre data-lang="typescript" class="language-typescript "><code class="language-typescript" data-lang="typescript">const lambda_epsilon = Math.cos(lambda - lambda_0);
+
+const lambda_s = Math.sin(lambda - lambda_0);
+</code></pre>
+<p>$t,\bar{t}$:</p>
+<p>$$t = \sinh{\left(\tanh^{-1}\sin{\phi} - \frac{2\sqrt{n}}{1+n}\tanh^{-1}\left(\left[ \frac{2\sqrt{n}}{1+n}\sin{\phi}\right]\right)\right)}$$</p>
+<p>$$\bar{t} = \sqrt{1+t^2}$$</p>
+<pre data-lang="typsscript" class="language-typsscript "><code class="language-typsscript" data-lang="typsscript">const t = Math.sinh(Math.atanh(Math.sin(phi)) - (2*Math.sqrt(n) &#x2F; (1+n)) * Math.atanh( (2*Math.sqrt(n) &#x2F; (1+n)) * Math.sin(phi) ));
+
+const bar_t = Math.sqrt(1 + t^2);
+</code></pre>
+<p>$\xi, \eta$:</p>
+<p>$$\xi = \tan^{-1}\left(\frac{t}{\lambda_\epsilon}\right)$$</p>
+<p>$$\eta = \tan^{-1}\left(\frac{\lambda_s}{t}\right)$$</p>
+<pre data-lang="typescript" class="language-typescript "><code class="language-typescript" data-lang="typescript">const xi = Math.atan(t &#x2F; lambda_epsilon);
+
+const eta = Math.atan(lambda_s &#x2F; t);
+</code></pre>
+<p>$x,y$:</p>
+<p>$$x = \bar{A} (\xi + \Sigma^5_{j=1} \alpha \sin{(2j\xi)} \cosh{(2j\eta)}) - \bar{S_{\phi_0}}$$</p>
+<p>$$y = \bar{A} (\eta + \Sigma^5_{j=1} \alpha \sin{(2j\xi)} \cosh{(2j\eta)})$$</p>
+<pre data-lang="typescript" class="language-typescript "><code class="language-typescript" data-lang="typescript">const x = bar_A * (xi + alpha_List.map((alpha, j) =&gt; alpha * Math.sin(2*j*xi) * Math.cosh(2*j*eta) ).reduce((a, b) =&gt; a+b, 0)) - bar_S_phi_0;
+
+const y = bar_A * (eta + alpha_List.map((alpha, j) =&gt; alpha * Math.sin(2*j*xi) * Math.cosh(2*j*eta) ).reduce((a, b) =&gt; a+b, 0));
+</code></pre>
+<h4 id="matome">まとめ</h4>
+<pre data-lang="typescript" class="language-typescript "><code class="language-typescript" data-lang="typescript">interface GeoCoordinate {
+  latitude: number;
+  longitude: number;
+};
+
+interface PlaneCoordinate {
+  x: number;
+  y: number;
+};
+
+interface Configure {
+  latitude_origin: number;
+  longitude_origin: number;
+  long_lad: number;
+  oblateness: number;
+  scale_factor: number;
+};
+
+const get_A_List = (n:number):number[] =&gt; {
+  return [
+    1 + (n^2 &#x2F; 4) + (n^3 &#x2F; 64),
+    -(3&#x2F;2) * (n - ((n^3) &#x2F; 8) - ((n^5) &#x2F; 64)),
+    (15&#x2F;16) * (n^2 - ((n^4) &#x2F; 4)),
+    -(35&#x2F;48) * (n^3 - ((5*n^5) &#x2F; 16)),
+    315&#x2F;512 * n^4,
+    693&#x2F;1280 * n^5
+  ];
+};
+
+const get_alpha_List= (n:number):number[]  =&gt; {
+  return [
+    0,
+    (1&#x2F;2)*n - (2&#x2F;3)*(n^2) + (5&#x2F;16)*(n^3) - (41&#x2F;180)*(n^4) - (127&#x2F;288)*(n^5),
+    (13&#x2F;48)*(n^2) - (3&#x2F;5)*(n^3) + (557&#x2F;1440)*(n^4) + (281&#x2F;630)*(n^5),
+    (61&#x2F;240)*(n^3) - (103&#x2F;140)*(n^4) + (15061&#x2F;26880)*(n^5),
+    (49561&#x2F;161280)*(n^4) - (179&#x2F;168)*(n^5),
+    (34729&#x2F;80640)*(n^5)
+  ];
+};
+
+const get_bar_S_phi_0　= (m_0: number, a:number, n:number, A_List:number[], phi_0:number): number  =&gt; {
+  return (m_0*a &#x2F; (1+n)) * (A_List[0] * phi_0 + A_List.map((A, j) =&gt; A * Math.sin(2*j*phi_0) ).reduce((a, b) =&gt; a+b, 0));
+};
+
+const get_bar_A = (m_0:number, n:number, A_List:number[]): number =&gt; {
+
+  return (m_0 &#x2F; (1+n)) * A_List[0];
+};
+
+const get_lambda_epsilon = (lambda:number, lambda_0:number): number =&gt; {
+  return Math.cos(lambda - lambda_0);
+};
+
+const get_lambda_s = (lambda:number, lambda_0:number): number =&gt; {
+  return Math.sin(lambda - lambda_0);
+};
+
+const get_t = (n:number, phi:number): number =&gt; {
+  return Math.sinh(Math.atanh(Math.sin(phi)) - (2*Math.sqrt(n) &#x2F; (1+n)) * Math.atanh( (2*Math.sqrt(n) &#x2F; (1+n)) * Math.sin(phi) ));
+};
+
+const get_bar_t = (t:number): number =&gt; {
+  return Math.sqrt(1 + t^2);
+};
+
+const get_xi = (t:number, lambda_epsilon:number): number =&gt; {
+  return Math.atan(t &#x2F; lambda_epsilon);
+};
+
+const get_eta = (lambda_s:number, t:number): number =&gt; {
+  return Math.atan(lambda_s &#x2F; t);
+};
+
+
+const GeoToPlane = (geo: GeoCoordinate, config: Configure): PlaneCoordinate =&gt; {
+  const latitude = geo.latitude;
+  const longitude = geo.longitude;
+
+  const latitude_origin:number = config.latitude_origin;
+  const longitude_origin:number = config.longitude_origin;
+  const long_lad:number = config.long_lad;
+  const oblateness:number = config.oblateness;
+  const scale_factor:number = config.scale_factor;
+
+  const n:number = 1 &#x2F; (2 * oblateness - 1);
+
+  const A_List:number[] = get_A_List(n);
+  const alpha_List:number[] = get_alpha_List(n);
+
+  const bar_S_phi_0 = get_bar_S_phi_0(scale_factor, long_lad, n, A_List, latitude_origin);
+  const bar_A = get_bar_A(scale_factor, n, A_List);
+
+  const lambda_epsilon = get_lambda_epsilon(longitude, longitude_origin);
+  const lambda_s = get_lambda_s(longitude, longitude_origin);
+  const t = get_t(n, latitude);
+  const bar_t = get_bar_t(t);
+  const xi = get_xi(t, lambda_epsilon);
+  const eta = get_eta(lambda_s, t);
+
+  const x = bar_A * (xi + alpha_List.map((alpha, j) =&gt; alpha * Math.sin(2*j*xi) * Math.cosh(2*j*eta) ).reduce((a, b) =&gt; a+b, 0)) - bar_S_phi_0;
+  const y = bar_A * (eta + alpha_List.map((alpha, j) =&gt; alpha * Math.sin(2*j*xi) * Math.cosh(2*j*eta) ).reduce((a, b) =&gt; a+b, 0));
+
+  return {
+      x: x,
+      y: y,
+  };
+};
+</code></pre>
+<p>テストはしてません．</p>
+<p>めんどい．</p>
+<h2 id="can-kao">参考</h2>
+<ol>
+<li>
+<p><a href="https://www.gsi.go.jp/common/000061216.pdf">https://www.gsi.go.jp/common/000061216.pdf</a></p>
+</li>
+<li>
+<p><a href="https://vldb.gsi.go.jp/sokuchi/surveycalc/surveycalc/algorithm/bl2xy/bl2xy.htm">https://vldb.gsi.go.jp/sokuchi/surveycalc/surveycalc/algorithm/bl2xy/bl2xy.htm</a></p>
+</li>
+<li>
+<p><a href="https://sw1227.hatenablog.com/entry/2018/11/30/200702">https://sw1227.hatenablog.com/entry/2018/11/30/200702</a></p>
+</li>
+</ol>
+</div>
+  <div class="post-footer">
+    <div class="meta">
+      <div class="info">
+        
+        <i class="far fa-sun"></i><span class="date">2024-02-17</span>
+        
+        
+        <i class="fas fa-tags"></i>
+        
+        <a class="tag" href="https://kyawaway.github.io/myblog/tags/math">&nbsp;math</a>
+        
+        <a class="tag" href="https://kyawaway.github.io/myblog/tags/typescript">&nbsp;typescript</a>
+        
+        
+      </div>
+    </div>
+  </div>
+</article>
+<div class="share">
+  <div class="twitter">
+    <a class="fab fa-twitter"
+      href="http://twitter.com/share?text=地理座標系と平面直角座標系の変換&url=https:&#x2F;&#x2F;kyawaway.github.io&#x2F;myblog&#x2F;post-lad&#x2F;&hashtags=math,typescript"></a>
+  </div>
+</div>
+
+
+
+
+
+
+
+<script>
+  MathJax = {
+    tex: {
+      displayMath: [['$$', '$$'], ["\\[", "\\]"]],
+      inlineMath: [['$', '$'], ['\\(', '\\)']]
+    }
+  };
+</script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+  </script>
+
+
+
+
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    function showLanguages() {
+      let currentDisplay = document.getElementById("languages").style.display;
+      if (currentDisplay == 'none') {
+        document.getElementById("languages").style.display = 'block';
+      } else {
+        document.getElementById("languages").style.display = 'none';
+      }
+    }
+  </script>
+</body>
+
+</html>
